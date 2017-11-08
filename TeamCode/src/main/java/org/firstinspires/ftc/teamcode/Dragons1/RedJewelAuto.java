@@ -32,7 +32,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 // Todo: Finish me!
 
 @Autonomous(name = "Red Jewel Auto", group = "Test")
-@Disabled
 
 public class RedJewelAuto extends LinearOpMode {
     public static final String TAG = "Vuforia VuMark Sample";
