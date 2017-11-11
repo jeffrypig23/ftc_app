@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.CameraDevice;
 
@@ -17,29 +16,30 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
- * Created by Stephen Ogden on 9/23/17.
+ * Created by Stephen Ogden on 10/23/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-// 560 ticks per rotation (Tetrix)
-// 290 tick per rotation (Core HEX)
+// 560 ticks per rotation
 // 4 in diameter
 // 89 ticks per inches
 
 // This is for 6128
 
-// Todo: Finish me!
+// TODO: Finish me!
 
-@Autonomous(name = "Red Jewel Auto", group = "Test")
+@Autonomous(name = "Blue Auto", group = "Test")
+@Disabled
 
-public class RedJewelAuto extends LinearOpMode {
+public class BlueAuto extends LinearOpMode {
+
     public static final String TAG = "Vuforia VuMark Sample";
-    private float hsvValues[] = {0F,0F,0F};
-    final float values[] = hsvValues;
-    private final double SERVOUPPOS= .5;
+    private final double SERVOUPPOS = .5;
     private final double SERVODOWNPOS = 0;
-    private String color = "Unknown :(";
+    private float hsvValues[] = {0F, 0F, 0F};
+    final float values[] = hsvValues;
+    private String color = null;
     private String imageLocation = null;
     // StageNumber > -1 means running
     private int stageNumber = 0;
@@ -64,30 +64,33 @@ public class RedJewelAuto extends LinearOpMode {
         RelicRecoveryVuMark vuMark;
 
         ColorSensor colorSensor = hardwareMap.colorSensor.get("color");
+        colorSensor.enableLed(false);
 
-        Servo servo = hardwareMap.servo.get("servo");
+        Servo servo = hardwareMap.servo.get("left servo");
         servo.setPosition(SERVOUPPOS);
 
-        DcMotor left = hardwareMap.dcMotor.get("lf");
+        DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        DcMotor right = hardwareMap.dcMotor.get("rf");
+        DcMotor right = hardwareMap.dcMotor.get("left");
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // TODO: Note: I am temporarily disabling directions for the motors, becasue theyre running with encoders
         //left.setDirection(DcMotorSimple.Direction.FORWARD);
         //right.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        telemetry.addData("Status", "Done! Press play to start" );
+        telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
-
         waitForStart();
         relicTrackables.activate();
         //</editor-fold>
 
-        while(opModeIsActive()) {
+
+        while (opModeIsActive()) {
 
             //<editor-fold desc="Move down servo">
             if (stageNumber == 0) {
@@ -104,7 +107,7 @@ public class RedJewelAuto extends LinearOpMode {
             }
             //</editor-fold>
 
-            //<editor-fold desc="Detect jewel color">
+            //<editor-fold desc="Detect Jewel Color">
             if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
                 colorSensor.enableLed(true);
                 if (colorSensor.red() > colorSensor.blue() && colorSensor.green() < colorSensor.red()) {
@@ -123,39 +126,20 @@ public class RedJewelAuto extends LinearOpMode {
             if (stageNumber == 5) {
                 switch (color) {
                     case "Red": {
-                    driveToPostion(left, 1, .3);
-                    //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //left.setTargetPosition(25810);
-                    //left.setPower(.3);
-                    //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    driveToPostion(right, -1, .3);
-                    //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //right.setTargetPosition(-25810);
-                    //right.setPower(.3);
-                    //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    stageNumber++;
+                        driveToPostion(left, -1, .3);
+                        driveToPostion(right, 1, .3);
+                        stageNumber++;
                     }
                     case "Blue": {
-                    driveToPostion(left, -1, .3);
-                    //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //left.setTargetPosition(-25810);
-                    //left.setPower(.3);
-                    //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    driveToPostion(right, 1, .3);
-                    //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //right.setTargetPosition(25810);
-                    //right.setPower(.3);
-                    //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    stageNumber++;
-                }
+                        driveToPostion(left, 1, .3);
+                        driveToPostion(right, -1, .3);
+                        stageNumber++;
+                    }
                 }
             }
 
-
             if (stageNumber == 6) {
-                //int curentPos = left.getCurrentPosition();
-                //int targetPos = left.getTargetPosition();
-                if (isThere(left, 2000) || isThere(right, 2000)/*Math.abs((targetPos - curentPos)) <= 2000*/) {
+                if (isThere(left, 2000) || isThere(right, 2000)) {
                     servo.setPosition(SERVOUPPOS);
                     stageNumber++;
                 }
@@ -167,13 +151,13 @@ public class RedJewelAuto extends LinearOpMode {
             if (stageNumber == 7) {
                 switch (color) {
                     case "Red": {
-                        driveToPostion(left, -1, .3);
-                        driveToPostion(right, 1, .3);
+                        driveToPostion(left, 1, .3);
+                        driveToPostion(right, -1, .3);
                         stageNumber++;
                     }
                     case "Blue": {
-                        driveToPostion(left, 1, .3);
-                        driveToPostion(right, -1, .3);
+                        driveToPostion(left, -1, .3);
+                        driveToPostion(right, 1, .3);
                         stageNumber++;
                     }
                 }
@@ -238,27 +222,9 @@ public class RedJewelAuto extends LinearOpMode {
                 }
             }
 
+            // Drive depending on image
 
-            /*
-
-            if (stageNumber == 7) {
-                if (color.equals("Red")) {
-                    driveToPostion(left, -1, .3);
-                    driveToPostion(right, -1, .3);
-                    stageNumber++;
-                } else if (color.equals("Blue")) {
-                    driveToPostion(left, 1, .3);
-                    driveToPostion(right, 1, .3);
-                    stageNumber++;
-                } else {
-                    stageNumber = stageNumber + 2;
-                }
-            }
-
-
-             */
-
-            // 4. Mark as done!
+            // Mark as done
             if (stageNumber == 14) {
                 left.setPower(0);
                 right.setPower(0);
@@ -269,16 +235,14 @@ public class RedJewelAuto extends LinearOpMode {
             if (stageNumber >= 0) {
                 telemetry.addData("Stage number", stageNumber)
                         .addData("Color", color)
-                        .addData("","")
+                        .addData("Image Location", imageLocation)
+                        .addData("", "")
                         .addData("Red value", colorSensor.red())
-                        .addData("Green value", colorSensor.green())
                         .addData("Blue value", colorSensor.blue())
-                        .addData("","")
-                        .addData("lefFront pos", left.getCurrentPosition())
+                        .addData("", "").addData("lefFront pos", left.getCurrentPosition())
                         .addData("left target", left.getTargetPosition())
                         .addData("left ∆", Math.abs(left.getTargetPosition() - left.getCurrentPosition()))
-                        .addData("","")
-                        .addData("right pos", right.getCurrentPosition())
+                        .addData("", "").addData("right pos", right.getCurrentPosition())
                         .addData("right target", right.getTargetPosition())
                         .addData("right ∆", Math.abs(right.getTargetPosition() - right.getCurrentPosition()));
                 telemetry.update();
@@ -292,11 +256,10 @@ public class RedJewelAuto extends LinearOpMode {
         telemetry.addData("Status", "Done!");
         telemetry.update();
     }
-    /*
+
     String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
-    */
 
     private static void driveToPostion(DcMotor motor, int position, double power) {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -310,5 +273,4 @@ public class RedJewelAuto extends LinearOpMode {
         int targetPos = motor.getTargetPosition();
         return Math.abs((targetPos - curentPos)) <= discrepancy;
     }
-
 }

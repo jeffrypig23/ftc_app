@@ -117,12 +117,12 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             */
 
             //if (gamepad2.dpad_down) {
-                //armDown(arm);
-                //moveArm(arm, 90, 1);
+            //armDown(arm);
+            //moveArm(arm, 90, 1);
             //manualMoveUp(arm, gamepad2.dpad_up);
             //} else if (gamepad2.dpad_up) {
-                //armUp(arm);
-                //moveArm(arm, 0, 1);
+            //armUp(arm);
+            //moveArm(arm, 0, 1);
             //manualMoveDown(arm, gamepad2.dpad_down);
 
             //}

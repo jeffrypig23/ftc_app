@@ -6,87 +6,47 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.vuforia.CameraDevice;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
- * Created by Stephen Ogden on 10/23/17.
+ * Created by Stephen Ogden on 11/7/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-// 560 ticks per rotation
-// 4 in diameter
-// 89 ticks per inches
-
-// This is for 6128
-
-// TODO: Finish me!
-
-@Autonomous(name = "Blue Jewel Auto", group = "Test")
+@Autonomous(name = "Blue Jewel", group = "Test")
 @Disabled
-
-public class BlueJewelAuto extends LinearOpMode {
-
-    public static final String TAG = "Vuforia VuMark Sample";
-    private final double SERVOUPPOS = .5;
-    private final double SERVODOWNPOS = 0;
-    private float hsvValues[] = {0F, 0F, 0F};
-    final float values[] = hsvValues;
-    private String color = null;
-    private String imageLocation = null;
-    // StageNumber > -1 means running
-    private int stageNumber = 0;
-    OpenGLMatrix lastLocation = null;
-    private VuforiaLocalizer vuforia;
-
-    @Override
+public class BlueJewel extends LinearOpMode {
     public void runOpMode() {
 
-        //<editor-fold desc="Initialization">
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "AUgZTU3/////AAAAGaQ5yTo6EkZqvsH9Iel0EktQjXWAZUz3q3FPq22sUTrmsYCccs/mjYiflQBH2u7lofbTxe4BxTca9o2EOnNwA8dLGa/yL3cUgDGjeRfXuwZUCpIG6OEKhiPU5ntOpT2Nr5uVkT3vs2uRr7J6G7YoaGHLw2i1wGncRaw37rZyO03QRh0ZatdKIiK1ItuvJkP3qfUJwQwcpROwa+ZdDNQDbpU6WTL+kPZpnkgR8oLcu+Na1lWrbJ2ZTYG8eUjoIGowbVVGJgORHJazy6/7MbYH268h9ZC4vZ12ItyDK/GlPRTeQWdcZRlWfzAAFwNrjmdjWv9hMuOMoWxo2Y2Rw1Fwii4ohLyRmcQa/wAWY+AOEL14";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate");
-        RelicRecoveryVuMark vuMark;
+        final double SERVOUPPOS = 0.5d;
+        final double SERVODOWNPOS = 0.0d;
+
+        int stageNumber = 0;
+
+        String color = null;
 
         ColorSensor colorSensor = hardwareMap.colorSensor.get("color");
         colorSensor.enableLed(false);
 
-        Servo servo = hardwareMap.servo.get("servo");
+        Servo servo = hardwareMap.servo.get("left servo");
         servo.setPosition(SERVOUPPOS);
 
-        DcMotor left = hardwareMap.dcMotor.get("lf");
+        DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        DcMotor right = hardwareMap.dcMotor.get("rf");
+        DcMotor right = hardwareMap.dcMotor.get("right");
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // TODO: Note: I am temporarily disabling directions for the motors, becasue theyre running with encoders
-        //left.setDirection(DcMotorSimple.Direction.FORWARD);
-        //right.setDirection(DcMotorSimple.Direction.REVERSE);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();
-        relicTrackables.activate();
-        //</editor-fold>
-
 
         while (opModeIsActive()) {
 
@@ -94,8 +54,6 @@ public class BlueJewelAuto extends LinearOpMode {
             if (stageNumber == 0) {
                 servo.setPosition(SERVODOWNPOS);
                 colorSensor.enableLed(false);
-                CameraDevice.getInstance().setFlashTorchMode(false);
-                vuMark = RelicRecoveryVuMark.from(relicTemplate);
                 stageNumber++;
             }
             if (stageNumber == 1) {
@@ -106,22 +64,26 @@ public class BlueJewelAuto extends LinearOpMode {
             //</editor-fold>
 
             //<editor-fold desc="Detect Jewel Color">
+            double colorValue = 0.0;
             if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
                 colorSensor.enableLed(true);
                 if (colorSensor.red() > colorSensor.blue() && colorSensor.green() < colorSensor.red()) {
-                    color = "Red";
+                    colorValue = (colorValue + 1.0);
                     stageNumber++;
                 } else if (colorSensor.red() < colorSensor.blue() && colorSensor.green() < colorSensor.blue()) {
-                    color = "Blue";
                     stageNumber++;
-                } else {
-                    color = "Unknown :(";
                 }
             }
             //</editor-fold>
 
             //<editor-fold desc="Drive based on Jewel Color">
             if (stageNumber == 5) {
+
+                if (((int) Math.round(colorValue / 3)) == 1) {
+                    color = "Red";
+                } else {
+                    color = "Blue";
+                }
                 switch (color) {
                     case "Red": {
                         driveToPostion(left, -1, .3);
@@ -138,6 +100,8 @@ public class BlueJewelAuto extends LinearOpMode {
 
             if (stageNumber == 6) {
                 if (isThere(left, 2000) || isThere(right, 2000)) {
+                    left.setPower(0);
+                    right.setPower(0);
                     servo.setPosition(SERVOUPPOS);
                     stageNumber++;
                 }
@@ -168,72 +132,10 @@ public class BlueJewelAuto extends LinearOpMode {
                 }
             }
             //</editor-fold>
-
-            // Scan image, if all else fails, go center
-            if (stageNumber == 9) {
-                vuMark = RelicRecoveryVuMark.from(relicTemplate);
-                switch (vuMark) {
-                    case LEFT: {
-                        imageLocation = "Left";
-                        stageNumber++;
-                    }
-                    case RIGHT: {
-                        imageLocation = "Right";
-                        stageNumber++;
-                    }
-                    case CENTER: {
-                        imageLocation = "Center";
-                        stageNumber++;
-                    }
-                    case UNKNOWN: {
-                        imageLocation = "Center"; // Go to center if unknown
-                        stageNumber++;
-                    }
-                }
-            }
-
-            if (stageNumber == 10) {
-                // Drive 36 In to get before key thing
-                driveToPostion(left, -36, .5);
-                driveToPostion(right, 36, .5);
-                stageNumber++;
-            }
-            if (stageNumber == 11) {
-                if (isThere(left, 2000) || isThere(right, 2000)) {
-                    left.setPower(0);
-                    right.setPower(0);
-                    stageNumber++;
-                }
-            }
-
-            if (stageNumber == 12) {
-                // Turn 90 degrees clockwise
-                driveToPostion(left, -4, .5);
-                driveToPostion(right, 4, .5);
-                stageNumber++;
-            }
-            if (stageNumber == 13) {
-                if (isThere(left, 2000) || isThere(right, 2000)) {
-                    left.setPower(0);
-                    right.setPower(0);
-                    stageNumber++;
-                }
-            }
-
-            // Drive depending on image
-
-            // Mark as done
-            if (stageNumber == 14) {
-                left.setPower(0);
-                right.setPower(0);
-                stageNumber = -1;
-            }
-
             //<editor-fold desc="Telemetry and Stop">
             if (stageNumber >= 0) {
                 telemetry.addData("Stage number", stageNumber)
                         .addData("Color", color)
-                        .addData("Image Location", imageLocation)
                         .addData("", "")
                         .addData("Red value", colorSensor.red())
                         .addData("Blue value", colorSensor.blue())
@@ -253,10 +155,7 @@ public class BlueJewelAuto extends LinearOpMode {
         }
         telemetry.addData("Status", "Done!");
         telemetry.update();
-    }
 
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 
     private static void driveToPostion(DcMotor motor, int position, double power) {
@@ -271,4 +170,5 @@ public class BlueJewelAuto extends LinearOpMode {
         int targetPos = motor.getTargetPosition();
         return Math.abs((targetPos - curentPos)) <= discrepancy;
     }
+
 }

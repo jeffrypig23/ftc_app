@@ -33,32 +33,21 @@ public class AutoConcept extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
 
-    float hsvValues[] = {0F,0F,0F};
+    private float hsvValues[] = {0F,0F,0F};
 
     final float values[] = hsvValues;
 
-
     // StageNumber > -1 means running
-    short stageNumber = 0;
+    private short stageNumber = 0;
 
     OpenGLMatrix lastLocation = null;
 
-    VuforiaLocalizer vuforia;
-
-    ColorSensor colorSensor;
-
-    Servo servo = null;
-
-    DcMotor leftFront = null;
-    DcMotor leftBack = null;
-    DcMotor rightFront = null;
-    DcMotor rightBack = null;
-
+    private VuforiaLocalizer vuforia;
 
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initalizing...");
+        telemetry.addData("Status", "Initializing...");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
@@ -71,14 +60,14 @@ public class AutoConcept extends LinearOpMode {
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate");
 
-        colorSensor = hardwareMap.colorSensor.get("color");
+        ColorSensor colorSensor = hardwareMap.colorSensor.get("color");
 
-        servo = hardwareMap.servo.get("servo");
+        Servo servo = hardwareMap.servo.get("servo");
 
-        leftFront = hardwareMap.dcMotor.get("lf");
-        leftBack = hardwareMap.dcMotor.get("lb");
-        rightFront = hardwareMap.dcMotor.get("rf");
-        rightBack = hardwareMap.dcMotor.get("rb");
+        DcMotor leftFront = hardwareMap.dcMotor.get("lf");
+        DcMotor leftBack = hardwareMap.dcMotor.get("lb");
+        DcMotor rightFront = hardwareMap.dcMotor.get("rf");
+        DcMotor rightBack = hardwareMap.dcMotor.get("rb");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

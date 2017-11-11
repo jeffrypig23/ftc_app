@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 //@Disabled
 @TeleOp(name = "servo demo", group = "Test")
+@Disabled
 public class getServoPos extends LinearOpMode {
     private final double SERVOUPPOS = .5;
     private final double SERVODOWNPOS = 0;
