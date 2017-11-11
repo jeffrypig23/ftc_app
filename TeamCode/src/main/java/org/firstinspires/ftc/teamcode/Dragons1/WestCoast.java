@@ -85,7 +85,7 @@ public class WestCoast extends LinearOpMode {
         double leftPos = 1;
         double powR = 0.0;
         double powL = 0.0;
-        double turnSpeed = 0.8;
+        double turnSpeed = 0.81;
         double throttle;
         double turn;
 
