@@ -89,6 +89,7 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         telemetry.update();
         waitForStart();
         float slow=1.0f;
+        float joyStickDeadZone = 0.05f;
 
         while (opModeIsActive()) {
 
@@ -132,7 +133,7 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             else {
                 slow=1.0f;
             }
-
+            // gamepad2.setJoystickDeadzone(joyStickDeadZone);
             arm.setPower(slow*gamepad2.left_stick_y); // Manual control
             box.setPower(slow*gamepad2.right_stick_y); // Manuual control
 
