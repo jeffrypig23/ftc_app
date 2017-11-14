@@ -12,33 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * FRC 1595
  */
 
-// Teleop for 6128
+
 @TeleOp(name = "Drive Methods", group = "Test")
 //@Disabled
-
-/*
-Function which will move the box to one of 4 different positions
-    Based on encoder
-    Pass a value - Value corresponds to position
-
-Another funciton to lift
-    Controlled by Continuous SERVO which is connected to encoder
-    Gear ratio is 12:1
-        560 tics per rotation on neverest
-        290 on core hex
-        12 full rotations around the small to go one full around the gear
-    Goes from starting posotion up by 90°
-
-Intake
-    2 Motors
-
-Outtake
-    2 Motors
-
-    // TODO: All motors (Except drive) are Core Hex motors!!!
-
-
- */
 
 public class DriveMethods extends LinearOpMode {
 
@@ -219,8 +195,6 @@ public class DriveMethods extends LinearOpMode {
         }
 
     }
-
-    // TODO: Redo box postion (Based on inches)
 
     private void manualMoveUp(DcMotor motor, boolean run) {
         if (run) {
