@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 
 @Autonomous(name = "Blue Jewel", group = "Test")
-@Disabled
+//@Disabled
 public class BlueJewel extends LinearOpMode {
     public void runOpMode() {
 
@@ -155,7 +155,6 @@ public class BlueJewel extends LinearOpMode {
         }
         telemetry.addData("Status", "Done!");
         telemetry.update();
-
     }
 
     private static void driveToPostion(DcMotor motor, int position, double power) {

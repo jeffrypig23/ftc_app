@@ -14,8 +14,8 @@ import com.qualcomm.robotcore.hardware.Servo;
  * FRC 1595
  */
 
-@Autonomous(name = "Blue Jewel", group = "Test")
-@Disabled
+@Autonomous(name = "Red Jewel", group = "Test")
+//@Disabled
 public class RedJewel extends LinearOpMode {
     public void runOpMode() {
 
@@ -133,6 +133,7 @@ public class RedJewel extends LinearOpMode {
                 }
             }
             //</editor-fold>
+
             //<editor-fold desc="Telemetry and Stop">
             if (stageNumber >= 0) {
                 telemetry.addData("Stage number", stageNumber)

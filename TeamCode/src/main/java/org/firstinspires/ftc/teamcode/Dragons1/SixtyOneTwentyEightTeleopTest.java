@@ -80,6 +80,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            //<editor-fold desc="Drive">
             right.setPower(powR);
             left.setPower(powL);
 
@@ -98,6 +99,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             }
             Out(lintake, rintake, gamepad2.left_bumper);
             In(lintake, rintake, gamepad2.right_bumper);
+            //</editor-fold>
 
             if (gamepad2.a) {
                 //slow = 0.35f;
@@ -115,16 +117,40 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             if (gamepad2.dpad_down) {
                 armPos = -977;
             }
+            if (armPos >= 1) {
+                armPos = 0;
+            }
 
+            if (gamepad2.left_stick_y != 0.0f) {
+                armPos = armPos + ((int) gamepad2.left_stick_y);
+            }
+            if (gamepad2.right_stick_y != 0.0f) {
+                boxPos = boxPos + ((int) gamepad2.right_stick_y);
+            }
 
+            if (gamepad2.x) {
+                boxPos = -420;
+            }
+            if (gamepad2.y) {
+                boxPos = -884;
+            }
+            if (gamepad2.b) {
+                boxPos = -898;
+            }
 
             arm.setTargetPosition(armPos);
             box.setTargetPosition(boxPos);
+            /*
+             * Arm: -583 starting, -672 blockhold/default, -977 lowest
+             * Box: -420 6in, -844 12 in, -898 max
+             */
+
             /*
             arm.setPower(slow * gamepad2.left_stick_y); // Manual control
             box.setPower(slow * gamepad2.right_stick_y); // Manuual control
             */
 
+            //<editor-fold desc="Telemetry">
             telemetry.addData("Left Pow", powL)
                     .addData("RPow", powR)
                     .addData("Right motor", right.getCurrentPosition())
@@ -132,6 +158,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                     .addData("Arm position", armPos)
                     .addData("Box position", boxPos);
             telemetry.update();
+            //</editor-fold>
         }
     }
 

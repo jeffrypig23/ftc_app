@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 
 @TeleOp(name = "encoderTest", group = "Test")
-//@Disabled
+@Disabled
 public class encoderTest extends LinearOpMode {
 
     public void runOpMode() {

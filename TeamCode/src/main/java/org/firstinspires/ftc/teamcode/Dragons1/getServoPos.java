@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Tests;
+package org.firstinspires.ftc.teamcode.Dragons1;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * FRC 1595
  */
 //@Disabled
-@TeleOp(name = "servo demo", group = "Test")
+@TeleOp(name = "6128 Servo up and down", group = "Test")
 @Disabled
 public class getServoPos extends LinearOpMode {
     private final double SERVOUPPOS = .5;
@@ -22,7 +22,7 @@ public class getServoPos extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
-        Servo servo = hardwareMap.servo.get("servo");
+        Servo servo = hardwareMap.servo.get("right servo");
         servo.setPosition(SERVOUPPOS);
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();

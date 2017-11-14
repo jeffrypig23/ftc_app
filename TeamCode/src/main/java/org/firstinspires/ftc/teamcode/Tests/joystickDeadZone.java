@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name = "Deadzone test", group = "Test")
-//@Disabled
+@Disabled
 public class joystickDeadZone extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
