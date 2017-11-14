@@ -16,30 +16,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "6128 TeleOp", group = "Official")
 //@Disabled
 
-/*
-Function which will move the box to one of 4 different positions
-    Based on encoder
-    Pass a value - Value corresponds to position
-
-Another funciton to lift
-    Controlled by Continuous SERVO which is connected to encoder
-    Gear ratio is 12:1
-        560 tics per rotation on neverest
-        290 on core hex
-        12 full rotations around the small to go one full around the gear
-    Goes from starting posotion up by 90°
-
-Intake
-    2 Motors
-
-Outtake
-    2 Motors
-
-    // TODO: All motors (Except drive) are Core Hex motors!!!
-
-
- */
-
 public class SixtyOneTwentyEightTeleop extends LinearOpMode {
 
     private boolean armMoving = false;
@@ -83,23 +59,42 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
 
         double rightPos = 1;
         double leftPos = 1;
-
+        double powR = 0.0;
+        double powL = 0.0;
+        double turnSpeed = 0.8;
+        double throttle;
+        double turn;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();
-        float slow=1.0f;
+        float slow = 1.0f;
 
         while (opModeIsActive()) {
 
+
             // if leftPos > 1
 
-            left.setPower(gamepad1.left_stick_y * -1);
-            right.setPower(gamepad1.right_stick_y * -1);
+            //left.setPower(gamepad1.left_stick_y * -1);
+            //right.setPower(gamepad1.right_stick_y * -1);
+            right.setPower(powR);
+            left.setPower(powL);
 
+            throttle = gamepad1.left_stick_y;
+            turn = gamepad1.right_stick_x;
+            if (turn < 0) { //want to turn left
+                powL = (-throttle);
+                powR = (-throttle) * (1.0 - turnSpeed * Math.sqrt(Math.abs(turn)));
+            } else { //turn right
+                powL = (-throttle) * (1.0 - turnSpeed * Math.sqrt(Math.abs(turn)));
+                powR = (-throttle);
+            }
+            if (gamepad1.left_stick_button) {
+                powR = -turn;
+                powL = turn;
+            }
             Out(lintake, rintake, gamepad2.left_bumper);
             In(lintake, rintake, gamepad2.right_bumper);
-
 
             /*
             if (gamepad2.x) {
@@ -117,32 +112,32 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             */
 
             //if (gamepad2.dpad_down) {
-                //armDown(arm);
-                //moveArm(arm, 90, 1);
+            //armDown(arm);
+            //moveArm(arm, 90, 1);
             //manualMoveUp(arm, gamepad2.dpad_up);
             //} else if (gamepad2.dpad_up) {
-                //armUp(arm);
-                //moveArm(arm, 0, 1);
+            //armUp(arm);
+            //moveArm(arm, 0, 1);
             //manualMoveDown(arm, gamepad2.dpad_down);
 
             //}
-            if(gamepad2.a) {
-                slow=0.35f;
+            if (gamepad2.a) {
+                slow = 0.35f;
+            } else {
+                slow = 1.0f;
             }
-            else {
-                slow=1.0f;
-            }
 
-            arm.setPower(slow*gamepad2.left_stick_y); // Manual control
-            box.setPower(slow*gamepad2.right_stick_y); // Manuual control
+            arm.setPower(slow * gamepad2.left_stick_y); // Manual control
+            box.setPower(slow * gamepad2.right_stick_y); // Manuual control
 
-
+            telemetry.addData("LPow", powL);
+            telemetry.addData("RPow", powR);
+            telemetry.addData("RPos", right.getCurrentPosition());
+            telemetry.addData("LPos", left.getCurrentPosition());
+            telemetry.update();
         }
-        telemetry.addData("RPos", right.getCurrentPosition())
-                .addData("LPos", left.getCurrentPosition());
-        telemetry.update();
-
     }
+
     private void Out (DcMotor motor0, DcMotor motor1, boolean run) {
         if (run) {
             motor0.setDirection(DcMotorSimple.Direction.REVERSE);
