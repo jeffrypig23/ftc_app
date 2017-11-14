@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 // Teleop for 6128
-@TeleOp(name = "6128 TeleOp TEST", group = "Test")
+@TeleOp(name = "Drive Methods", group = "Test")
 //@Disabled
 
 /*
