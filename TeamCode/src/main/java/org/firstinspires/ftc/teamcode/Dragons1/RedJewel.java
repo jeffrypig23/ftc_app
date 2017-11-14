@@ -87,7 +87,7 @@ public class RedJewel extends LinearOpMode {
                 }
                 switch (color) {
                     case "Red": {
-                        driveToPostion(left, -1, .3);
+                        driveToPostion(left, 1, .3);
                         driveToPostion(right, -1, .3);
                         stageNumber++;
                     }
@@ -114,7 +114,7 @@ public class RedJewel extends LinearOpMode {
             if (stageNumber == 7) {
                 switch (color) {
                     case "Red": {
-                        driveToPostion(left, 1, .3);
+                        driveToPostion(left, -1, .3);
                         driveToPostion(right, 1, .3);
                         stageNumber++;
                     }

@@ -50,7 +50,6 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
         DcMotor box = hardwareMap.dcMotor.get("box");
         box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -66,8 +65,6 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         double turnSpeed = 0.8;
         double throttle;
         double turn;
-
-        //float slow = 1.0f;
 
         int armPos = -583;
         int boxPos = 0;
@@ -97,19 +94,10 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                 powR = -turn;
                 powL = turn;
             }
-            Out(lintake, rintake, gamepad2.left_bumper);
-            In(lintake, rintake, gamepad2.right_bumper);
             //</editor-fold>
 
-            if (gamepad2.a) {
-                //slow = 0.35f;
-                arm.setPower(0.35f);
-                box.setPower(0.35f);
-            } else {
-                //slow = 1.0f;
-                arm.setPower(1.0f);
-                box.setPower(1.0f);
-            }
+            Out(lintake, rintake, gamepad2.left_bumper);
+            In(lintake, rintake, gamepad2.right_bumper);
 
             if (gamepad2.dpad_up) {
                 armPos = -672;
@@ -117,40 +105,26 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             if (gamepad2.dpad_down) {
                 armPos = -977;
             }
-            if (armPos >= 1) {
-                armPos = 0;
-            }
-
-            if (gamepad2.left_stick_y != 0.0f) {
-                armPos = armPos + ((int) gamepad2.left_stick_y);
-            }
-            if (gamepad2.right_stick_y != 0.0f) {
-                boxPos = boxPos + ((int) gamepad2.right_stick_y);
-            }
 
             if (gamepad2.x) {
-                boxPos = -420;
+                boxPos = 0;
             }
             if (gamepad2.y) {
-                boxPos = -884;
-            }
-            if (gamepad2.b) {
                 boxPos = -898;
             }
 
             arm.setTargetPosition(armPos);
+            arm.setPower(0.5d);
+
             box.setTargetPosition(boxPos);
+            box.setPower(0.5d);
+
             /*
              * Arm: -583 starting, -672 blockhold/default, -977 lowest
              * Box: -420 6in, -844 12 in, -898 max
              */
 
-            /*
-            arm.setPower(slow * gamepad2.left_stick_y); // Manual control
-            box.setPower(slow * gamepad2.right_stick_y); // Manuual control
-            */
 
-            //<editor-fold desc="Telemetry">
             telemetry.addData("Left Pow", powL)
                     .addData("RPow", powR)
                     .addData("Right motor", right.getCurrentPosition())
@@ -158,8 +132,9 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                     .addData("Arm position", armPos)
                     .addData("Box position", boxPos);
             telemetry.update();
-            //</editor-fold>
         }
+        telemetry.addData("Status", "Done");
+        telemetry.update();
     }
 
     private void Out(DcMotor motor0, DcMotor motor1, boolean run) {

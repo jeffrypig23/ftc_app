@@ -132,6 +132,7 @@ public class BlueJewel extends LinearOpMode {
                 }
             }
             //</editor-fold>
+
             //<editor-fold desc="Telemetry and Stop">
             if (stageNumber >= 0) {
                 telemetry.addData("Stage number", stageNumber)
