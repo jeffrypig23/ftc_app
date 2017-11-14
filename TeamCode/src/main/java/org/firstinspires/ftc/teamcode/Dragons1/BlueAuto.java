@@ -29,10 +29,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 // TODO: Finish me!
 
-@Autonomous(name = "Blue Jewel Auto", group = "Test")
+@Autonomous(name = "Blue Auto", group = "Test")
 @Disabled
 
-public class BlueJewelAuto extends LinearOpMode {
+public class BlueAuto extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";
     private final double SERVOUPPOS = .5;
@@ -66,16 +66,18 @@ public class BlueJewelAuto extends LinearOpMode {
         ColorSensor colorSensor = hardwareMap.colorSensor.get("color");
         colorSensor.enableLed(false);
 
-        Servo servo = hardwareMap.servo.get("servo");
+        Servo servo = hardwareMap.servo.get("left servo");
         servo.setPosition(SERVOUPPOS);
 
-        DcMotor left = hardwareMap.dcMotor.get("lf");
+        DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        DcMotor right = hardwareMap.dcMotor.get("rf");
+        DcMotor right = hardwareMap.dcMotor.get("left");
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // TODO: Note: I am temporarily disabling directions for the motors, becasue theyre running with encoders
         //left.setDirection(DcMotorSimple.Direction.FORWARD);

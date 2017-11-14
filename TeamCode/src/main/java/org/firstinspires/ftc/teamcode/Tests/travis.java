@@ -18,7 +18,7 @@ public class travis extends LinearOpMode {
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
         while(opModeIsActive()){
-          motor.setPower(power);
+            motor.setPower(power);
             if (rampUp) {
                 power += 0.1;
                 if (power >= 1.0) {

@@ -31,9 +31,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 // Todo: Finish me!
 
-@Autonomous(name = "Red Jewel Auto", group = "Test")
+@Autonomous(name = "Red Auto", group = "Test")
+@Disabled
 
-public class RedJewelAuto extends LinearOpMode {
+public class RedAuto extends LinearOpMode {
     public static final String TAG = "Vuforia VuMark Sample";
     private float hsvValues[] = {0F,0F,0F};
     final float values[] = hsvValues;
@@ -68,13 +69,15 @@ public class RedJewelAuto extends LinearOpMode {
         Servo servo = hardwareMap.servo.get("servo");
         servo.setPosition(SERVOUPPOS);
 
-        DcMotor left = hardwareMap.dcMotor.get("lf");
+        DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        DcMotor right = hardwareMap.dcMotor.get("rf");
+        DcMotor right = hardwareMap.dcMotor.get("right");
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // TODO: Note: I am temporarily disabling directions for the motors, becasue theyre running with encoders
         //left.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -123,31 +126,31 @@ public class RedJewelAuto extends LinearOpMode {
             if (stageNumber == 5) {
                 switch (color) {
                     case "Red": {
-                    driveToPostion(left, 1, .3);
-                    //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //left.setTargetPosition(25810);
-                    //left.setPower(.3);
-                    //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    driveToPostion(right, -1, .3);
-                    //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //right.setTargetPosition(-25810);
-                    //right.setPower(.3);
-                    //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    stageNumber++;
+                        driveToPostion(left, 1, .3);
+                        //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        //left.setTargetPosition(25810);
+                        //left.setPower(.3);
+                        //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        driveToPostion(right, -1, .3);
+                        //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        //right.setTargetPosition(-25810);
+                        //right.setPower(.3);
+                        //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        stageNumber++;
                     }
                     case "Blue": {
-                    driveToPostion(left, -1, .3);
-                    //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //left.setTargetPosition(-25810);
-                    //left.setPower(.3);
-                    //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    driveToPostion(right, 1, .3);
-                    //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    //right.setTargetPosition(25810);
-                    //right.setPower(.3);
-                    //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    stageNumber++;
-                }
+                        driveToPostion(left, -1, .3);
+                        //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        //left.setTargetPosition(-25810);
+                        //left.setPower(.3);
+                        //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        driveToPostion(right, 1, .3);
+                        //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        //right.setTargetPosition(25810);
+                        //right.setPower(.3);
+                        //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        stageNumber++;
+                    }
                 }
             }
 
@@ -302,7 +305,6 @@ public class RedJewelAuto extends LinearOpMode {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setTargetPosition(position * 25810);
         motor.setPower(power);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     private static boolean isThere(DcMotor motor, int discrepancy) {
