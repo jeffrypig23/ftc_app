@@ -26,12 +26,12 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
 
         DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         left.setDirection(DcMotorSimple.Direction.REVERSE);
 
         DcMotor right = hardwareMap.dcMotor.get("right");
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right.setDirection(DcMotorSimple.Direction.FORWARD);
 
         DcMotor lintake = hardwareMap.dcMotor.get("lintake");
@@ -57,13 +57,14 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         //Servo leftServo = hardwareMap.servo.get("leftServo");
         //Servo rightServo = hardwareMap.servo.get("rightServo");
 
-        double rightPos = 1;
-        double leftPos = 1;
-        double powR = 0.0;
-        double powL = 0.0;
-        double turnSpeed = 0.8;
+        double powR;
+        double powL;
         double throttle;
         double turn;
+
+        double sensitivity=0.6f;
+        int armPos = -583;
+        int boxPos = 0;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -77,22 +78,39 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
 
             //left.setPower(gamepad1.left_stick_y * -1);
             //right.setPower(gamepad1.right_stick_y * -1);
+
+            if(gamepad1.left_stick_y > 0) {
+                throttle = -(gamepad1.left_stick_y*gamepad1.left_stick_y);
+            }
+            else {
+                throttle = gamepad1.left_stick_y*gamepad1.left_stick_y;
+            }
+
+            turn = gamepad1.right_stick_x;
+            if(turn > 0) {
+                powL = (int) (throttle - turn * turn);
+                powR = (int) (throttle + turn * turn);
+            }
+            else {
+                powL = (int) (throttle + turn * turn);
+                powR = (int) (throttle - turn * turn);
+            }
+            if (powR > 1.0) {
+                powL -= sensitivity * (powR - 1.0);
+                powR = 1.0;
+            } else if (powL > 1.0) {
+                powR -=  sensitivity * (powL - 1.0);
+                powL = 1.0;
+            } else if (powR < -1.0) {
+                powL +=  sensitivity * (-1.0 - powR);
+                powR = -1.0;
+            } else if (powL < -1.0) {
+                powR +=  sensitivity * (-1.0 - powL);
+                powL = -1.0;
+            }
             right.setPower(powR);
             left.setPower(powL);
 
-            throttle = gamepad1.left_stick_y;
-            turn = gamepad1.right_stick_x;
-            if (turn < 0) { //want to turn left
-                powL = (-throttle);
-                powR = (-throttle) * (1.0 - turnSpeed * Math.sqrt(Math.abs(turn)));
-            } else { //turn right
-                powL = (-throttle) * (1.0 - turnSpeed * Math.sqrt(Math.abs(turn)));
-                powR = (-throttle);
-            }
-            if (gamepad1.left_stick_button) {
-                powR = -turn;
-                powL = turn;
-            }
             Out(lintake, rintake, gamepad2.left_bumper);
             In(lintake, rintake, gamepad2.right_bumper);
 
