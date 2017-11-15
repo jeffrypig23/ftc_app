@@ -17,10 +17,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Autonomous(name = "Red Jewel", group = "Test")
 //@Disabled
 public class RedJewel extends LinearOpMode {
+
+    private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
+
+        bot.getConfig(hardwareMap);
 
         final double SERVOUPPOS = 0.5d;
         final double SERVODOWNPOS = 0.0d;
@@ -29,11 +34,11 @@ public class RedJewel extends LinearOpMode {
 
         String color = null;
 
-        ColorSensor colorSensor = hardwareMap.colorSensor.get("color");
-        colorSensor.enableLed(false);
+        /*
+        ColorSensor rightColorSensor = hardwareMap.colorSensor.get("right color");
 
-        Servo servo = hardwareMap.servo.get("right servo");
-        servo.setPosition(SERVOUPPOS);
+        Servo rightServo = hardwareMap.servo.get("right servo");
+        rightServo.setPosition(SERVOUPPOS);
 
         DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -44,6 +49,7 @@ public class RedJewel extends LinearOpMode {
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        */
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -53,12 +59,11 @@ public class RedJewel extends LinearOpMode {
 
             //<editor-fold desc="Move down servo">
             if (stageNumber == 0) {
-                servo.setPosition(SERVODOWNPOS);
-                colorSensor.enableLed(false);
+                bot.rightServo.setPosition(SERVODOWNPOS);
                 stageNumber++;
             }
             if (stageNumber == 1) {
-                if (servo.getPosition() == SERVODOWNPOS) {
+                if (bot.rightServo.getPosition() == SERVODOWNPOS) {
                     stageNumber++;
                 }
             }
@@ -67,11 +72,10 @@ public class RedJewel extends LinearOpMode {
             //<editor-fold desc="Detect Jewel Color">
             double colorValue = 0.0;
             if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
-                colorSensor.enableLed(true);
-                if (colorSensor.red() > colorSensor.blue() && colorSensor.green() < colorSensor.red()) {
+                if (bot.rightColorSensor.red() > bot.rightColorSensor.blue() && bot.rightColorSensor.green() < bot.rightColorSensor.red()) {
                     colorValue = (colorValue + 1.0);
                     stageNumber++;
-                } else if (colorSensor.red() < colorSensor.blue() && colorSensor.green() < colorSensor.blue()) {
+                } else if (bot.rightColorSensor.red() < bot.rightColorSensor.blue() && bot.rightColorSensor.green() < bot.rightColorSensor.blue()) {
                     stageNumber++;
                 }
             }
@@ -87,23 +91,23 @@ public class RedJewel extends LinearOpMode {
                 }
                 switch (color) {
                     case "Red": {
-                        driveToPostion(left, 1, .3);
-                        driveToPostion(right, -1, .3);
+                        driveToPostion(bot.left, 1, .3);
+                        driveToPostion(bot.right, -1, .3);
                         stageNumber++;
                     }
                     case "Blue": {
-                        driveToPostion(left, -1, .3);
-                        driveToPostion(right, 1, .3);
+                        driveToPostion(bot.left, -1, .3);
+                        driveToPostion(bot.right, 1, .3);
                         stageNumber++;
                     }
                 }
             }
 
             if (stageNumber == 6) {
-                if (isThere(left, 2000) || isThere(right, 2000)) {
-                    left.setPower(0);
-                    right.setPower(0);
-                    servo.setPosition(SERVOUPPOS);
+                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
+                    bot.rightServo.setPosition(SERVOUPPOS);
                     stageNumber++;
                 }
 
@@ -114,21 +118,21 @@ public class RedJewel extends LinearOpMode {
             if (stageNumber == 7) {
                 switch (color) {
                     case "Red": {
-                        driveToPostion(left, -1, .3);
-                        driveToPostion(right, 1, .3);
+                        driveToPostion(bot.left, -1, .3);
+                        driveToPostion(bot.right, 1, .3);
                         stageNumber++;
                     }
                     case "Blue": {
-                        driveToPostion(left, 1, .3);
-                        driveToPostion(right, -1, .3);
+                        driveToPostion(bot.left, 1, .3);
+                        driveToPostion(bot.right, -1, .3);
                         stageNumber++;
                     }
                 }
             }
             if (stageNumber == 8) {
-                if (isThere(left, 2000) || isThere(right, 2000)) {
-                    left.setPower(0);
-                    right.setPower(0);
+                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
                     stageNumber++;
                 }
             }
@@ -139,14 +143,14 @@ public class RedJewel extends LinearOpMode {
                 telemetry.addData("Stage number", stageNumber)
                         .addData("Color", color)
                         .addData("", "")
-                        .addData("Red value", colorSensor.red())
-                        .addData("Blue value", colorSensor.blue())
-                        .addData("", "").addData("lefFront pos", left.getCurrentPosition())
-                        .addData("left target", left.getTargetPosition())
-                        .addData("left ∆", Math.abs(left.getTargetPosition() - left.getCurrentPosition()))
-                        .addData("", "").addData("right pos", right.getCurrentPosition())
-                        .addData("right target", right.getTargetPosition())
-                        .addData("right ∆", Math.abs(right.getTargetPosition() - right.getCurrentPosition()));
+                        .addData("Red value", bot.rightColorSensor.red())
+                        .addData("Blue value", bot.rightColorSensor.blue())
+                        .addData("", "").addData("lefFront pos", bot.left.getCurrentPosition())
+                        .addData("left target", bot.left.getTargetPosition())
+                        .addData("left ∆", Math.abs(bot.left.getTargetPosition() - bot.left.getCurrentPosition()))
+                        .addData("", "").addData("right pos", bot.right.getCurrentPosition())
+                        .addData("right target", bot.right.getTargetPosition())
+                        .addData("right ∆", Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()));
                 telemetry.update();
             } else {
                 stop();

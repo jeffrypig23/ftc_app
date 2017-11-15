@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Dragons1;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,6 +21,8 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
 
     private boolean armMoving = false;
 
+    private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+
     @Override
     public void runOpMode() {
 
@@ -27,6 +30,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
+        /*
         DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -55,17 +59,21 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         box.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        //Servo leftServo = hardwareMap.servo.get("leftServo");
-        //Servo rightServo = hardwareMap.servo.get("rightServo");
+        ColorSensor leftColorSensor = hardwareMap.colorSensor.get("left color");
+        ColorSensor rightColorSensor = hardwareMap.colorSensor.get("right color");
 
-        double rightPos = 1;
-        double leftPos = 1;
-        double powR = 0.0;
-        double powL = 0.0;
-        double turnSpeed = 0.8;
+        Servo rightServo = hardwareMap.servo.get("right servo");
+        Servo leftServo = hardwareMap.servo.get("left servo");
+        */
+
+        bot.getConfig(hardwareMap);
+
+        double powR;
+        double powL;
         double throttle;
         double turn;
 
+        double sensitivity=0.6f;
         int armPos = -583;
         int boxPos = 0;
 
@@ -78,26 +86,41 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             //<editor-fold desc="Drive">
-            right.setPower(powR);
-            left.setPower(powL);
+            if(gamepad1.left_stick_y > 0) {
+                throttle = -(gamepad1.left_stick_y*gamepad1.left_stick_y);
+            }
+            else {
+                throttle = gamepad1.left_stick_y*gamepad1.left_stick_y;
+            }
 
-            throttle = gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
-            if (turn < 0) { //want to turn left
-                powL = (-throttle);
-                powR = (-throttle) * (1.0 - turnSpeed * Math.sqrt(Math.abs(turn)));
-            } else { //turn right
-                powL = (-throttle) * (1.0 - turnSpeed * Math.sqrt(Math.abs(turn)));
-                powR = (-throttle);
+            if(turn > 0) {
+                powL = (int) (throttle - turn * turn);
+                powR = (int) (throttle + turn * turn);
             }
-            if (gamepad1.left_stick_button) {
-                powR = -turn;
-                powL = turn;
+            else {
+                powL = (int) (throttle + turn * turn);
+                powR = (int) (throttle - turn * turn);
             }
+            if (powR > 1.0) {
+                powL -= sensitivity * (powR - 1.0);
+                powR = 1.0;
+            } else if (powL > 1.0) {
+                powR -=  sensitivity * (powL - 1.0);
+                powL = 1.0;
+            } else if (powR < -1.0) {
+                powL +=  sensitivity * (-1.0 - powR);
+                powR = -1.0;
+            } else if (powL < -1.0) {
+                powR +=  sensitivity * (-1.0 - powL);
+                powL = -1.0;
+            }
+            bot.right.setPower(powR);
+            bot.left.setPower(powL);
             //</editor-fold>
 
-            Out(lintake, rintake, gamepad2.left_bumper);
-            In(lintake, rintake, gamepad2.right_bumper);
+            Out(bot.lintake, bot.rintake, gamepad2.left_bumper);
+            In(bot.lintake, bot.rintake, gamepad2.right_bumper);
 
             if (gamepad2.dpad_up) {
                 armPos = -672;
@@ -113,11 +136,11 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                 boxPos = -898;
             }
 
-            arm.setTargetPosition(armPos);
-            arm.setPower(0.5d);
+            bot.arm.setTargetPosition(armPos);
+            bot.arm.setPower(0.5d);
 
-            box.setTargetPosition(boxPos);
-            box.setPower(0.5d);
+            bot.box.setTargetPosition(boxPos);
+            bot.box.setPower(0.5d);
 
             /*
              * Arm: -583 starting, -672 blockhold/default, -977 lowest
@@ -127,8 +150,8 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
 
             telemetry.addData("Left Pow", powL)
                     .addData("RPow", powR)
-                    .addData("Right motor", right.getCurrentPosition())
-                    .addData("Left motor", left.getCurrentPosition())
+                    .addData("Right motor", bot.right.getCurrentPosition())
+                    .addData("Left motor", bot.left.getCurrentPosition())
                     .addData("Arm position", armPos)
                     .addData("Box position", boxPos);
             telemetry.update();
