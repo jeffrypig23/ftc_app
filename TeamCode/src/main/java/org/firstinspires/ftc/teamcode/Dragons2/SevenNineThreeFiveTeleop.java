@@ -19,12 +19,15 @@ public class SevenNineThreeFiveTeleop extends LinearOpMode {
 
     private boolean outRun = false;
 
+    private SevenNineThreeFiveConfig bot = new SevenNineThreeFiveConfig();
+
     public void runOpMode() {
 
         //<editor-fold desc="Initialization">
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
+        /*
         DcMotor left = hardwareMap.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -62,10 +65,11 @@ public class SevenNineThreeFiveTeleop extends LinearOpMode {
         DcMotor out = hardwareMap.dcMotor.get("out");
         out.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         out.setDirection(DcMotorSimple.Direction.FORWARD);
+        */
+
+        bot.getConfig(hardwareMap);
 
         int elevatorPos = 251;
-
-
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -73,26 +77,26 @@ public class SevenNineThreeFiveTeleop extends LinearOpMode {
         //</editor-fold>
         while (opModeIsActive()) {
 
-            right.setPower(gamepad2.left_stick_y - (gamepad2.right_stick_x * 2));
-            left.setPower(gamepad2.left_stick_y + (gamepad2.right_stick_x * 2));
+            bot.right.setPower(gamepad2.left_stick_y - (gamepad2.right_stick_x * 2));
+            bot.left.setPower(gamepad2.left_stick_y + (gamepad2.right_stick_x * 2));
 
             if (gamepad1.dpad_down) {
-                lintake.setPower(1);
-                rintake.setPower(-1);
-                out.setPower(-1);
+                bot.lintake.setPower(1);
+                bot.rintake.setPower(-1);
+                bot.out.setPower(-1);
             } else if (gamepad1.dpad_up) {
-                lintake.setPower(-1);
-                rintake.setPower(1);
-                out.setPower(1);
+                bot.lintake.setPower(-1);
+                bot.rintake.setPower(1);
+                bot.out.setPower(1);
             } else {
                 //In(lintake, gamepad1.left_bumper);
                 //In(rintake, gamepad1.right_bumper);
-                lintake.setPower(gamepad1.right_trigger * -1);
-                rintake.setPower(gamepad1.right_trigger);
-                out.setPower(gamepad1.right_trigger);
+                bot.lintake.setPower(gamepad1.right_trigger * -1);
+                bot.rintake.setPower(gamepad1.right_trigger);
+                bot.out.setPower(gamepad1.right_trigger);
             }
 
-            out.setPower(gamepad1.left_trigger * -1);
+            bot.out.setPower(gamepad1.left_trigger * -1);
 
             /*
             if (gamepad1.right_trigger >= 0.2f) {
@@ -102,11 +106,11 @@ public class SevenNineThreeFiveTeleop extends LinearOpMode {
 
 
             if (gamepad1.right_stick_y != 0 || elevatorPos < 250) {
-                relevator.setPower(1);
-                lelevator.setPower(-1);
+                bot.relevator.setPower(1);
+                bot.lelevator.setPower(-1);
             } else {
-                relevator.setPower(0);
-                lelevator.setPower(0);
+                bot.relevator.setPower(0);
+                bot.lelevator.setPower(0);
             }
 
             //relevator.setPower(gamepad1.right_stick_y);
@@ -118,8 +122,8 @@ public class SevenNineThreeFiveTeleop extends LinearOpMode {
             } else {
                 elevatorPos = 251;
             }
-            relevator.setTargetPosition(elevatorPos);
-            lelevator.setTargetPosition(elevatorPos);
+            bot.relevator.setTargetPosition(elevatorPos);
+            bot.lelevator.setTargetPosition(elevatorPos);
 
             /*
             if (gamepad1.a) {
@@ -146,8 +150,8 @@ public class SevenNineThreeFiveTeleop extends LinearOpMode {
             telemetry.addData("RPower", gamepad2.left_stick_y - (gamepad2.right_stick_x * 2));
             telemetry.addData("LPower", gamepad2.left_stick_y + (gamepad2.right_stick_x * 2));
             telemetry.addData("TargetPos", elevatorPos);
-            telemetry.addData("Left elevator", lelevator.getCurrentPosition());
-            telemetry.addData("Right elevator", relevator.getCurrentPosition());
+            telemetry.addData("Left elevator", bot.lelevator.getCurrentPosition());
+            telemetry.addData("Right elevator", bot.relevator.getCurrentPosition());
 
             telemetry.update();
         }

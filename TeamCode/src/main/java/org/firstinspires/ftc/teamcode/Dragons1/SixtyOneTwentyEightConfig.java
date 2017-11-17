@@ -6,14 +6,36 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-/**
+/*
  * Created by Stephen Ogden on 11/14/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-// This is the config file for FTC Team 6128: Dragons 1.0
 
+/**
+ * This is NOT an opmode.
+ *
+ * This class can be used to define all the specific hardware for a single robot.
+ * In this case that robot is the bot for FTC Team 6128: Dragons 1.0.
+ *
+ * This hardware class assumes the following device names have been configured on the robot:
+ * Note:  All names are lower case and some have single spaces between words.
+ *
+ * Motor channel: Left drive motor: "left"
+ * Motor channel: Right drive motor:  "right"
+ * Motor channel: Left intake motor: "lintake"
+ * Motor channel: Right intake motor: "rintake"
+ * Motor channel: Motor to raise/lower arm: "arm"
+ * Motor channel: Motor to raise/lower box: "box"
+ *
+ * I2C Channel: Color sensor for left side: "left color"
+ * I2C Channel: Color sensor for right side: "right color"
+ *
+ * Servo channel: Servo to raise/lower right arm: "right servo"
+ * Servo channel: Servo to raise/lower left arm: "left servo"
+ *
+ */
 public class SixtyOneTwentyEightConfig {
 
     DcMotor left;
@@ -28,6 +50,16 @@ public class SixtyOneTwentyEightConfig {
 
     Servo rightServo;
     Servo leftServo;
+
+    // Left up is  .53| down is .95
+    // Right up is .3 | down is .11
+
+
+    public final double leftUp = 0.53d;
+    public final double leftDown = 0.95d;
+    public final double rightUp = 0.3d;
+    public final double rightDown = 0.11d;
+
 
     public void getConfig(HardwareMap config) {
 

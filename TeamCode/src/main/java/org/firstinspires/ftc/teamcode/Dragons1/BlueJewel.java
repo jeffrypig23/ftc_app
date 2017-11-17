@@ -26,6 +26,10 @@ public class BlueJewel extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
+        // Left up is  .53| down is .95
+        // Right up is .3 | down is .11
+
+
         final double SERVOUPPOS = 0.5d;
         final double SERVODOWNPOS = 0.0d;
 

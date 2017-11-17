@@ -30,43 +30,10 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        /*
-        DcMotor left = hardwareMap.dcMotor.get("left");
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        DcMotor right = hardwareMap.dcMotor.get("right");
-        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        DcMotor lintake = hardwareMap.dcMotor.get("lintake");
-        lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        DcMotor rintake = hardwareMap.dcMotor.get("rintake");
-        rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        DcMotor arm = hardwareMap.dcMotor.get("arm");
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        DcMotor box = hardwareMap.dcMotor.get("box");
-        box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        box.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        ColorSensor leftColorSensor = hardwareMap.colorSensor.get("left color");
-        ColorSensor rightColorSensor = hardwareMap.colorSensor.get("right color");
-
-        Servo rightServo = hardwareMap.servo.get("right servo");
-        Servo leftServo = hardwareMap.servo.get("left servo");
-        */
-
         bot.getConfig(hardwareMap);
+
+        bot.leftServo.setPosition(bot.leftUp);
+        bot.rightServo.setPosition(bot.rightUp);
 
         double powR;
         double powL;
@@ -75,13 +42,21 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
 
         double sensitivity=0.6f;
         int armPos = -583;
-        int boxPos = 0;
+        int boxPos = -844;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         //</editor-fold>
 
         waitForStart();
+        bot.box.setTargetPosition(-850);
+        while(!isThere(bot.box, 10)) {
+
+        }
+        // TODO: Program to tet ALL THE THINGS (Servos, motors, color sensors), Remind Ethan to czech autos
+        // TODO: Servo varialbe in config (when moving, just add)
+        bot.arm.setTargetPosition(-583);
+
 
         while (opModeIsActive()) {
 
@@ -184,6 +159,12 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             motor1.setPower(0);
         }
 
+    }
+
+    private static boolean isThere(DcMotor motor, int discrepancy) {
+        int curentPos = motor.getCurrentPosition();
+        int targetPos = motor.getTargetPosition();
+        return Math.abs((targetPos - curentPos)) <= discrepancy;
     }
 
 }
