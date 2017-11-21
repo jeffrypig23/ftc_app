@@ -17,4 +17,5 @@ Consider reading the [documentation](https://www.firstinspires.org/sites/default
 
 ## What does the field look like? Just for reference?
 It looks like this:
+<br>
 ![alt](https://cdn3.volusion.com/vyfsn.knvgw/v/vspfiles/photos/am-3600-2.jpg?1505371248)
