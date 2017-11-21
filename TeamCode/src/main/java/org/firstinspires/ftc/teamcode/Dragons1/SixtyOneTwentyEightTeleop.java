@@ -46,16 +46,11 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //CRServo arm = hardwareMap.crservo.get("arm");
-
         DcMotor box = hardwareMap.dcMotor.get("box");
         box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         box.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         box.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        //Servo leftServo = hardwareMap.servo.get("leftServo");
-        //Servo rightServo = hardwareMap.servo.get("rightServo");
 
         double powR;
         double powL;
@@ -72,12 +67,6 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         float slow = 1.0f;
 
         while (opModeIsActive()) {
-
-
-            // if leftPos > 1
-
-            //left.setPower(gamepad1.left_stick_y * -1);
-            //right.setPower(gamepad1.right_stick_y * -1);
 
             if(gamepad1.left_stick_y > 0) {
                 throttle = -(gamepad1.left_stick_y*gamepad1.left_stick_y);
@@ -114,31 +103,6 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             Out(lintake, rintake, gamepad2.left_bumper);
             In(lintake, rintake, gamepad2.right_bumper);
 
-            /*
-            if (gamepad2.x) {
-                //boxPos(box, 0);
-                moveBoxTo(box,12,1);
-                //manualMoveBoxUp(box, gamepad2.x);
-
-            } else if (gamepad2.a) {
-                //boxPos(box, 1);
-                moveBoxTo(box, 0,1);
-            } else if (gamepad2.b) {
-                //boxPos(box, 2);
-                moveBoxTo(box, 6, 1);
-            }
-            */
-
-            //if (gamepad2.dpad_down) {
-            //armDown(arm);
-            //moveArm(arm, 90, 1);
-            //manualMoveUp(arm, gamepad2.dpad_up);
-            //} else if (gamepad2.dpad_up) {
-            //armUp(arm);
-            //moveArm(arm, 0, 1);
-            //manualMoveDown(arm, gamepad2.dpad_down);
-
-            //}
             if (gamepad2.a) {
                 slow = 0.35f;
             } else {
@@ -209,28 +173,7 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         motor.setPower(power);
     }
 
-
-    /*
-    private void boxPos (DcMotor motor, int position) {
-
-        switch (position){
-            case 0: {
-                // Something
-            }
-            case 1: {
-                // Something
-            }
-            case 2: {
-                // Something
-            }
-            case 3: {
-                // Something
-            }
-        }
-    }
-    */
-
-    private void moveArm (DcMotor motor, int degrees, double power) {
+        private void moveArm (DcMotor motor, int degrees, double power) {
         // 290*12*(96/360) = 729.6
         //float conversion = 3480.0f * (degrees/360.0f);
         int position = Math.round(((290*12)/360) * (degrees));
@@ -245,40 +188,4 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         int targetPos = motor.getTargetPosition();
         return Math.abs((targetPos - curentPos)) <= discrepancy;
     }
-    /*
-    private void armUp (DcMotor motor) {
-        if (armMoving) {
-            if (Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) <= 50) {
-                motor.setPower(0);
-                armMoving = false;
-            }
-        } else {
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setTargetPosition(730);
-            motor.setPower(1);
-            armMoving = true;
-        }
-    }
-
-    private void armDown (DcMotor motor) {
-        if (armMoving) {
-            if (Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) <= 50) {
-                motor.setPower(0);
-                armMoving = false;
-            }
-        } else {
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setTargetPosition(-(730));
-            motor.setPower(1);
-            armMoving = true;
-        }
-    }
-    */
-    /*
-    private void armUp (CRServo servo) {
-        if (armMoving) {
-            if (Math.abs(servo.))
-        }
-    }
-    */
 }

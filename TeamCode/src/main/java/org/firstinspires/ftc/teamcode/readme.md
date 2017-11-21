@@ -14,3 +14,7 @@ There are also test programs included in the `Tests` folder. I would highly reco
 ## Im still stuck!
 
 Consider reading the [documentation](https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/android-studio-tutorial.pdf) for setting up android studios
+
+## What does the field look like? Just for reference?
+It looks like this:
+![alt](https://cdn3.volusion.com/vyfsn.knvgw/v/vspfiles/photos/am-3600-2.jpg?1505371248)
