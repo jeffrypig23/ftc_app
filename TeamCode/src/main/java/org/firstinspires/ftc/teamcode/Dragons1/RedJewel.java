@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 /**
@@ -27,29 +28,11 @@ public class RedJewel extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
-        final double SERVOUPPOS = 0.5d;
-        final double SERVODOWNPOS = 0.0d;
+        ElapsedTime time = new ElapsedTime();
 
         int stageNumber = 0;
 
-        String color = null;
-
-        /*
-        ColorSensor rightColorSensor = hardwareMap.colorSensor.get("right color");
-
-        Servo rightServo = hardwareMap.servo.get("right servo");
-        rightServo.setPosition(SERVOUPPOS);
-
-        DcMotor left = hardwareMap.dcMotor.get("left");
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        DcMotor right = hardwareMap.dcMotor.get("right");
-        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        */
+        String color = "";
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -59,12 +42,14 @@ public class RedJewel extends LinearOpMode {
 
             //<editor-fold desc="Move down servo">
             if (stageNumber == 0) {
-                bot.rightServo.setPosition(SERVODOWNPOS);
+                bot.rightServo.setPosition(bot.rightDown);
                 stageNumber++;
             }
             if (stageNumber == 1) {
-                if (bot.rightServo.getPosition() == SERVODOWNPOS) {
-                    stageNumber++;
+                if (time.seconds() < 2) {
+                    // Do nothing :P
+                } else {
+                    stageNumber = 2;
                 }
             }
             //</editor-fold>
@@ -107,7 +92,7 @@ public class RedJewel extends LinearOpMode {
                 if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
-                    bot.rightServo.setPosition(SERVOUPPOS);
+                    bot.rightServo.setPosition(bot.rightUp);
                     stageNumber++;
                 }
 
@@ -138,6 +123,22 @@ public class RedJewel extends LinearOpMode {
             }
             //</editor-fold>
 
+            if ((bot.left.getTargetPosition() - bot.left.getCurrentPosition()) >= 10) {
+                bot.left.setPower(1);
+            } else if ((bot.left.getTargetPosition() - bot.left.getCurrentPosition()) <= -10) {
+                bot.left.setPower(-1);
+            } else {
+                bot.left.setPower(0);
+            }
+
+            if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
+                bot.right.setPower(1);
+            } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
+                bot.right.setPower(-1);
+            } else {
+                bot.right.setPower(0);
+            }
+
             //<editor-fold desc="Telemetry and Stop">
             if (stageNumber >= 0) {
                 telemetry.addData("Stage number", stageNumber)
@@ -152,6 +153,7 @@ public class RedJewel extends LinearOpMode {
                         .addData("right target", bot.right.getTargetPosition())
                         .addData("right ∆", Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()));
                 telemetry.update();
+
             } else {
                 stop();
             }
@@ -166,7 +168,7 @@ public class RedJewel extends LinearOpMode {
     private static void driveToPostion(DcMotor motor, int position, double power) {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setTargetPosition(position * 25810);
-        motor.setPower(power);
+        //motor.setPower(power);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
