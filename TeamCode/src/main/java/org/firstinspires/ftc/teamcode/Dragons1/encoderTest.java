@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * FRC 1595
  */
 
-@TeleOp(name = "6128 encoder test", group = "Test")
+@TeleOp(name = "Encoder and color test", group = "Test")
 //@Disabled
 public class encoderTest extends LinearOpMode {
 

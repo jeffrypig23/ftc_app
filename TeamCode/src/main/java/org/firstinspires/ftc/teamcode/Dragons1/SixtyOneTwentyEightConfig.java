@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Dragons1;
 
+import android.app.Activity;
+import android.view.View;
+
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -51,14 +54,16 @@ public class SixtyOneTwentyEightConfig {
     Servo rightServo;
     Servo leftServo;
 
+    View app;
+
     // Left up is  .53| down is .95
     // Right up is .3 | down is .11
 
 
     public final double leftUp = 0.53d;
-    public final double leftDown = 0.95d;
+    public final double leftDown = 1.0d;
     public final double rightUp = 0.3d;
-    public final double rightDown = 0.11d;
+    public final double rightDown = 0.0d;
 
 
     public void getConfig(HardwareMap config) {
@@ -96,6 +101,8 @@ public class SixtyOneTwentyEightConfig {
 
         rightServo = config.servo.get("right servo");
         leftServo = config.servo.get("left servo");
+
+        app = ((Activity) config.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
 
     }
 }

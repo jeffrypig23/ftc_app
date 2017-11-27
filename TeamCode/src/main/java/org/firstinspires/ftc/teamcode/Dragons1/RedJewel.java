@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name = "Red Jewel", group = "Test")
-//@Disabled
+@Disabled
 public class RedJewel extends LinearOpMode {
 
     private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
@@ -42,10 +42,11 @@ public class RedJewel extends LinearOpMode {
 
             //<editor-fold desc="Move down servo">
             if (stageNumber == 0) {
-                bot.rightServo.setPosition(bot.rightDown);
+                bot.leftServo.setPosition(bot.leftDown);
+                time.reset();
                 stageNumber++;
             }
-            if (stageNumber == 1) {
+            else if (stageNumber == 1) {
                 if (time.seconds() < 2) {
                     // Do nothing :P
                 } else {

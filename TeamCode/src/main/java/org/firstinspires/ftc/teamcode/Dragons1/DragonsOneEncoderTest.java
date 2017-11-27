@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * FTC 6128 | 7935
  * FRC 1595
  */
-@TeleOp(name = "6128 Encoder test", group = "Test")
-//@Disabled
+@TeleOp(name = "Ethan's encoder test", group = "Test")
+@Disabled
 public class DragonsOneEncoderTest extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");

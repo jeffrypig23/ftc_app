@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Dragons1;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -43,56 +47,46 @@ public class BlueJewel extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            //<editor-fold desc="Move down servo">
             if (stageNumber == 0) {
                 bot.leftServo.setPosition(bot.leftDown);
                 time.reset();
                 stageNumber++;
-            }
-            else if (stageNumber == 1) {
+            } else if (stageNumber == 1) {
                 if (time.seconds() < 2) {
-                    // Do nothing :P
+                    // This is here to wait for the servo to get into position
                 } else {
                     stageNumber = 2;
                 }
-            }
-            //</editor-fold>
-
-            //<editor-fold desc="Detect Jewel Color">
-
-            else if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
-                if (bot.leftColorSensor.red() > bot.leftColorSensor.blue() && bot.leftColorSensor.green() < bot.leftColorSensor.red()) {
+            } else if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
+                if (bot.leftColorSensor.red() > bot.leftColorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
                     stageNumber++;
-                } else if (bot.leftColorSensor.red() < bot.leftColorSensor.blue() && bot.leftColorSensor.green() < bot.leftColorSensor.blue()) {
+                } else {
+                    // Its blue, so dont add the color value
                     stageNumber++;
                 }
-            }
-            //</editor-fold>
-
-            //<editor-fold desc="Drive based on Jewel Color">
-            else if (stageNumber == 5) {
-
+            } else if (stageNumber == 5) {
                 if (((int) Math.round(colorValue / 3)) == 1) {
                     color = "Red";
+                    bot.app.setBackgroundColor(Color.argb(bot.leftColorSensor.alpha(), bot.leftColorSensor.red(), bot.leftColorSensor.green(), bot.leftColorSensor.blue()));
+                    stageNumber = 10;
                 } else {
                     color = "Blue";
+                    bot.app.setBackgroundColor(Color.argb(bot.leftColorSensor.alpha(), bot.leftColorSensor.red(), bot.leftColorSensor.green(), bot.leftColorSensor.blue()));
+                    stageNumber = 10;
                 }
-                switch (color) {
-                    case "Red": {
-                        driveToPostion(bot.left, -1, .3);
-                        driveToPostion(bot.right, 1, .3);
-                        stageNumber++;
-                    }
-                    case "Blue": {
-                        driveToPostion(bot.left, 1, .3);
-                        driveToPostion(bot.right, -1, .3);
-                        stageNumber++;
-                    }
-                }
-            }
 
-            else if (stageNumber == 6) {
+            } else if (stageNumber == 6) {
+                if (color.equals("Red")) {
+                    driveToPostion(bot.left, 2);
+                    driveToPostion(bot.right, 2);
+                    stageNumber++;
+                } else {
+                    driveToPostion(bot.left, -2);
+                    driveToPostion(bot.right, -2);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 7) {
                 if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
@@ -100,34 +94,25 @@ public class BlueJewel extends LinearOpMode {
                     stageNumber++;
                 }
 
-            }
-            //</editor-fold>
-
-            //<editor-fold desc="Drive back to position">
-            else if (stageNumber == 7) {
-                switch (color) {
-                    case "Red": {
-                        driveToPostion(bot.left, 1, .3);
-                        driveToPostion(bot.right, -1, .3);
-                        stageNumber++;
-                    }
-                    case "Blue": {
-                        driveToPostion(bot.left, -1, .3);
-                        driveToPostion(bot.right, 1, .3);
-                        stageNumber++;
-                    }
+            } else if (stageNumber == 8) {
+                if (color.equals("Red")) {
+                    driveToPostion(bot.left, 1);
+                    driveToPostion(bot.right, -1);
+                    stageNumber++;
+                } else {
+                    driveToPostion(bot.left, -1);
+                    driveToPostion(bot.right, 1);
+                    stageNumber++;
                 }
-            }
-            else if (stageNumber == 8) {
+            } else if (stageNumber == 9) {
                 if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
                     stageNumber++;
                 }
-            } else if (stageNumber == 9) {
-                stop();
+            } else if (stageNumber == 10) {
+                //stop();
             }
-            //</editor-fold>
 
             if ((bot.left.getTargetPosition() - bot.left.getCurrentPosition()) >= 10) {
                 bot.left.setPower(1);
@@ -158,18 +143,15 @@ public class BlueJewel extends LinearOpMode {
                     .addData("right ∆", Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()));
             telemetry.update();
 
-            //<editor-fold desc="Telemetry and Stop">
-
             idle();
         }
         telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
     }
 
-    private static void driveToPostion(DcMotor motor, int position, double power) {
+    private static void driveToPostion(DcMotor motor, int position) {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setTargetPosition(position * 25810);
-        //motor.setPower(power);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 

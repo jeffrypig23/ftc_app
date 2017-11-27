@@ -35,19 +35,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 @Disabled
 
 public class RedAuto extends LinearOpMode {
+
     public static final String TAG = "Vuforia VuMark Sample";
     private float hsvValues[] = {0F,0F,0F};
     final float values[] = hsvValues;
-    private final double SERVOUPPOS= .5;
-    private final double SERVODOWNPOS = 0;
     private String color = "Unknown :(";
     private String imageLocation = null;
-    // StageNumber > -1 means running
     private int stageNumber = 0;
     OpenGLMatrix lastLocation = null;
     private VuforiaLocalizer vuforia;
+    private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
 
-    @Override
     public void runOpMode() {
 
         //<editor-fold desc="Initialization">
@@ -64,24 +62,7 @@ public class RedAuto extends LinearOpMode {
         relicTemplate.setName("relicVuMarkTemplate");
         RelicRecoveryVuMark vuMark;
 
-        ColorSensor colorSensor = hardwareMap.colorSensor.get("color");
-
-        Servo servo = hardwareMap.servo.get("servo");
-        servo.setPosition(SERVOUPPOS);
-
-        DcMotor left = hardwareMap.dcMotor.get("left");
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        DcMotor right = hardwareMap.dcMotor.get("right");
-        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // TODO: Note: I am temporarily disabling directions for the motors, becasue theyre running with encoders
-        //left.setDirection(DcMotorSimple.Direction.FORWARD);
-        //right.setDirection(DcMotorSimple.Direction.REVERSE);
+        bot.getConfig(hardwareMap);
 
         telemetry.addData("Status", "Done! Press play to start" );
         telemetry.update();
@@ -94,14 +75,13 @@ public class RedAuto extends LinearOpMode {
 
             //<editor-fold desc="Move down servo">
             if (stageNumber == 0) {
-                servo.setPosition(SERVODOWNPOS);
-                colorSensor.enableLed(false);
+                bot.rightServo.setPosition(bot.rightDown);
                 CameraDevice.getInstance().setFlashTorchMode(false);
                 vuMark = RelicRecoveryVuMark.from(relicTemplate);
                 stageNumber++;
             }
             if (stageNumber == 1) {
-                if (servo.getPosition() == SERVODOWNPOS) {
+                if (bot.rightServo.getPosition() == bot.rightDown) {
                     stageNumber++;
                 }
             }
@@ -109,11 +89,10 @@ public class RedAuto extends LinearOpMode {
 
             //<editor-fold desc="Detect jewel color">
             if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
-                colorSensor.enableLed(true);
-                if (colorSensor.red() > colorSensor.blue() && colorSensor.green() < colorSensor.red()) {
+                if (bot.rightColorSensor.red() > bot.rightColorSensor.blue() && bot.rightColorSensor.green() < bot.rightColorSensor.red()) {
                     color = "Red";
                     stageNumber++;
-                } else if (colorSensor.red() < colorSensor.blue() && colorSensor.green() < colorSensor.blue()) {
+                } else if (bot.rightColorSensor.red() < bot.rightColorSensor.blue() && bot.rightColorSensor.green() < bot.rightColorSensor.blue()) {
                     color = "Blue";
                     stageNumber++;
                 } else {
@@ -126,29 +105,13 @@ public class RedAuto extends LinearOpMode {
             if (stageNumber == 5) {
                 switch (color) {
                     case "Red": {
-                        driveToPostion(left, 1, .3);
-                        //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        //left.setTargetPosition(25810);
-                        //left.setPower(.3);
-                        //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        driveToPostion(right, -1, .3);
-                        //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        //right.setTargetPosition(-25810);
-                        //right.setPower(.3);
-                        //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        driveToPostion(bot.left, 1, .3);
+                        driveToPostion(bot.right, -1, .3);
                         stageNumber++;
                     }
                     case "Blue": {
-                        driveToPostion(left, -1, .3);
-                        //left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        //left.setTargetPosition(-25810);
-                        //left.setPower(.3);
-                        //left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        driveToPostion(right, 1, .3);
-                        //right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        //right.setTargetPosition(25810);
-                        //right.setPower(.3);
-                        //right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        driveToPostion(bot.left, -1, .3);
+                        driveToPostion(bot.right, 1, .3);
                         stageNumber++;
                     }
                 }
@@ -156,10 +119,8 @@ public class RedAuto extends LinearOpMode {
 
 
             if (stageNumber == 6) {
-                //int curentPos = left.getCurrentPosition();
-                //int targetPos = left.getTargetPosition();
-                if (isThere(left, 2000) || isThere(right, 2000)/*Math.abs((targetPos - curentPos)) <= 2000*/) {
-                    servo.setPosition(SERVOUPPOS);
+                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)/*Math.abs((targetPos - curentPos)) <= 2000*/) {
+                    bot.rightServo.setPosition(bot.rightUp);
                     stageNumber++;
                 }
 
@@ -170,21 +131,21 @@ public class RedAuto extends LinearOpMode {
             if (stageNumber == 7) {
                 switch (color) {
                     case "Red": {
-                        driveToPostion(left, -1, .3);
-                        driveToPostion(right, 1, .3);
+                        driveToPostion(bot.left, -1, .3);
+                        driveToPostion(bot.right, 1, .3);
                         stageNumber++;
                     }
                     case "Blue": {
-                        driveToPostion(left, 1, .3);
-                        driveToPostion(right, -1, .3);
+                        driveToPostion(bot.left, 1, .3);
+                        driveToPostion(bot.right, -1, .3);
                         stageNumber++;
                     }
                 }
             }
             if (stageNumber == 8) {
-                if (isThere(left, 2000) || isThere(right, 2000)) {
-                    left.setPower(0);
-                    right.setPower(0);
+                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
                     stageNumber++;
                 }
             }
@@ -215,56 +176,36 @@ public class RedAuto extends LinearOpMode {
 
             if (stageNumber == 10) {
                 // Drive 36 In to get before key thing
-                driveToPostion(left, -36, .5);
-                driveToPostion(right, 36, .5);
+                driveToPostion(bot.left, -36, .5);
+                driveToPostion(bot.right, 36, .5);
                 stageNumber++;
             }
             if (stageNumber == 11) {
-                if (isThere(left, 2000) || isThere(right, 2000)) {
-                    left.setPower(0);
-                    right.setPower(0);
+                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
                     stageNumber++;
                 }
             }
 
             if (stageNumber == 12) {
                 // Turn 90 degrees clockwise
-                driveToPostion(left, -4, .5);
-                driveToPostion(right, 4, .5);
+                driveToPostion(bot.left, -4, .5);
+                driveToPostion(bot.right, 4, .5);
                 stageNumber++;
             }
             if (stageNumber == 13) {
-                if (isThere(left, 2000) || isThere(right, 2000)) {
-                    left.setPower(0);
-                    right.setPower(0);
+                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
                     stageNumber++;
                 }
             }
-
-
-            /*
-
-            if (stageNumber == 7) {
-                if (color.equals("Red")) {
-                    driveToPostion(left, -1, .3);
-                    driveToPostion(right, -1, .3);
-                    stageNumber++;
-                } else if (color.equals("Blue")) {
-                    driveToPostion(left, 1, .3);
-                    driveToPostion(right, 1, .3);
-                    stageNumber++;
-                } else {
-                    stageNumber = stageNumber + 2;
-                }
-            }
-
-
-             */
 
             // 4. Mark as done!
             if (stageNumber == 14) {
-                left.setPower(0);
-                right.setPower(0);
+                bot.left.setPower(0);
+                bot.right.setPower(0);
                 stageNumber = -1;
             }
 
@@ -273,17 +214,17 @@ public class RedAuto extends LinearOpMode {
                 telemetry.addData("Stage number", stageNumber)
                         .addData("Color", color)
                         .addData("","")
-                        .addData("Red value", colorSensor.red())
-                        .addData("Green value", colorSensor.green())
-                        .addData("Blue value", colorSensor.blue())
+                        .addData("Red value", bot.rightColorSensor.red())
+                        .addData("Green value", bot.rightColorSensor.green())
+                        .addData("Blue value", bot.rightColorSensor.blue())
                         .addData("","")
-                        .addData("lefFront pos", left.getCurrentPosition())
-                        .addData("left target", left.getTargetPosition())
-                        .addData("left ∆", Math.abs(left.getTargetPosition() - left.getCurrentPosition()))
+                        .addData("lefFront pos", bot.left.getCurrentPosition())
+                        .addData("left target", bot.left.getTargetPosition())
+                        .addData("left ∆", Math.abs(bot.left.getTargetPosition() - bot.left.getCurrentPosition()))
                         .addData("","")
-                        .addData("right pos", right.getCurrentPosition())
-                        .addData("right target", right.getTargetPosition())
-                        .addData("right ∆", Math.abs(right.getTargetPosition() - right.getCurrentPosition()));
+                        .addData("right pos", bot.right.getCurrentPosition())
+                        .addData("right target", bot.right.getTargetPosition())
+                        .addData("right ∆", Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()));
                 telemetry.update();
             } else {
                 stop();
@@ -295,11 +236,6 @@ public class RedAuto extends LinearOpMode {
         telemetry.addData("Status", "Done!");
         telemetry.update();
     }
-    /*
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
-    }
-    */
 
     private static void driveToPostion(DcMotor motor, int position, double power) {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
