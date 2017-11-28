@@ -90,17 +90,17 @@ public class RedJewel extends LinearOpMode {
                 if (color.equals("Blue")) {
                     //driveToPosition(bot.left, 2);
                     bot.left.setPower(0);
-                    driveToPosition(bot.right, -516);
+                    driveToPosition(bot.right, 4);
                     stageNumber++;
                 } else {
                     //driveToPosition(bot.left, -2);
                     bot.left.setPower(-1);
-                    driveToPosition(bot.right, -3000);
+                    bot.right.setTargetPosition(-3000);
                     //driveToPosition(bot.right, 0.4d);
                     stageNumber++;
                 }
             } else if (stageNumber == 7) {
-                if (isThere(bot.right, 200)) {
+                if (isThere(bot.right, 100)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
                     bot.rightServo.setPosition(bot.rightUp);
@@ -111,7 +111,7 @@ public class RedJewel extends LinearOpMode {
                 if (color.equals("Blue")) {
                     //driveToPosition(bot.left, 1);
                     bot.left.setPower(0);
-                    driveToPosition(bot.right, 516);
+                    driveToPosition(bot.right, -4);
                     stageNumber++;
                 } else {
                     //driveToPosition(bot.left, -1);
@@ -120,7 +120,7 @@ public class RedJewel extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 9) {
-                if (isThere(bot.right, 200)) {
+                if (isThere(bot.right, 100)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
                     stageNumber++;
@@ -129,13 +129,13 @@ public class RedJewel extends LinearOpMode {
                 //stop();
                 if (color.equals("Blue")) {
                     bot.left.setPower(-1);
-                    driveToPosition(bot.right, -3000);
+                    bot.right.setTargetPosition(-3000);
                     stageNumber++;
                 } else {
                     // Done!
                 }
             } else if (stageNumber == 11) {
-                if (isThere(bot.right, 200)) {
+                if (isThere(bot.right, 100)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
                     bot.rightServo.setPosition(bot.rightUp);

@@ -34,6 +34,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 @Autonomous(name = "Red Auto", group = "Test")
 @Disabled
 
+@Deprecated
 public class RedAuto extends LinearOpMode {
 
     public static final String TAG = "Vuforia VuMark Sample";

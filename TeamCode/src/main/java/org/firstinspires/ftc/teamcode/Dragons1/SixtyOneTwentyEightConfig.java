@@ -109,7 +109,9 @@ public class SixtyOneTwentyEightConfig {
     public static void driveToPosition(DcMotor motor, double position) {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //motor.setTargetPosition(position * 25810);
-        motor.setTargetPosition((int) position);
+        // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
+        final double equation = (28 * 49) * 1/(3.14*4);
+        motor.setTargetPosition((int) (equation * position));
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
