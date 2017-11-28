@@ -95,7 +95,7 @@ public class BlueJewel extends LinearOpMode {
                 } else {
                     //driveToPosition(bot.left, -2);
                     bot.left.setPower(-1);
-                    bot.right.setTargetPosition(-3000);
+                    bot.right.setTargetPosition(-300);
                     //driveToPosition(bot.right, 0.4d);
                     stageNumber++;
                 }
@@ -115,7 +115,8 @@ public class BlueJewel extends LinearOpMode {
                     stageNumber++;
                 } else {
                     //driveToPosition(bot.left, -1);
-                    bot.left.setPower(0);
+                    bot.left.setPower(-1);
+                    bot.right.setTargetPosition(-2700);
                     //driveToPosition(bot.right, -0.4d);
                     stageNumber++;
                 }
@@ -133,6 +134,8 @@ public class BlueJewel extends LinearOpMode {
                     stageNumber++;
                 } else {
                     // Done!
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
                 }
             } else if (stageNumber == 11) {
                 if (isThere(bot.right, 100)) {

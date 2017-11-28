@@ -86,7 +86,7 @@ public class RedJewel extends LinearOpMode {
                     });
                     stageNumber = 6;
                 }
-            } else if (stageNumber == 6) { // TODO: Note: Because only one motor has an encoder, turning is wrong for this
+            } else if (stageNumber == 6) {
                 if (color.equals("Blue")) {
                     //driveToPosition(bot.left, 2);
                     bot.left.setPower(0);
@@ -95,7 +95,7 @@ public class RedJewel extends LinearOpMode {
                 } else {
                     //driveToPosition(bot.left, -2);
                     bot.left.setPower(-1);
-                    bot.right.setTargetPosition(-3000);
+                    bot.right.setTargetPosition(-300);
                     //driveToPosition(bot.right, 0.4d);
                     stageNumber++;
                 }
@@ -115,7 +115,8 @@ public class RedJewel extends LinearOpMode {
                     stageNumber++;
                 } else {
                     //driveToPosition(bot.left, -1);
-                    bot.left.setPower(0);
+                    bot.left.setPower(-1);
+                    bot.right.setTargetPosition(-2700);
                     //driveToPosition(bot.right, -0.4d);
                     stageNumber++;
                 }
@@ -133,9 +134,11 @@ public class RedJewel extends LinearOpMode {
                     stageNumber++;
                 } else {
                     // Done!
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
                 }
             } else if (stageNumber == 11) {
-                if (isThere(bot.right, 100)) {
+                if (isThere(bot.right, 200)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
                     bot.rightServo.setPosition(bot.rightUp);
