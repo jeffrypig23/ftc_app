@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 
 /**
- * This is NOT an opmode.
+ * This is NOT an OpMode.
  *
  * This class can be used to define all the specific hardware for a single robot.
  * In this case that robot is the bot for FTC Team 6128: Dragons 1.0.
@@ -70,7 +70,7 @@ public class SixtyOneTwentyEightConfig {
 
         left = config.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Encoder machine 🅱️roke
         left.setDirection(DcMotorSimple.Direction.REVERSE);
 
         right = config.dcMotor.get("right");
@@ -104,5 +104,18 @@ public class SixtyOneTwentyEightConfig {
 
         app = ((Activity) config.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
 
+    }
+
+    public static void driveToPosition(DcMotor motor, double position) {
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //motor.setTargetPosition(position * 25810);
+        motor.setTargetPosition((int) position);
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public static boolean isThere(DcMotor motor, int discrepancy) {
+        int currentPosition = motor.getCurrentPosition();
+        int targetPos = motor.getTargetPosition();
+        return Math.abs((targetPos - currentPosition)) <= discrepancy;
     }
 }

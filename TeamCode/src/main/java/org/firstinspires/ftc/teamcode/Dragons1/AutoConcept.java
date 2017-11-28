@@ -31,14 +31,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class AutoConcept extends LinearOpMode {
 
-    public static final String TAG = "Vuforia VuMark Sample";
-
-    private float hsvValues[] = {0F,0F,0F};
-
-    final float values[] = hsvValues;
-
-    // StageNumber > -1 means running
-    private short stageNumber = 0;
+    SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
 
     OpenGLMatrix lastLocation = null;
 
@@ -48,7 +41,14 @@ public class AutoConcept extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
+        telemetry.update();
 
+        final String TAG = "Vuforia VuMark Sample";
+
+        float hsvValues[] = {0F,0F,0F};
+        float values[] = hsvValues;
+
+        int stageNumber = 0;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -60,29 +60,7 @@ public class AutoConcept extends LinearOpMode {
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate");
 
-        ColorSensor colorSensor = hardwareMap.colorSensor.get("color");
-
-        Servo servo = hardwareMap.servo.get("servo");
-
-        DcMotor leftFront = hardwareMap.dcMotor.get("lf");
-        DcMotor leftBack = hardwareMap.dcMotor.get("lb");
-        DcMotor rightFront = hardwareMap.dcMotor.get("rf");
-        DcMotor rightBack = hardwareMap.dcMotor.get("rb");
-
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bot.getConfig(hardwareMap);
 
         telemetry.addData("Status", "Done! Press play to start" );
         telemetry.update();
@@ -95,52 +73,16 @@ public class AutoConcept extends LinearOpMode {
 
             // 0. Start the servo at mid pos for now, and initalize camera
 
-            if (stageNumber == 0) {
-                servo.setPosition(.5);
-
-                colorSensor.enableLed(true);
-
-                CameraDevice.getInstance().setFlashTorchMode(false);
-                RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-
-
-                stageNumber++;
-            }
-
             // 1. Drop servo arm for color sensor
-
-
-
 
             // Last: Update telemetry
 
             if (stageNumber >= 0) {
 
-                telemetry.addData("Red value", colorSensor.red());
-                telemetry.addData("Green value", colorSensor.green());
-                telemetry.addData("Blue value", colorSensor.blue());
-
-                telemetry.addData("lefFront pos", leftFront.getCurrentPosition());
-                telemetry.addData("leftFront target", leftFront.getTargetPosition());
-                telemetry.addData("leftFront ∆", Math.abs(leftFront.getTargetPosition() - leftFront.getCurrentPosition()));
-
-                telemetry.addData("rightFront pos", rightFront.getCurrentPosition());
-                telemetry.addData("rightFront target", rightFront.getTargetPosition());
-                telemetry.addData("rightFront ∆", Math.abs(rightFront.getTargetPosition() - rightFront.getCurrentPosition()));
-
-                telemetry.addData("lefBack pos", leftBack.getCurrentPosition());
-                telemetry.addData("leftBack target", leftBack.getTargetPosition());
-                telemetry.addData("leftBack ∆", Math.abs(leftBack.getTargetPosition() - leftBack.getCurrentPosition()));
-
-                telemetry.addData("rightBack pos", rightBack.getCurrentPosition());
-                telemetry.addData("rightBack target", rightBack.getTargetPosition());
-                telemetry.addData("rightBack ∆", Math.abs(rightBack.getTargetPosition() - rightBack.getCurrentPosition()));
-
                 telemetry.update();
             } else {
                 stop();
             }
-
 
         }
         telemetry.addData("Status", "Done!");

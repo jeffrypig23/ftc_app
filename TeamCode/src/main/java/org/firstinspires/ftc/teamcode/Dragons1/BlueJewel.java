@@ -12,6 +12,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveToPosition;
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.isThere;
+
 /**
  * Created by Stephen Ogden on 11/7/17.
  * FTC 6128 | 7935
@@ -53,7 +56,7 @@ public class BlueJewel extends LinearOpMode {
                 stageNumber++;
             } else if (stageNumber == 1) {
                 if (time.seconds() < 2) {
-                    // This is here to wait for the servo to get into position
+                    //idle();
                 } else {
                     stageNumber = 2;
                 }
@@ -68,26 +71,36 @@ public class BlueJewel extends LinearOpMode {
             } else if (stageNumber == 5) {
                 if (((int) Math.round(colorValue / 3)) == 1) {
                     color = "Red";
-                    bot.app.setBackgroundColor(Color.argb(bot.leftColorSensor.alpha(), bot.leftColorSensor.red(), bot.leftColorSensor.green(), bot.leftColorSensor.blue()));
-                    stageNumber = 10;
+                    bot.app.post(new Runnable() {
+                        public void run() {
+                            bot.app.setBackgroundColor(Color.argb(bot.leftColorSensor.alpha(), bot.leftColorSensor.red(), bot.leftColorSensor.green(), bot.leftColorSensor.blue()));
+                        }
+                    });
+                    stageNumber = 6;
                 } else {
                     color = "Blue";
-                    bot.app.setBackgroundColor(Color.argb(bot.leftColorSensor.alpha(), bot.leftColorSensor.red(), bot.leftColorSensor.green(), bot.leftColorSensor.blue()));
-                    stageNumber = 10;
+                    bot.app.post(new Runnable() {
+                        public void run() {
+                            bot.app.setBackgroundColor(Color.argb(bot.leftColorSensor.alpha(), bot.leftColorSensor.red(), bot.leftColorSensor.green(), bot.leftColorSensor.blue()));
+                        }
+                    });
+                    stageNumber = 6;
                 }
-
             } else if (stageNumber == 6) {
                 if (color.equals("Red")) {
-                    driveToPostion(bot.left, 2);
-                    driveToPostion(bot.right, 2);
+                    //driveToPosition(bot.left, 2);
+                    bot.left.setPower(0);
+                    driveToPosition(bot.right, -516);
                     stageNumber++;
                 } else {
-                    driveToPostion(bot.left, -2);
-                    driveToPostion(bot.right, -2);
+                    //driveToPosition(bot.left, -2);
+                    bot.left.setPower(-1);
+                    driveToPosition(bot.right, -3000);
+                    //driveToPosition(bot.right, 0.4d);
                     stageNumber++;
                 }
             } else if (stageNumber == 7) {
-                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
+                if (isThere(bot.right, 200)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
                     bot.leftServo.setPosition(bot.leftUp);
@@ -96,24 +109,43 @@ public class BlueJewel extends LinearOpMode {
 
             } else if (stageNumber == 8) {
                 if (color.equals("Red")) {
-                    driveToPostion(bot.left, 1);
-                    driveToPostion(bot.right, -1);
+                    //driveToPosition(bot.left, 1);
+                    bot.left.setPower(0);
+                    driveToPosition(bot.right, 516);
                     stageNumber++;
                 } else {
-                    driveToPostion(bot.left, -1);
-                    driveToPostion(bot.right, 1);
+                    //driveToPosition(bot.left, -1);
+                    bot.left.setPower(0);
+                    //driveToPosition(bot.right, -0.4d);
                     stageNumber++;
                 }
             } else if (stageNumber == 9) {
-                if (isThere(bot.left, 2000) || isThere(bot.right, 2000)) {
+                if (isThere(bot.right, 200)) {
                     bot.left.setPower(0);
                     bot.right.setPower(0);
                     stageNumber++;
                 }
             } else if (stageNumber == 10) {
                 //stop();
+                if (color.equals("Red")) {
+                    bot.left.setPower(-1);
+                    driveToPosition(bot.right, -3000);
+                    stageNumber++;
+                } else {
+                    // Done!
+                }
+            } else if (stageNumber == 11) {
+                if (isThere(bot.right, 200)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
+                    bot.leftServo.setPosition(bot.leftUp);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 12) {
+                // Done!
             }
 
+            /*
             if ((bot.left.getTargetPosition() - bot.left.getCurrentPosition()) >= 10) {
                 bot.left.setPower(1);
             } else if ((bot.left.getTargetPosition() - bot.left.getCurrentPosition()) <= -10) {
@@ -121,6 +153,8 @@ public class BlueJewel extends LinearOpMode {
             } else {
                 bot.left.setPower(0);
             }
+            */
+
 
             if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
                 bot.right.setPower(1);
@@ -148,17 +182,4 @@ public class BlueJewel extends LinearOpMode {
         telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
     }
-
-    private static void driveToPostion(DcMotor motor, int position) {
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setTargetPosition(position * 25810);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-    private static boolean isThere(DcMotor motor, int discrepancy) {
-        int curentPos = motor.getCurrentPosition();
-        int targetPos = motor.getTargetPosition();
-        return Math.abs((targetPos - curentPos)) <= discrepancy;
-    }
-
 }
