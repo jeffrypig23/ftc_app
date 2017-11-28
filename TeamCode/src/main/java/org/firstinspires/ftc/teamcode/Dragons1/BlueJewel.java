@@ -21,7 +21,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  * FRC 1595
  */
 
-@Autonomous(name = "Blue Jewel", group = "Official")
+@Autonomous(name = "6128: Blue Jewel", group = "Official")
 //@Disabled
 public class BlueJewel extends LinearOpMode {
 
@@ -136,6 +136,7 @@ public class BlueJewel extends LinearOpMode {
                     // Done!
                     bot.left.setPower(0);
                     bot.right.setPower(0);
+                    stageNumber++;
                 }
             } else if (stageNumber == 11) {
                 if (isThere(bot.right, 100)) {
@@ -146,6 +147,9 @@ public class BlueJewel extends LinearOpMode {
                 }
             } else if (stageNumber == 12) {
                 // Done!
+                bot.left.setPower(0);
+                bot.right.setPower(0);
+                stop();
             }
 
             /*
@@ -158,13 +162,14 @@ public class BlueJewel extends LinearOpMode {
             }
             */
 
-
-            if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
-                bot.right.setPower(1);
-            } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
-                bot.right.setPower(-1);
-            } else {
-                bot.right.setPower(0);
+            if (stageNumber != 12) {
+                if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
+                    bot.right.setPower(1);
+                } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
+                    bot.right.setPower(-1);
+                } else {
+                    bot.right.setPower(0);
+                }
             }
 
             telemetry.addData("Stage number", stageNumber)
