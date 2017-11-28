@@ -21,7 +21,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  * FRC 1595
  */
 
-@Autonomous(name = "Blue Jewel", group = "Test")
+@Autonomous(name = "Blue Jewel", group = "Official")
 //@Disabled
 public class BlueJewel extends LinearOpMode {
 
