@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.isThere;
+
 /**
  * Created by Stephen Ogden on 10/30/17.
  * FTC 6128 | 7935
@@ -19,14 +21,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
 
-    private boolean armMoving = false;
-
     private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
 
     @Override
     public void runOpMode() {
-
-        //<editor-fold desc="Initialization">
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
@@ -39,20 +37,18 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         double powL;
         double throttle;
         double turn;
-
         double sensitivity=0.6f;
+
+        int selectedArmPos = 2;
         int armPos = -583;
         int boxPos = -850; // Was set to -844
+
+        boolean isPressed = false;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
 
-        //</editor-fold>
-
         waitForStart();
-
-        //bot.arm.setPower(0.5d);
-        //bot.box.setPower(0.5d);
 
         while (opModeIsActive()) {
 
@@ -93,11 +89,34 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             Out(bot.lintake, bot.rintake, gamepad2.left_bumper);
             In(bot.lintake, bot.rintake, gamepad2.right_bumper);
 
-            if (gamepad2.dpad_up) {
-                armPos = -672;
+            if (!isPressed) {
+                if (gamepad2.dpad_up) {
+                    //armPos = -672;
+                    selectedArmPos++;
+                    isPressed = true;
+                } else if (gamepad2.dpad_down) {
+                    //armPos = -977;
+                    selectedArmPos--;
+                    isPressed = true;
+                }
+            } else if (!(gamepad2.dpad_up && gamepad2.dpad_down)) {
+                isPressed = false;
             }
-            if (gamepad2.dpad_down) {
+
+            if (selectedArmPos < 0) {
+                selectedArmPos = 0;
+            } else if (selectedArmPos > 3) {
+                selectedArmPos = 3;
+            }
+
+            if (selectedArmPos == 0) {
                 armPos = -977;
+            } else if (selectedArmPos == 1) {
+                armPos = -672;
+            } else if (selectedArmPos == 2) {
+                armPos = -583;
+            } else if (selectedArmPos == 3) {
+                armPos = -7;
             }
 
             if (gamepad2.x) {
@@ -108,23 +127,28 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             }
 
             bot.arm.setTargetPosition(armPos);
-            //bot.arm.setPower(-0.5d);
 
             bot.box.setTargetPosition(boxPos);
-            //bot.box.setPower(-0.5d);
 
             if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10) {
-                bot.box.setPower(1);
+                bot.box.setPower(0.5d);
             } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10) {
-                bot.box.setPower(-1);
+                bot.box.setPower(-0.5d);
             } else {
                 bot.box.setPower(0);
             }
-
-            if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 10) {
-                bot.arm.setPower(1);
-            } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -10) {
-                bot.arm.setPower(-1);
+            if (isThere(bot.box, 10)) {
+                //if (bot.arm.getTargetPosition() == -5 && bot.arm.getCurrentPosition() >= -105) {
+                    //bot.arm.setPower(-0.1d);
+                //} else {
+                if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 5) {
+                    bot.arm.setPower(1);
+                } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -5) {
+                    bot.arm.setPower(-1);
+                } else {
+                    bot.arm.setPower(0);
+                }
+                //}
             } else {
                 bot.arm.setPower(0);
             }
@@ -136,7 +160,9 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
              */
 
 
-            telemetry.addData("Left Pow", powL)
+            telemetry.addData("isPressed", isPressed)
+                    .addData("ArmSelectPosition", selectedArmPos)
+                    .addData("Left Pow", powL)
                     .addData("RPow", powR)
                     .addData("Right motor", bot.right.getCurrentPosition())
                     .addData("Left motor", bot.left.getCurrentPosition())
@@ -172,12 +198,6 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             motor1.setPower(0);
         }
 
-    }
-
-    private static boolean isThere(DcMotor motor, int discrepancy) {
-        int curentPos = motor.getCurrentPosition();
-        int targetPos = motor.getTargetPosition();
-        return Math.abs((targetPos - curentPos)) <= discrepancy;
     }
 
 }

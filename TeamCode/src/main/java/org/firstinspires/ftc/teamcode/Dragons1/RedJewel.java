@@ -37,12 +37,38 @@ public class RedJewel extends LinearOpMode {
         ElapsedTime time = new ElapsedTime();
 
         int stageNumber = 0;
+        int armPos = -583;
+        int boxPos = -850;
+
+
         double colorValue = 0.0;
 
         String color = "";
 
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
+
+        bot.arm.setTargetPosition(armPos);
+        bot.box.setTargetPosition(boxPos);
+
+        if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10) {
+            bot.box.setPower(1);
+        } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10) {
+            bot.box.setPower(-1);
+        } else {
+            bot.box.setPower(0);
+        }
+        if (isThere(bot.box, 10)){
+            if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 10) {
+                bot.arm.setPower(1);
+            } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -10) {
+                bot.arm.setPower(-1);
+            } else {
+                bot.arm.setPower(0);
+            }
+        } else {
+            bot.arm.setPower(0);
+        }
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();

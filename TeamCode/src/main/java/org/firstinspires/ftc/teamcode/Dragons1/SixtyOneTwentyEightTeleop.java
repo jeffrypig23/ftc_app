@@ -57,7 +57,7 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         double throttle;
         double turn;
 
-        double sensitivity=0.6f;
+        double sensitivity=0.4f;
         int armPos = -583;
         int boxPos = 0;
 
