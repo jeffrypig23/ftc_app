@@ -47,26 +47,6 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
 
-
-        bot.box.setTargetPosition(-850);
-        bot.box.setPower(-1);
-        while(!isThere(bot.box, 10)) {
-            // Basically wait until the box is at the right position
-            telemetry.addData("Moving box to position", bot.box.getTargetPosition() + " (" + bot.box.getCurrentPosition() + ")");
-            telemetry.update();
-        }
-        bot.box.setPower(0);
-
-        bot.arm.setTargetPosition(-583);
-
-        bot.arm.setPower(-1);
-        while (!isThere(bot.arm, 10)) {
-            // Wait
-            telemetry.addData("Moving arm to position", bot.arm.getTargetPosition() + " (" + bot.arm.getCurrentPosition() + ")");
-            telemetry.update();
-        }
-        bot.arm.setPower(0);
-
         //</editor-fold>
 
         waitForStart();
