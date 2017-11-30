@@ -37,7 +37,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         double powL;
         double throttle;
         double turn;
-        double sensitivity=0.6f;
+        double sensitivity=0.4f;
 
         int selectedArmPos = 2;
         int armPos = -583;
@@ -53,21 +53,19 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             //<editor-fold desc="Drive">
+            turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
+            throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
             if(gamepad1.left_stick_y > 0) {
-                throttle = -(gamepad1.left_stick_y*gamepad1.left_stick_y);
-            }
-            else {
-                throttle = gamepad1.left_stick_y*gamepad1.left_stick_y;
+                throttle = -throttle;
             }
 
-            turn = gamepad1.right_stick_x;
             if(turn > 0) {
-                powL = (int) (throttle - turn * turn);
-                powR = (int) (throttle + turn * turn);
+                powL = (int) (throttle - turn);
+                powR = (int) (throttle + turn);
             }
             else {
-                powL = (int) (throttle + turn * turn);
-                powR = (int) (throttle - turn * turn);
+                powL = (int) (throttle + turn);
+                powR = (int) (throttle - turn);
             }
             if (powR > 1.0) {
                 powL -= sensitivity * (powR - 1.0);
@@ -84,7 +82,6 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             }
             bot.right.setPower(powR);
             bot.left.setPower(powL);
-            //</editor-fold>
 
             Out(bot.lintake, bot.rintake, gamepad2.left_bumper);
             In(bot.lintake, bot.rintake, gamepad2.right_bumper);
