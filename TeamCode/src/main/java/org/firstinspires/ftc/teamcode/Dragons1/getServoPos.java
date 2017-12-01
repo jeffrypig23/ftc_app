@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // Left up is  .53| down is .95
 // Right up is .3 | down is .11
 @TeleOp(name = "6128 Servo up and down", group = "Test")
-//@Disabled
+@Disabled
 public class getServoPos extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();

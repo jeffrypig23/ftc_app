@@ -50,14 +50,17 @@ public class BlueJewel extends LinearOpMode {
         bot.arm.setTargetPosition(armPos);
         bot.box.setTargetPosition(boxPos);
 
-        if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10) {
-            bot.box.setPower(1);
-        } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10) {
-            bot.box.setPower(-1);
-        } else {
-            bot.box.setPower(0);
+        while (!isThere(bot.box, 10)) {
+            if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10) {
+                bot.box.setPower(1.0d);
+            } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10) {
+                bot.box.setPower(-1.0d);
+            } else {
+                bot.box.setPower(0);
+            }
         }
-        if (isThere(bot.box, 10)){
+        bot.box.setPower(0);
+        while (!isThere(bot.arm, 7)) {
             if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 10) {
                 bot.arm.setPower(1);
             } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -10) {
@@ -65,9 +68,8 @@ public class BlueJewel extends LinearOpMode {
             } else {
                 bot.arm.setPower(0);
             }
-        } else {
-            bot.arm.setPower(0);
         }
+        bot.arm.setPower(0);
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
