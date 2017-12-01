@@ -18,48 +18,28 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class SixtyOneTwentyEightTeleop extends LinearOpMode {
 
-    private boolean armMoving = false;
+    SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        DcMotor left = hardwareMap.dcMotor.get("left");
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        bot.getConfig(hardwareMap);
 
-        DcMotor right = hardwareMap.dcMotor.get("right");
-        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        DcMotor lintake = hardwareMap.dcMotor.get("lintake");
-        lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        DcMotor rintake = hardwareMap.dcMotor.get("rintake");
-        rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        DcMotor arm = hardwareMap.dcMotor.get("arm");
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        DcMotor box = hardwareMap.dcMotor.get("box");
-        box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        box.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        box.setDirection(DcMotorSimple.Direction.FORWARD);
-
+        bot.leftServo.setPosition(bot.leftUp);
+        bot.rightServo.setPosition(bot.rightUp);
 
         double powR;
         double powL;
         double throttle;
         double turn;
-
         double sensitivity=0.4f;
+
         int armPos = -583;
         int boxPos = 0;
+
+        boolean armMoving = false;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -67,22 +47,19 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         float slow = 1.0f;
 
         while (opModeIsActive()) {
-
+            turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
+            throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
             if(gamepad1.left_stick_y > 0) {
-                throttle = -(gamepad1.left_stick_y*gamepad1.left_stick_y);
-            }
-            else {
-                throttle = gamepad1.left_stick_y*gamepad1.left_stick_y;
+                throttle = -throttle;
             }
 
-            turn = gamepad1.right_stick_x;
-            if(turn > 0) {
-                powL = (int) (throttle - turn * turn);
-                powR = (int) (throttle + turn * turn);
+            if(gamepad1.right_stick_x > 0) {
+                powL = (int) (throttle - turn);
+                powR = (int) (throttle + turn);
             }
             else {
-                powL = (int) (throttle + turn * turn);
-                powR = (int) (throttle - turn * turn);
+                powL = (int) (throttle + turn);
+                powR = (int) (throttle - turn);
             }
             if (powR > 1.0) {
                 powL -= sensitivity * (powR - 1.0);
@@ -97,25 +74,21 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
                 powR +=  sensitivity * (-1.0 - powL);
                 powL = -1.0;
             }
-            right.setPower(powR);
-            left.setPower(powL);
+            bot.right.setPower(powR);
+            bot.left.setPower(powL);
 
-            Out(lintake, rintake, gamepad2.left_bumper);
-            In(lintake, rintake, gamepad2.right_bumper);
+            Out(bot.lintake, bot.rintake, gamepad2.left_bumper);
+            In(bot.lintake, bot.rintake, gamepad2.right_bumper);
 
-            if (gamepad2.a) {
-                slow = 0.35f;
-            } else {
-                slow = 1.0f;
-            }
+            bot.arm.setPower(slow * gamepad2.left_stick_y); // Manual control
+            bot.box.setPower(slow * gamepad2.right_stick_y); // Manuual control
 
-            arm.setPower(slow * gamepad2.left_stick_y); // Manual control
-            box.setPower(slow * gamepad2.right_stick_y); // Manuual control
-
-            telemetry.addData("LPow", powL);
-            telemetry.addData("RPow", powR);
-            telemetry.addData("RPos", right.getCurrentPosition());
-            telemetry.addData("LPos", left.getCurrentPosition());
+            telemetry.addData("Left Pow", powL)
+                    .addData("RPow", powR)
+                    .addData("Right motor", bot.right.getCurrentPosition())
+                    .addData("Left motor", bot.left.getCurrentPosition())
+                    .addData("Arm position", armPos + " (" + bot.arm.getCurrentPosition() + ")")
+                    .addData("Box position", boxPos +  " (" + bot.box.getCurrentPosition() + ")");
             telemetry.update();
         }
     }
@@ -143,49 +116,5 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             motor1.setPower(0);
         }
 
-    }
-
-    // TODO: Redo box postion (Based on inches)
-
-    private void manualMoveUp(DcMotor motor, boolean run) {
-        if (run) {
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            motor.setDirection(DcMotorSimple.Direction.FORWARD);
-            motor.setPower(1);
-        } else {
-            motor.setPower(0);
-        }
-    }
-
-    private void manualMoveDown(DcMotor motor, boolean run){
-        if (run) {
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            motor.setDirection(DcMotorSimple.Direction.REVERSE);
-            motor.setPower(1);
-        } else {
-            motor.setPower(0);
-        }
-    }
-
-
-    private void moveBoxTo(DcMotor motor, int position, double power) {
-        motor.setTargetPosition((int)(290/(3.14*1.2) * position)); //290 tick/rotation * (3.14 * 1.2) inches/rotation --> 290*1/(3.14*1.2) ticks/inch
-        motor.setPower(power);
-    }
-
-        private void moveArm (DcMotor motor, int degrees, double power) {
-        // 290*12*(96/360) = 729.6
-        //float conversion = 3480.0f * (degrees/360.0f);
-        int position = Math.round(((290*12)/360) * (degrees));
-
-        motor.setTargetPosition(position);
-        motor.setPower(power);
-
-    }
-
-    private static boolean isThere(DcMotor motor, int discrepancy) {
-        int curentPos = motor.getCurrentPosition();
-        int targetPos = motor.getTargetPosition();
-        return Math.abs((targetPos - curentPos)) <= discrepancy;
     }
 }
