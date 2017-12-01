@@ -46,7 +46,7 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         while (opModeIsActive()) {
             turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
             throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
-            if(gamepad1.left_stick_y > 0) {
+            if(gamepad1.left_stick_y < 0) {
                 throttle = -throttle;
             }
 
