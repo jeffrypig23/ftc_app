@@ -13,7 +13,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 @TeleOp(name = "Ethan's encoder test", group = "Test")
 @Disabled
-public class DragonsOneEncoderTest extends LinearOpMode {
+@Deprecated
+public class OldEncoderTest extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
