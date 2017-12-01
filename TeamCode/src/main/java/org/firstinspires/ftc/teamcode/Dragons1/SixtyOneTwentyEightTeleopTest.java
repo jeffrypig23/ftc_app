@@ -51,15 +51,13 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-
-            //<editor-fold desc="Drive">
             turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
             throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
             if(gamepad1.left_stick_y > 0) {
                 throttle = -throttle;
             }
 
-            if(turn > 0) {
+            if(gamepad1.right_stick_x > 0) {
                 powL = (int) (throttle - turn);
                 powR = (int) (throttle + turn);
             }
@@ -117,45 +115,53 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             }
 
             if (gamepad2.x) {
-                boxPos = 0;
+                boxPos = bot.bottomBoxPos;
             }
             if (gamepad2.y) {
-                boxPos = -898;
+                //boxPos = -898;
+                boxPos = bot.topBoxPos;
             }
 
             bot.arm.setTargetPosition(armPos);
-
             bot.box.setTargetPosition(boxPos);
 
-            if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10) {
-                bot.box.setPower(0.5d);
-            } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10) {
-                bot.box.setPower(-0.5d);
-            } else {
+            if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 40) {
+                bot.box.setPower(0.6d);
+            } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -40) {
+                bot.box.setPower(-0.6d);
+            } else if (isThere(bot.box, 9)) {
                 bot.box.setPower(0);
             }
+
+            if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10 && (bot.box.getTargetPosition() - bot.box.getCurrentPosition()) < 40) {
+                bot.box.setPower(-0.4d);
+            } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10 && (bot.box.getTargetPosition() - bot.box.getCurrentPosition()) > -40) {
+                bot.box.setPower(0.4d);
+            } else if (isThere(bot.box, 9)) {
+                bot.box.setPower(0);
+            }
+
             if (isThere(bot.box, 10)) {
-                //if (bot.arm.getTargetPosition() == -5 && bot.arm.getCurrentPosition() >= -105) {
-                    //bot.arm.setPower(-0.1d);
-                //} else {
-                if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 5) {
-                    bot.arm.setPower(1);
-                } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -5) {
-                    bot.arm.setPower(-1);
+                if (selectedArmPos == 3) {
+                    if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 5) {
+                        bot.arm.setPower(0.40d);
+                    } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -5) {
+                        bot.arm.setPower(-0.40d);
+                    } else {
+                        bot.arm.setPower(0);
+                    }
                 } else {
-                    bot.arm.setPower(0);
+                    if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 5) {
+                        bot.arm.setPower(1);
+                    } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -5) {
+                        bot.arm.setPower(-1);
+                    } else {
+                        bot.arm.setPower(0);
+                    }
                 }
-                //}
             } else {
                 bot.arm.setPower(0);
             }
-
-
-            /*
-             * Arm: -583 starting, -672 blockhold/default, -977 lowest
-             * Box: -420 6in, -844 12 in, -898 max
-             */
-
 
             telemetry.addData("isPressed", isPressed)
                     .addData("ArmSelectPosition", selectedArmPos)

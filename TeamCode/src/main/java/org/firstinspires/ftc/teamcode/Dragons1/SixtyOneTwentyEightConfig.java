@@ -65,6 +65,9 @@ public class SixtyOneTwentyEightConfig {
     public final double rightUp = 0.3d;
     public final double rightDown = 0.0d;
 
+    public final int topBoxPos = -990; // TODO
+    public final int bottomBoxPos = 0;
+
 
     public void getConfig(HardwareMap config) {
 
@@ -92,7 +95,7 @@ public class SixtyOneTwentyEightConfig {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         box = config.dcMotor.get("box");
-        box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         box.setDirection(DcMotorSimple.Direction.FORWARD);
 
