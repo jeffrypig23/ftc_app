@@ -39,12 +39,9 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         int armPos = -583;
         int boxPos = 0;
 
-        boolean armMoving = false;
-
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();
-        float slow = 1.0f;
 
         while (opModeIsActive()) {
             turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
@@ -80,8 +77,8 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             Out(bot.lintake, bot.rintake, gamepad2.left_bumper);
             In(bot.lintake, bot.rintake, gamepad2.right_bumper);
 
-            bot.arm.setPower(slow * gamepad2.left_stick_y); // Manual control
-            bot.box.setPower(slow * gamepad2.right_stick_y); // Manuual control
+            bot.arm.setPower(gamepad2.left_stick_y); // Manual control
+            bot.box.setPower(gamepad2.right_stick_y); // Manuual control
 
             telemetry.addData("Left Pow", powL)
                     .addData("RPow", powR)
