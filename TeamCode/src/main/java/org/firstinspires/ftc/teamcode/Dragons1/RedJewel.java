@@ -38,8 +38,7 @@ public class RedJewel extends LinearOpMode {
 
         int stageNumber = 0;
         int armPos = -583;
-        int boxPos = -850;
-
+        //int boxPos = -850;
 
         double colorValue = 0.0;
 
@@ -49,13 +48,13 @@ public class RedJewel extends LinearOpMode {
         bot.rightServo.setPosition(bot.rightUp);
 
         bot.arm.setTargetPosition(armPos);
-        bot.box.setTargetPosition(boxPos);
+        bot.box.setTargetPosition(bot.topBoxPos);
 
         while (!isThere(bot.box, 10)) {
             if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10) {
-                bot.box.setPower(1.0d);
+                bot.box.setPower(1);
             } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10) {
-                bot.box.setPower(-1.0d);
+                bot.box.setPower(-1);
             } else {
                 bot.box.setPower(0);
             }
