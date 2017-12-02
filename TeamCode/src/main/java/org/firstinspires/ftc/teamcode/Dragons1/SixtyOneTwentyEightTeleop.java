@@ -45,18 +45,19 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
 
         while (opModeIsActive()) {
             turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
-            throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
+            //throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
+            throttle = gamepad1.left_stick_y;
             if(gamepad1.left_stick_y < 0) {
-                throttle = -throttle;
+             //   throttle = -throttle;
             }
 
             if(gamepad1.right_stick_x > 0) {
-                powL = (int) (throttle - turn);
-                powR = (int) (throttle + turn);
+                powL = (throttle - turn);
+                powR = (throttle + turn);
             }
             else {
-                powL = (int) (throttle + turn);
-                powR = (int) (throttle - turn);
+                powL = (throttle + turn);
+                powR = (throttle - turn);
             }
             if (powR > 1.0) {
                 powL -= sensitivity * (powR - 1.0);
