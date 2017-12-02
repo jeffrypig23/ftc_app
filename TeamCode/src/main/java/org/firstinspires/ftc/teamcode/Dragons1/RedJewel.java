@@ -47,6 +47,7 @@ public class RedJewel extends LinearOpMode {
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
 
+        /*
         bot.arm.setTargetPosition(armPos);
         bot.box.setTargetPosition(bot.topBoxPos);
 
@@ -70,6 +71,7 @@ public class RedJewel extends LinearOpMode {
             }
         }
         bot.arm.setPower(0);
+        */
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();

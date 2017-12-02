@@ -38,6 +38,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         double throttle;
         double turn;
         double sensitivity=0.4f;
+        double slow = 1.0d;
 
         int selectedArmPos = 2;
         int armPos = -583;
@@ -49,21 +50,22 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
         while (opModeIsActive()) {
             turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
-            throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
-            if(gamepad1.left_stick_y > 0) {
-                throttle = -throttle;
+            throttle = gamepad1.left_stick_y;
+            if (gamepad1.right_bumper) {
+                slow = 0.5f;
+            } else {
+                slow = 1;
             }
 
             if(gamepad1.right_stick_x > 0) {
-                powL = (int) (throttle - turn);
-                powR = (int) (throttle + turn);
+                powL = (throttle - turn);
+                powR = (throttle + turn);
             }
             else {
-                powL = (int) (throttle + turn);
-                powR = (int) (throttle - turn);
+                powL = (throttle + turn);
+                powR = (throttle - turn);
             }
             if (powR > 1.0) {
                 powL -= sensitivity * (powR - 1.0);
@@ -78,12 +80,40 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                 powR +=  sensitivity * (-1.0 - powL);
                 powL = -1.0;
             }
-            bot.right.setPower(powR);
-            bot.left.setPower(powL);
+            bot.right.setPower(slow * powR);
+            bot.left.setPower(slow * powL);
 
-            Out(bot.lintake, bot.rintake, gamepad2.left_bumper);
-            In(bot.lintake, bot.rintake, gamepad2.right_bumper);
+            if (gamepad2.right_trigger > 0.1f) {
+                bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
+                bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
+                bot.rintake.setPower(1);
+                bot.lintake.setPower(-1);
+            } else if (gamepad2.left_trigger > 0.1f) {
+                bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
+                bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
+                bot.rintake.setPower(-1);
+                bot.lintake.setPower(1);
+            } else {
+                bot.rintake.setPower(0);
+                bot.lintake.setPower(0);
+            }
 
+            if (gamepad2.left_bumper) {
+                bot.lintake.setPower(1);
+                bot.rintake.setPower(1);
+            } else if (gamepad2.right_bumper) {
+                bot.lintake.setPower(-1);
+                bot.rintake.setPower(-1);
+            } else {
+                bot.lintake.setPower(0);
+                bot.rintake.setPower(0);
+            }
+
+            bot.arm.setPower(gamepad2.left_stick_y); // Manual control
+            bot.box.setPower(gamepad2.right_stick_y); // Manuual control
+
+
+            /*
             if (!isPressed) {
                 if (gamepad2.dpad_up) {
                     //armPos = -672;
@@ -162,6 +192,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             } else {
                 bot.arm.setPower(0);
             }
+            */
 
             telemetry.addData("isPressed", isPressed)
                     .addData("ArmSelectPosition", selectedArmPos)
@@ -175,32 +206,6 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         }
         telemetry.addData("Status", "Done");
         telemetry.update();
-    }
-
-    private void Out(DcMotor motor0, DcMotor motor1, boolean run) {
-        if (run) {
-            motor0.setDirection(DcMotorSimple.Direction.REVERSE);
-            motor1.setDirection(DcMotorSimple.Direction.REVERSE);
-            motor0.setPower(1);
-            motor1.setPower(1);
-        } else {
-            motor0.setPower(0);
-            motor1.setPower(0);
-        }
-
-    }
-
-    private void In(DcMotor motor0, DcMotor motor1, boolean run) {
-        if (run) {
-            motor0.setDirection(DcMotorSimple.Direction.FORWARD);
-            motor1.setDirection(DcMotorSimple.Direction.FORWARD);
-            motor0.setPower(1);
-            motor1.setPower(1);
-        } else {
-            motor0.setPower(0);
-            motor1.setPower(0);
-        }
-
     }
 
 }

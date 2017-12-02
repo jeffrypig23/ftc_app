@@ -62,7 +62,7 @@ public class SixtyOneTwentyEightConfig {
 
     public final double leftUp = 0.53d;
     public final double leftDown = 1.0d;
-    public final double rightUp = 0.3d;
+    public final double rightUp = 0.45d;
     public final double rightDown = 0.0d;
 
     public final int topBoxPos = -990; // TODO
@@ -84,10 +84,12 @@ public class SixtyOneTwentyEightConfig {
         lintake = config.dcMotor.get("lintake");
         lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lintake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rintake = config.dcMotor.get("rintake");
         rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rintake.setDirection(DcMotorSimple.Direction.REVERSE);
 
         arm = config.dcMotor.get("arm");
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

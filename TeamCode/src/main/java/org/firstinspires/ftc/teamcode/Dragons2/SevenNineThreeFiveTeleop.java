@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 
 @TeleOp(name = "7935 TeleOp", group = "Official")
-//@Disabled
+@Disabled
 
 public class SevenNineThreeFiveTeleop extends LinearOpMode {
 

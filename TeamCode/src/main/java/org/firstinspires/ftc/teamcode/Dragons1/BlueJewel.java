@@ -47,6 +47,7 @@ public class BlueJewel extends LinearOpMode {
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
 
+        /*
         bot.arm.setTargetPosition(armPos);
         bot.box.setTargetPosition(bot.topBoxPos);
 
@@ -70,6 +71,7 @@ public class BlueJewel extends LinearOpMode {
             }
         }
         bot.arm.setPower(0);
+        */
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -117,7 +119,7 @@ public class BlueJewel extends LinearOpMode {
                 if (color.equals("Red")) {
                     //driveToPosition(bot.left, 2);
                     bot.left.setPower(0);
-                    driveToPosition(bot.right, -4);
+                    driveToPosition(bot.right, -5);
                     stageNumber++;
                 } else {
                     //driveToPosition(bot.left, -2);
@@ -138,7 +140,7 @@ public class BlueJewel extends LinearOpMode {
                 if (color.equals("Red")) {
                     //driveToPosition(bot.left, 1);
                     bot.left.setPower(0);
-                    driveToPosition(bot.right, 4);
+                    driveToPosition(bot.right, 5);
                     stageNumber++;
                 } else {
                     //driveToPosition(bot.left, -1);

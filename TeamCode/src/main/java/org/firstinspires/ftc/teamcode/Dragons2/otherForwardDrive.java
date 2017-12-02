@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name = "7935: Super professional auto!", group = "Official")
-//@Disabled
+@Disabled
 public class otherForwardDrive extends LinearOpMode {
 
     @Override
