@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "6128: Just go forward lol", group = "Official")
 //@Disabled
-public class forwardAuto extends LinearOpMode {
+public class simpleAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
