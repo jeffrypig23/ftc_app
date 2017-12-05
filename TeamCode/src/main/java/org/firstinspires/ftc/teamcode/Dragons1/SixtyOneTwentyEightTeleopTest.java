@@ -109,11 +109,11 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                 bot.rintake.setPower(0);
             }
 
-            //bot.arm.setPower(gamepad2.left_stick_y); // Manual control
+            bot.arm.setPower(gamepad2.left_stick_y); // Manual control
             //bot.box.setPower(gamepad2.right_stick_y); // Manuual control
 
 
-
+            /*
             if (!isPressed) {
                 if (gamepad2.dpad_up) {
                     //armPos = -672;
@@ -153,6 +153,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             }
 
             bot.arm.setTargetPosition(armPos);
+            */
             bot.box.setTargetPosition(boxPos);
 
             if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 40) {
@@ -171,6 +172,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                 bot.box.setPower(0);
             }
 
+            /*
             if (isThere(bot.box, 10)) {
                 if (selectedArmPos == 3) {
                     if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 5) {
@@ -192,7 +194,8 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             } else {
                 bot.arm.setPower(0);
             }
-            
+            */
+
 
             telemetry.addData("isPressed", isPressed)
                     .addData("ArmSelectPosition", selectedArmPos)
