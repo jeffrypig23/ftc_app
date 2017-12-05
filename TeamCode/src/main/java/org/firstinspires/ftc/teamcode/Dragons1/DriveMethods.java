@@ -19,67 +19,36 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class DriveMethods extends LinearOpMode {
 
-    private boolean armMoving = false;
+    SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+    ElapsedTime time = new ElapsedTime();
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        DcMotor left = hardwareMap.dcMotor.get("left");
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        bot.getConfig(hardwareMap);
 
-        DcMotor right = hardwareMap.dcMotor.get("right");
-        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        DcMotor lintake = hardwareMap.dcMotor.get("lintake");
-        lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        DcMotor rintake = hardwareMap.dcMotor.get("rintake");
-        rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        DcMotor arm = hardwareMap.dcMotor.get("arm");
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        //CRServo arm = hardwareMap.crservo.get("arm");
-
-        DcMotor box = hardwareMap.dcMotor.get("box");
-        box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        box.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        box.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //Servo leftServo = hardwareMap.servo.get("leftServo");
-        //Servo rightServo = hardwareMap.servo.get("rightServo");
-
-        double rightPos = 1;
-        double leftPos = 1;
         double powR = 0.0;
         double powL = 0.0;
         double turnSpeed = 0.81;
         double throttle;
+        double sensitivity = 0.7;
         double turn;
+        double slow = 1.0f;
+
         String driveMethod = "ORIGINAL";
+
         boolean oneStick = false;
         boolean bPressed = false;
+
         int quickTurn = 0;
-        double sensitivity = 0.7;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
+
         waitForStart();
-        float slow = 1.0f;
-        ElapsedTime time = new ElapsedTime();
-        int lastTime = 0;
-
         while (opModeIsActive()) {
-
 
             if (gamepad1.a) {
                 slow = 0.35f;
@@ -159,140 +128,16 @@ public class DriveMethods extends LinearOpMode {
                 }
             }
 
-            right.setPower(slow*powR);
-            left.setPower(slow*powL);
+            bot.right.setPower(slow*powR);
+            bot.left.setPower(slow*powL);
 
             telemetry.addData("One Stick?", oneStick);
             telemetry.addData("Mode:", driveMethod);
             telemetry.addData("LPow", powL);
             telemetry.addData("RPow", powR);
-            telemetry.addData("RPos", right.getCurrentPosition());
-            telemetry.addData("LPos", left.getCurrentPosition());
+            telemetry.addData("RPos", bot.right.getCurrentPosition());
+            telemetry.addData("LPos", bot.left.getCurrentPosition());
             telemetry.update();
         }
     }
-
-    private void Out (DcMotor motor0, DcMotor motor1, boolean run) {
-        if (run) {
-            motor0.setDirection(DcMotorSimple.Direction.REVERSE);
-            motor1.setDirection(DcMotorSimple.Direction.REVERSE);
-            motor0.setPower(1);
-            motor1.setPower(1);
-        } else {
-            motor0.setPower(0);
-            motor1.setPower(0);
-        }
-
-    }
-    private void In (DcMotor motor0, DcMotor motor1, boolean run) {
-        if (run) {
-            motor0.setDirection(DcMotorSimple.Direction.FORWARD);
-            motor1.setDirection(DcMotorSimple.Direction.FORWARD);
-            motor0.setPower(1);
-            motor1.setPower(1);
-        } else {
-            motor0.setPower(0);
-            motor1.setPower(0);
-        }
-
-    }
-
-    private void manualMoveUp(DcMotor motor, boolean run) {
-        if (run) {
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            motor.setDirection(DcMotorSimple.Direction.FORWARD);
-            motor.setPower(1);
-        } else {
-            motor.setPower(0);
-        }
-    }
-
-    private void manualMoveDown(DcMotor motor, boolean run){
-        if (run) {
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            motor.setDirection(DcMotorSimple.Direction.REVERSE);
-            motor.setPower(1);
-        } else {
-            motor.setPower(0);
-        }
-    }
-
-
-    private void moveBoxTo(DcMotor motor, int position, double power) {
-        motor.setTargetPosition((int)(290/(3.14*1.2) * position)); //290 tick/rotation * (3.14 * 1.2) inches/rotation --> 290*1/(3.14*1.2) ticks/inch
-        motor.setPower(power);
-    }
-
-
-    /*
-    private void boxPos (DcMotor motor, int position) {
-
-        switch (position){
-            case 0: {
-                // Something
-            }
-            case 1: {
-                // Something
-            }
-            case 2: {
-                // Something
-            }
-            case 3: {
-                // Something
-            }
-        }
-    }
-    */
-
-    private void moveArm (DcMotor motor, int degrees, double power) {
-        // 290*12*(96/360) = 729.6
-        //float conversion = 3480.0f * (degrees/360.0f);
-        int position = Math.round(((290*12)/360) * (degrees));
-
-        motor.setTargetPosition(position);
-        motor.setPower(power);
-
-    }
-
-    private static boolean isThere(DcMotor motor, int discrepancy) {
-        int curentPos = motor.getCurrentPosition();
-        int targetPos = motor.getTargetPosition();
-        return Math.abs((targetPos - curentPos)) <= discrepancy;
-    }
-    /*
-    private void armUp (DcMotor motor) {
-        if (armMoving) {
-            if (Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) <= 50) {
-                motor.setPower(0);
-                armMoving = false;
-            }
-        } else {
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setTargetPosition(730);
-            motor.setPower(1);
-            armMoving = true;
-        }
-    }
-
-    private void armDown (DcMotor motor) {
-        if (armMoving) {
-            if (Math.abs(motor.getTargetPosition() - motor.getCurrentPosition()) <= 50) {
-                motor.setPower(0);
-                armMoving = false;
-            }
-        } else {
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setTargetPosition(-(730));
-            motor.setPower(1);
-            armMoving = true;
-        }
-    }
-    */
-    /*
-    private void armUp (CRServo servo) {
-        if (armMoving) {
-            if (Math.abs(servo.))
-        }
-    }
-    */
 }

@@ -13,12 +13,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 // Left up is  .53| down is .95
 // Right up is .3 | down is .11
-@TeleOp(name = "6128 Servo up and down", group = "Test")
+@TeleOp(name = "6128 get servo position", group = "Test")
 @Disabled
 public class getServoPos extends LinearOpMode {
 
-    private ElapsedTime runtime = new ElapsedTime();
-    private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+    ElapsedTime runtime = new ElapsedTime();
+    SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
 
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
@@ -27,8 +27,10 @@ public class getServoPos extends LinearOpMode {
 
         final double SERVOUPPOS = 1;
         final double SERVODOWNPOS = 0;
+
         double lPos = 0.53;
         double rPos = 0.3;
+
         boolean left = true;
 
         bot.getConfig(hardwareMap);
@@ -72,7 +74,6 @@ public class getServoPos extends LinearOpMode {
             telemetry.addData("Right servo pos", bot.rightServo.getPosition())
                     .addData("Left servo pos", bot.leftServo.getPosition());
             telemetry.update();
-
             idle();
         }
     }
