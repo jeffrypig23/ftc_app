@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by Stephen Ogden on 10/30/17.
@@ -19,6 +20,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class SixtyOneTwentyEightTeleop extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+    ElapsedTime armTime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -111,6 +113,17 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             }
 
             bot.arm.setPower(gamepad2.left_stick_y); // Manual control
+            if (bot.arm.isBusy() || (bot.arm.getPower() != 0.0d)) {
+                armTime.reset();
+                bot.leftServo.setPosition(bot.leftOffset);
+                bot.rightServo.setPosition(bot.rightOffset);
+            } else {
+                if (armTime.seconds() > 2) {
+                    bot.leftServo.setPosition(bot.leftUp);
+                    bot.rightServo.setPosition(bot.rightUp);
+                }
+            }
+
             bot.box.setPower(gamepad2.right_stick_y); // Manuual control
 
             telemetry.addData("Left Pow", powL)
