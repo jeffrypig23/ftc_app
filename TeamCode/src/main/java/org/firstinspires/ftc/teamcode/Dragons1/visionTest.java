@@ -16,6 +16,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
 import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.format;
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.getVuMark;
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.relicTemplate;
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.vuMark;
 
 /**
  * Created by Stephen Ogden on 12/6/17.
@@ -41,9 +44,10 @@ public class visionTest extends LinearOpMode {
         waitForStart();
         bot.vision.activate();
         while (opModeIsActive()) {
-            if (bot.vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                telemetry.addData("Status", "%s visible", bot.vuMark);
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)bot.relicTemplate.getListener()).getPose();
+            getVuMark();
+            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+                telemetry.addData("Status", "%s visible", vuMark);
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
                 telemetry.addData("Pose", format(pose));
                 if (pose != null) {
                     VectorF trans = pose.getTranslation();
