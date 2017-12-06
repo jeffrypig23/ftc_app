@@ -66,8 +66,9 @@ public class SixtyOneTwentyEightConfig {
 
     VuforiaTrackables vision;
     VuforiaLocalizer vuforia;
-    VuforiaTrackable relicTemplate;
-    RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+    
+    static VuforiaTrackable relicTemplate;
+    static RelicRecoveryVuMark vuMark;
 
     // Left upMost =  .5 | Offset = .6 | Down = .95
     // Right upMost =  .36 | Offset = .29 | Down = .12
@@ -152,6 +153,10 @@ public class SixtyOneTwentyEightConfig {
 
     public static String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
+    }
+
+    public static void getVuMark() {
+        vuMark = RelicRecoveryVuMark.from(relicTemplate);
     }
 
 }
