@@ -30,8 +30,6 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
 
 // This is for 6128
 
-// TODO: Finish me!
-
 @Autonomous(name = "Blue Auto", group = "Test")
 @Disabled
 
@@ -62,6 +60,7 @@ public class BlueAuto extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
+        /*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AUgZTU3/////AAAAGaQ5yTo6EkZqvsH9Iel0EktQjXWAZUz3q3FPq22sUTrmsYCccs/mjYiflQBH2u7lofbTxe4BxTca9o2EOnNwA8dLGa/yL3cUgDGjeRfXuwZUCpIG6OEKhiPU5ntOpT2Nr5uVkT3vs2uRr7J6G7YoaGHLw2i1wGncRaw37rZyO03QRh0ZatdKIiK1ItuvJkP3qfUJwQwcpROwa+ZdDNQDbpU6WTL+kPZpnkgR8oLcu+Na1lWrbJ2ZTYG8eUjoIGowbVVGJgORHJazy6/7MbYH268h9ZC4vZ12ItyDK/GlPRTeQWdcZRlWfzAAFwNrjmdjWv9hMuOMoWxo2Y2Rw1Fwii4ohLyRmcQa/wAWY+AOEL14";
@@ -71,13 +70,15 @@ public class BlueAuto extends LinearOpMode {
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate");
         RelicRecoveryVuMark vuMark;
+        */
 
         bot.getConfig(hardwareMap);
+        bot.getVision(hardwareMap);
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();
-        relicTrackables.activate();
+        bot.vision.activate();
         //</editor-fold>
 
 
@@ -88,7 +89,6 @@ public class BlueAuto extends LinearOpMode {
                 //bot.servo.setPosition(SERVODOWNPOS);
                 //colorSensor.enableLed(false);
                 CameraDevice.getInstance().setFlashTorchMode(false);
-                vuMark = RelicRecoveryVuMark.from(relicTemplate);
                 stageNumber++;
             }
             if (stageNumber == 1) {
@@ -164,8 +164,7 @@ public class BlueAuto extends LinearOpMode {
 
             // Scan image, if all else fails, go center
             if (stageNumber == 9) {
-                vuMark = RelicRecoveryVuMark.from(relicTemplate);
-                switch (vuMark) {
+                switch (bot.vuMark) {
                     case LEFT: {
                         imageLocation = "Left";
                         stageNumber++;
@@ -247,9 +246,4 @@ public class BlueAuto extends LinearOpMode {
         telemetry.addData("Status", "Done!");
         telemetry.update();
     }
-
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
-    }
-
 }

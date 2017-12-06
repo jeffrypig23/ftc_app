@@ -19,7 +19,6 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
 @TeleOp(name = "6128 TeleOp Test", group = "Test")
 //@Disabled
 
-
 public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
@@ -200,8 +199,6 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                     bot.rightServo.setPosition(bot.rightUp);
                 }
             }
-
-
 
             telemetry.addData("isPressed", isPressed)
                     .addData("ArmSelectPosition", selectedArmPos)

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.CameraDevice;
 
@@ -16,20 +16,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveToPosition;
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.isThere;
+
 /**
  * Created by Stephen Ogden on 9/23/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
-
-// 560 ticks per rotation (Tetrix)
-// 290 tick per rotation (Core HEX)
-// 4 in diameter
-// 89 ticks per inches
-
-// This is for 6128
-
-// Todo: Finish me!
 
 @Autonomous(name = "Red Auto", group = "Test")
 @Disabled
@@ -53,6 +47,7 @@ public class RedAuto extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
+        /*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AUgZTU3/////AAAAGaQ5yTo6EkZqvsH9Iel0EktQjXWAZUz3q3FPq22sUTrmsYCccs/mjYiflQBH2u7lofbTxe4BxTca9o2EOnNwA8dLGa/yL3cUgDGjeRfXuwZUCpIG6OEKhiPU5ntOpT2Nr5uVkT3vs2uRr7J6G7YoaGHLw2i1wGncRaw37rZyO03QRh0ZatdKIiK1ItuvJkP3qfUJwQwcpROwa+ZdDNQDbpU6WTL+kPZpnkgR8oLcu+Na1lWrbJ2ZTYG8eUjoIGowbVVGJgORHJazy6/7MbYH268h9ZC4vZ12ItyDK/GlPRTeQWdcZRlWfzAAFwNrjmdjWv9hMuOMoWxo2Y2Rw1Fwii4ohLyRmcQa/wAWY+AOEL14";
@@ -62,6 +57,7 @@ public class RedAuto extends LinearOpMode {
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate");
         RelicRecoveryVuMark vuMark;
+        */
 
         bot.getConfig(hardwareMap);
 
@@ -69,7 +65,7 @@ public class RedAuto extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        relicTrackables.activate();
+        bot.vision.activate();
         //</editor-fold>
 
         while(opModeIsActive()) {
@@ -78,7 +74,6 @@ public class RedAuto extends LinearOpMode {
             if (stageNumber == 0) {
                 bot.rightServo.setPosition(bot.rightDown);
                 CameraDevice.getInstance().setFlashTorchMode(false);
-                vuMark = RelicRecoveryVuMark.from(relicTemplate);
                 stageNumber++;
             }
             if (stageNumber == 1) {
@@ -106,13 +101,13 @@ public class RedAuto extends LinearOpMode {
             if (stageNumber == 5) {
                 switch (color) {
                     case "Red": {
-                        driveToPostion(bot.left, 1, .3);
-                        driveToPostion(bot.right, -1, .3);
+                        driveToPosition(bot.left, 1);
+                        driveToPosition(bot.right, -1);
                         stageNumber++;
                     }
                     case "Blue": {
-                        driveToPostion(bot.left, -1, .3);
-                        driveToPostion(bot.right, 1, .3);
+                        driveToPosition(bot.left, -1);
+                        driveToPosition(bot.right, 1);
                         stageNumber++;
                     }
                 }
@@ -132,13 +127,13 @@ public class RedAuto extends LinearOpMode {
             if (stageNumber == 7) {
                 switch (color) {
                     case "Red": {
-                        driveToPostion(bot.left, -1, .3);
-                        driveToPostion(bot.right, 1, .3);
+                        driveToPosition(bot.left, -1);
+                        driveToPosition(bot.right, 1);
                         stageNumber++;
                     }
                     case "Blue": {
-                        driveToPostion(bot.left, 1, .3);
-                        driveToPostion(bot.right, -1, .3);
+                        driveToPosition(bot.left, 1);
+                        driveToPosition(bot.right, -1);
                         stageNumber++;
                     }
                 }
@@ -154,8 +149,7 @@ public class RedAuto extends LinearOpMode {
 
             // Scan image, if all else fails, go center
             if (stageNumber == 9) {
-                vuMark = RelicRecoveryVuMark.from(relicTemplate);
-                switch (vuMark) {
+                switch (bot.vuMark) {
                     case LEFT: {
                         imageLocation = "Left";
                         stageNumber++;
@@ -177,8 +171,8 @@ public class RedAuto extends LinearOpMode {
 
             if (stageNumber == 10) {
                 // Drive 36 In to get before key thing
-                driveToPostion(bot.left, -36, .5);
-                driveToPostion(bot.right, 36, .5);
+                driveToPosition(bot.left, -36);
+                driveToPosition(bot.right, 36);
                 stageNumber++;
             }
             if (stageNumber == 11) {
@@ -191,8 +185,8 @@ public class RedAuto extends LinearOpMode {
 
             if (stageNumber == 12) {
                 // Turn 90 degrees clockwise
-                driveToPostion(bot.left, -4, .5);
-                driveToPostion(bot.right, 4, .5);
+                driveToPosition(bot.left, -4);
+                driveToPosition(bot.right, 4);
                 stageNumber++;
             }
             if (stageNumber == 13) {
@@ -237,17 +231,4 @@ public class RedAuto extends LinearOpMode {
         telemetry.addData("Status", "Done!");
         telemetry.update();
     }
-
-    private static void driveToPostion(DcMotor motor, int position, double power) {
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setTargetPosition(position * 25810);
-        motor.setPower(power);
-    }
-
-    private static boolean isThere(DcMotor motor, int discrepancy) {
-        int curentPos = motor.getCurrentPosition();
-        int targetPos = motor.getTargetPosition();
-        return Math.abs((targetPos - curentPos)) <= discrepancy;
-    }
-
 }

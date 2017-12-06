@@ -8,6 +8,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.vuforia.Vuforia;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /*
  * Created by Stephen Ogden on 11/14/17.
@@ -55,6 +63,11 @@ public class SixtyOneTwentyEightConfig {
     Servo leftServo;
 
     View app;
+
+    VuforiaTrackables vision;
+    VuforiaLocalizer vuforia;
+    VuforiaTrackable relicTemplate;
+    RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
 
     // Left upMost =  .5 | Offset = .6 | Down = .95
     // Right upMost =  .36 | Offset = .29 | Down = .12
@@ -111,6 +124,17 @@ public class SixtyOneTwentyEightConfig {
 
     }
 
+    public void getVision(HardwareMap config) {
+        int cameraMonitorViewId = config.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", config.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        parameters.vuforiaLicenseKey = "AUgZTU3/////AAAAGaQ5yTo6EkZqvsH9Iel0EktQjXWAZUz3q3FPq22sUTrmsYCccs/mjYiflQBH2u7lofbTxe4BxTca9o2EOnNwA8dLGa/yL3cUgDGjeRfXuwZUCpIG6OEKhiPU5ntOpT2Nr5uVkT3vs2uRr7J6G7YoaGHLw2i1wGncRaw37rZyO03QRh0ZatdKIiK1ItuvJkP3qfUJwQwcpROwa+ZdDNQDbpU6WTL+kPZpnkgR8oLcu+Na1lWrbJ2ZTYG8eUjoIGowbVVGJgORHJazy6/7MbYH268h9ZC4vZ12ItyDK/GlPRTeQWdcZRlWfzAAFwNrjmdjWv9hMuOMoWxo2Y2Rw1Fwii4ohLyRmcQa/wAWY+AOEL14";
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        vision = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = vision.get(0);
+        relicTemplate.setName("relicVuMarkTemplate");
+    }
+
     public static void driveToPosition(DcMotor motor, double position_in_inches) {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //motor.setTargetPosition(position * 25810);
@@ -125,4 +149,9 @@ public class SixtyOneTwentyEightConfig {
         int targetPos = motor.getTargetPosition();
         return Math.abs((targetPos - currentPosition)) <= discrepancy;
     }
+
+    public static String format(OpenGLMatrix transformationMatrix) {
+        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
+    }
+
 }
