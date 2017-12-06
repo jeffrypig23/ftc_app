@@ -11,10 +11,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * FTC 6128 | 7935
  * FRC 1595
  */
-// Left up is  .53| down is .95
-// Right up is .3 | down is .11
+
 @TeleOp(name = "6128 get servo position", group = "Test")
-@Disabled
+//@Disabled
 public class getServoPos extends LinearOpMode {
 
     ElapsedTime runtime = new ElapsedTime();

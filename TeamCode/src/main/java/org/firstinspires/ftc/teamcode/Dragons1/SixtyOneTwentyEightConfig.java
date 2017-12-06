@@ -56,18 +56,19 @@ public class SixtyOneTwentyEightConfig {
 
     View app;
 
-    // Left up is  .53| down is .95
-    // Right up is .3 | down is .11
+    // Left upMost =  .5 | Offset = .6 | Down = .95
+    // Right upMost =  .36 | Offset = .29 | Down = .12
 
+    public final double leftUp = 0.5d;
+    public final double leftOffset = 0.6d;
+    public final double leftDown = 0.95d;
 
-    public final double leftUp = 0.53d;
-    public final double leftDown = 1.0d;
-    public final double rightUp = 0.45d;
+    public final double rightUp = 0.36d;
+    public final double rightOffset = 0.29d;
     public final double rightDown = 0.0d;
 
-    public final int topBoxPos = -990; // TODO
+    public final int topBoxPos = -990; // TODO: Find new top box position
     public final int bottomBoxPos = 0;
-
 
     public void getConfig(HardwareMap config) {
 
