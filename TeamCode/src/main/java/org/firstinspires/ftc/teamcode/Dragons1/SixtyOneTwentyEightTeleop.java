@@ -50,12 +50,8 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)2));
-            //throttle = Math.abs(Math.pow(gamepad1.left_stick_y, (double)2));
+            turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)0.5));
             throttle = gamepad1.left_stick_y;
-            if(gamepad1.left_stick_y < 0) {
-                //   throttle = -throttle;
-            }
             if (gamepad1.right_bumper) {
                 slow = 0.5f;
             } else {
@@ -87,21 +83,12 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             bot.left.setPower(slow * powL);
 
             if (gamepad2.right_trigger > 0.1f) {
-                bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
-                bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
                 bot.rintake.setPower(1);
                 bot.lintake.setPower(-1);
             } else if (gamepad2.left_trigger > 0.1f) {
-                bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
-                bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
                 bot.rintake.setPower(-1);
                 bot.lintake.setPower(1);
-            } else {
-                bot.rintake.setPower(0);
-                bot.lintake.setPower(0);
-            }
-
-            if (gamepad2.left_bumper) {
+            } else if (gamepad2.left_bumper) {
                 bot.lintake.setPower(1);
                 bot.rintake.setPower(1);
             } else if (gamepad2.right_bumper) {
@@ -118,7 +105,7 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
                 bot.leftServo.setPosition(bot.leftOffset);
                 bot.rightServo.setPosition(bot.rightOffset);
             } else {
-                if (armTime.seconds() > 2) {
+                if (armTime.seconds() > 1) {
                     bot.leftServo.setPosition(bot.leftUp);
                     bot.rightServo.setPosition(bot.rightUp);
                 }

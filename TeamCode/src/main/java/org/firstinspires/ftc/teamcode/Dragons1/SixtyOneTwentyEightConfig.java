@@ -67,8 +67,8 @@ public class SixtyOneTwentyEightConfig {
     public final double rightOffset = 0.29d;
     public final double rightDown = 0.0d;
 
-    public final int topBoxPos = -990; // TODO: Find new top box position
-    public final int bottomBoxPos = 0;
+    public final int topBoxPos = -890; // TODO: Find new top box position
+    public final int bottomBoxPos = -30;
 
     public void getConfig(HardwareMap config) {
 
