@@ -174,17 +174,17 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             bot.box.setTargetPosition(boxPos);
 
             if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 40) {
-                bot.box.setPower(0.6d);
+                bot.box.setPower(1.0d);
             } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -40) {
-                bot.box.setPower(-0.6d);
+                bot.box.setPower(-1.0d);
             } else if (isThere(bot.box, 9)) {
                 bot.box.setPower(0);
             }
 
             if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 10 && (bot.box.getTargetPosition() - bot.box.getCurrentPosition()) < 40) {
-                bot.box.setPower(-0.4d);
+                bot.box.setPower(-0.75d);
             } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10 && (bot.box.getTargetPosition() - bot.box.getCurrentPosition()) > -40) {
-                bot.box.setPower(0.4d);
+                bot.box.setPower(0.75d);
             } else if (isThere(bot.box, 9)) {
                 bot.box.setPower(0);
             }

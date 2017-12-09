@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name = "6128: Just go forward lol", group = "Official")
-//@Disabled
+@Disabled
 public class simpleAuto extends LinearOpMode {
 
     @Override
@@ -53,17 +53,4 @@ public class simpleAuto extends LinearOpMode {
         }
     }
 
-    private static boolean isThere(DcMotor motor, int discrepancy) {
-        int curentPos = motor.getCurrentPosition();
-        int targetPos = motor.getTargetPosition();
-        return Math.abs((targetPos - curentPos)) <= discrepancy;
-    }
-
-    private static void driveToPostion(DcMotor motor, int position, double power) {
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setTargetPosition(position * 25810);
-        motor.setPower(power);
-
-    }
 }

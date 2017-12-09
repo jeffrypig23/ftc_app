@@ -25,7 +25,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  * FTC 6128 | 7935
  * FRC 1595
  */
-@TeleOp(name = "Vision test", group = "test")
+@TeleOp(name = "Vision test", group = "Test")
 //@Disabled
 public class visionTest extends LinearOpMode {
 
