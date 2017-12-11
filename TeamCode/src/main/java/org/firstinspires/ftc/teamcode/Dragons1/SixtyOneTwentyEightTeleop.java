@@ -36,8 +36,9 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         double powL;
         double throttle;
         double turn;
-        double sensitivity=0.4f;
+        double sensitivity=0.4d;
         double slow = 1.0d;
+        double turnSpeed=0.7d;
 
         bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
         bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -50,21 +51,21 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            turn = Math.abs(Math.pow(gamepad1.right_stick_x, (double)0.5));
+            turn = gamepad1.right_stick_x * gamepad1.right_stick_x;
             throttle = gamepad1.left_stick_y;
             if (gamepad1.right_bumper) {
-                slow = 0.5f;
+                slow = 0.35f;
             } else {
                 slow = 1;
             }
-
             if(gamepad1.right_stick_x > 0) {
-                powL = (throttle - turn);
-                powR = (throttle + turn);
+                powL = (throttle - turnSpeed*turn);
+                powR = (throttle + turnSpeed*turn);
             }
+
             else {
-                powL = (throttle + turn);
-                powR = (throttle - turn);
+                powL = (throttle + turnSpeed*turn);
+                powR = (throttle - turnSpeed*turn);
             }
             if (powR > 1.0) {
                 powL -= sensitivity * (powR - 1.0);

@@ -38,8 +38,8 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
         double powL;
         double throttle;
         double turn;
-        double sensitivity=0.4f;
-        double turnSpeed=0.7f;
+        double sensitivity=0.4d;
+        double turnSpeed=0.7d;
         double slow = 1;
 
         int selectedArmPos = 2;
@@ -53,18 +53,18 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            turn = Math.abs(Math.pow(gamepad1.right_stick_x, 0.5));
-            throttle = gamepad1.left_stick_y;//(gamepad1.left_stick_y/Math.abs(gamepad1.left_stick_y)) * Math.abs(Math.pow(gamepad1.left_stick_y, (double)2))  ;
+            turn = gamepad1.right_stick_x * gamepad1.right_stick_x;
+            throttle = gamepad1.left_stick_y;
             if (gamepad1.right_bumper) {
                 slow = 0.35f;
             } else {
                 slow = 1;
             }
-
             if(gamepad1.right_stick_x > 0) {
                 powL = (throttle - turnSpeed*turn);
                 powR = (throttle + turnSpeed*turn);
             }
+
             else {
                 powL = (throttle + turnSpeed*turn);
                 powR = (throttle - turnSpeed*turn);
