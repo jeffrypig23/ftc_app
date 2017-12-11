@@ -85,7 +85,7 @@ public class BlueJewel extends LinearOpMode {
                 stageNumber++;
             } else if (stageNumber == 1) {
                 if (time.seconds() < 2) {
-                    //idle();
+                    telemetry.addData("Status", "Waiting...");
                 } else {
                     stageNumber = 2;
                 }

@@ -50,34 +50,14 @@ public class turn90 extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-
             Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-            double turn = (double) angles.firstAngle;
-
             turn(90);
-            /*
 
-
-            if ((int)Math.round(turn) > -85) {
-                bot.left.setPower(-0.5d);
-                bot.right.setPower(0.5d);
-            } else if ((int)Math.round(turn) < -95) {
-                bot.left.setPower(0.5d);
-                bot.right.setPower(-0.5d);
-            } else {
-                bot.left.setPower(0);
-                bot.right.setPower(0);
-            }
-            */
-
-            telemetry.addData("Angles", angles + " (" + (int)Math.round(turn) + ")");
+            telemetry.addData("Angles", angles + " (" + (int)Math.round((double) angles.firstAngle) + ")");
             telemetry.update();
 
         }
-
-
-
     }
 
     public void turn(int degree) {
@@ -85,18 +65,16 @@ public class turn90 extends LinearOpMode {
         Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         double turn = (double) angles.firstAngle;
-
-        if ((int)Math.round(turn) > -85) {
+        if ((int) Math.round(turn) > -85) {
             bot.left.setPower(-0.5d);
             bot.right.setPower(0.5d);
-        } else if ((int)Math.round(turn) < -95) {
+        } else if ((int) Math.round(turn) < -95) {
             bot.left.setPower(0.5d);
             bot.right.setPower(-0.5d);
         } else {
             bot.left.setPower(0);
             bot.right.setPower(0);
         }
-
     }
 
 }
