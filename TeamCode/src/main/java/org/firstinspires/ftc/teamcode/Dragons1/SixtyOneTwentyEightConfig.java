@@ -89,7 +89,7 @@ public class SixtyOneTwentyEightConfig {
     public final double rightOffset = 0.29d;
     public final double rightDown = 0.0d;
 
-    public final int topBoxPos = -890;
+    public final int topBoxPos = -950;
     public final int bottomBoxPos = -30;
 
     public void getConfig(HardwareMap config) {
@@ -134,11 +134,11 @@ public class SixtyOneTwentyEightConfig {
         gyro = config.get(BNO055IMU.class, "gyro");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         gyro = config.get(BNO055IMU.class, "gyro");
         gyro.initialize(parameters);
