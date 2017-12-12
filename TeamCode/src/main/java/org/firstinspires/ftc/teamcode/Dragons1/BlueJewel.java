@@ -44,9 +44,6 @@ public class BlueJewel extends LinearOpMode {
 
         String color = "";
 
-        bot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
 

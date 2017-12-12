@@ -47,9 +47,6 @@ public class RedJewel extends LinearOpMode {
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
 
-        bot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();
