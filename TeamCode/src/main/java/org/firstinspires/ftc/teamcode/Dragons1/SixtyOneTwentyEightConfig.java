@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Dragons1;
 import android.app.Activity;
 import android.view.View;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,6 +14,10 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -66,6 +72,8 @@ public class SixtyOneTwentyEightConfig {
 
     VuforiaTrackables vision;
     VuforiaLocalizer vuforia;
+
+    BNO055IMU gyro;
     
     static VuforiaTrackable relicTemplate;
     static RelicRecoveryVuMark vuMark;
@@ -123,6 +131,18 @@ public class SixtyOneTwentyEightConfig {
 
         app = ((Activity) config.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
 
+        gyro = config.get(BNO055IMU.class, "gyro");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        gyro = config.get(BNO055IMU.class, "gyro");
+        gyro.initialize(parameters);
+
     }
 
     public void getVision(HardwareMap config) {
@@ -158,5 +178,24 @@ public class SixtyOneTwentyEightConfig {
     public static void getVuMark() {
         vuMark = RelicRecoveryVuMark.from(relicTemplate);
     }
+
+
+    public static void turn(int degree, DcMotor leftMotor, DcMotor rightMotor, BNO055IMU gyro) {
+
+        Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double turn = (double) angles.firstAngle;
+        if ((int) Math.round(turn) > -85) {
+            leftMotor.setPower(-0.5d);
+            rightMotor.setPower(0.5d);
+        } else if ((int) Math.round(turn) < -95) {
+            leftMotor.setPower(0.5d);
+            rightMotor.setPower(-0.5d);
+        } else {
+            leftMotor.setPower(0);
+            rightMotor.setPower(0);
+        }
+    }
+
 
 }

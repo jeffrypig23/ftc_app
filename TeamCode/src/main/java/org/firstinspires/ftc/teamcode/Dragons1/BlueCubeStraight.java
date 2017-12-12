@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.Dragons1;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.isThere;
 import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveToPosition;
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.turn;
 
 /**
  * Created by Stephen Ogden on 11/28/17.
@@ -14,7 +16,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  * FRC 1595
  */
 
-@Disabled
+//@Disabled
 @Autonomous(name = "Blue Club (straight)", group = "Test")
 
 public class BlueCubeStraight extends LinearOpMode {
@@ -50,25 +52,11 @@ public class BlueCubeStraight extends LinearOpMode {
 
         int stageNumber = 0;
 
-        bot.rightServo.setPosition(bot.rightUp);
+        bot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         bot.leftServo.setPosition(bot.leftUp);
-
-        bot.box.setTargetPosition(-850);
-        bot.box.setPower(-1);
-        while(!isThere(bot.box, 10)) {
-            // Basically wait until the box is at the right position
-            telemetry.addData("Moving box to position", bot.box.getTargetPosition() + " (" + bot.box.getCurrentPosition() + ")");
-            telemetry.update();
-        }
-        bot.box.setPower(0);
-
-        bot.arm.setTargetPosition(-583);
-        bot.arm.setPower(-1);
-        while (!isThere(bot.arm, 10)) {
-            telemetry.addData("Moving arm to position", bot.arm.getTargetPosition() + " (" + bot.arm.getCurrentPosition() + ")");
-            telemetry.update();
-        }
-        bot.arm.setPower(0);
+        bot.rightServo.setPosition(bot.rightUp);
 
         telemetry.addData("Status", "Done!");
         telemetry.update();
@@ -78,64 +66,35 @@ public class BlueCubeStraight extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (stageNumber == 0) {
-                bot.arm.setTargetPosition(-977);
-                driveToPosition(bot.right, 30);
-                driveToPosition(bot.left, 30);
+                //bot.arm.setTargetPosition(-977);
+                driveToPosition(bot.right, 12);
+                //driveToPosition(bot.left, 12);
+                bot.left.setPower(1);
                 stageNumber++;
             } else if (stageNumber == 1) {
-                if (isThere(bot.right, 100) || isThere(bot.left, 100)) {
+                if (isThere(bot.right, 100)) {
                     bot.right.setPower(0);
                     bot.left.setPower(0);
                     stageNumber++;
                 }
-            } else if (stageNumber == 2) {
-                bot.lintake.setPower(-1);
-                bot.rintake.setPower(-1);
-                time.reset();
-                while (time.seconds() < 1) {
-                    telemetry.addData("Status","Gaining points...");
-                    telemetry.update();
-                }
-                bot.rintake.setPower(0);
-                bot.lintake.setPower(0);
-                stageNumber++;
+            } /*else if (stageNumber == 2) {
+                    turn(90, bot.left, bot.right, bot.gyro);
+                    if (bot.right.getPower() == 0) {
+                        stageNumber++;
+                    }
             } else if (stageNumber == 3) {
-                driveToPosition(bot.right, -3);
-                driveToPosition(bot.left, -3);
-                stageNumber++;
-            } else if (stageNumber == 4) {
-                if (isThere(bot.right, 100) || isThere(bot.left, 100)) {
-                    bot.right.setPower(0);
-                    bot.left.setPower(0);
-                    stageNumber++;
-                }
-            } else if (stageNumber == 5) {
+                bot.left.setPower(0);
+                bot.right.setPower(0);
                 stop();
-            }
+            } */
 
-            if (stageNumber == 1 || stageNumber == 4) {
-                if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 100) {
+            if (stageNumber == 1) {
+                if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
                     bot.right.setPower(1);
-                } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -100) {
+                } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
                     bot.right.setPower(-1);
                 } else {
                     bot.right.setPower(0);
-                }
-                if ((bot.left.getTargetPosition() - bot.left.getCurrentPosition()) >= 100) {
-                    bot.left.setPower(1);
-                } else if ((bot.left.getTargetPosition() - bot.left.getCurrentPosition()) <= -100) {
-                    bot.left.setPower(-1);
-                } else {
-                    bot.left.setPower(0);
-                }
-            }
-            if (stageNumber == 1) {
-                if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) >= 10) {
-                    bot.right.setPower(1);
-                } else if ((bot.arm.getTargetPosition() - bot.arm.getCurrentPosition()) <= -10) {
-                    bot.arm.setPower(-1);
-                } else {
-                    bot.arm.setPower(0);
                 }
             }
 

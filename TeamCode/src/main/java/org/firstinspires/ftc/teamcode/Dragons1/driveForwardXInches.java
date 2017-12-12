@@ -14,7 +14,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  * FRC 1595
  */
 
-@Autonomous(name = "Drive forward 6 inches", group = "Test")
+@Autonomous(name = "Drive forward 3 feet", group = "Test")
 //@Disabled
 public class driveForwardXInches extends LinearOpMode {
 
@@ -34,24 +34,23 @@ public class driveForwardXInches extends LinearOpMode {
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
-
-            driveToPosition(bot.left, 6);
-            driveToPosition(bot.right, 6);
-
-            while(!isThere(bot.left, 10) && !isThere(bot.right, 10)) {
+            driveToPosition(bot.left, -36);
+            driveToPosition(bot.right, -36);
+            while (!isThere(bot.left, 10) && !isThere(bot.right, 10)) {
                 if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
                     bot.right.setPower(1);
+                    bot.left.setPower(1);
                 } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
                     bot.right.setPower(-1);
+                    bot.left.setPower(-1);
                 } else {
                     bot.right.setPower(0);
+                    bot.left.setPower(0);
                 }
             }
-
+            bot.right.setPower(0);
+            bot.left.setPower(0);
             stop();
-
         }
-
     }
-
 }
