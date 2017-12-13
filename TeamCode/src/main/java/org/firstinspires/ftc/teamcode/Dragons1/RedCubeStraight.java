@@ -50,7 +50,7 @@ public class RedCubeStraight extends LinearOpMode {
 
             if (stageNumber == 0) {
                 //bot.arm.setTargetPosition(-977);
-                driveToPosition(bot.right, -24);
+                driveToPosition(bot.right, -30);
                 //driveToPosition(bot.left, 12);
                 bot.arm.setPower(0);
                 bot.left.setPower(-1);
@@ -62,9 +62,12 @@ public class RedCubeStraight extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 2) {
+                    bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     turn(90, bot.left, bot.right, bot.gyro);
+                    bot.left.setPower(bot.right.getPower() * -1);
                     if (bot.right.getPower() == 0) {
                         stageNumber++;
+                        bot.left.setPower(0);
                     }
             } else if (stageNumber == 3) {
                 bot.left.setPower(0);

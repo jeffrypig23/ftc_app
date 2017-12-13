@@ -179,11 +179,9 @@ public class SixtyOneTwentyEightConfig {
         vuMark = RelicRecoveryVuMark.from(relicTemplate);
     }
 
-
     public static void turn(int degree, DcMotor leftMotor, DcMotor rightMotor, BNO055IMU gyro) {
 
         Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
         double turn = (double) angles.firstAngle;
         if ((int) Math.round(turn) > -85) {
             leftMotor.setPower(-0.5d);
