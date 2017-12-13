@@ -82,19 +82,23 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             }
             bot.right.setPower(slow * powR);
             bot.left.setPower(slow * powL);
+            
+            if (gamepad2.left_bumper) {
+                if (gamepad2.left_trigger > 0.1f) {
+                    bot.rintake.setPower(-1);
+                } else {
+                    bot.rintake.setPower(1);
+                }
+                bot.lintake.setPower(1);
 
-            if (gamepad2.right_trigger > 0.1f) {
-                bot.rintake.setPower(1);
-                bot.lintake.setPower(-1);
-            } else if (gamepad2.left_trigger > 0.1f) {
-                bot.rintake.setPower(-1);
-                bot.lintake.setPower(1);
-            } else if (gamepad2.left_bumper) {
-                bot.lintake.setPower(1);
-                bot.rintake.setPower(1);
             } else if (gamepad2.right_bumper) {
+                if (gamepad2.right_trigger > 0.1f) {
+                    bot.rintake.setPower(1);
+                } else {
+                    bot.rintake.setPower(-1);
+                }
                 bot.lintake.setPower(-1);
-                bot.rintake.setPower(-1);
+
             } else {
                 bot.lintake.setPower(0);
                 bot.rintake.setPower(0);
