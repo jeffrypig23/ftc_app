@@ -173,7 +173,7 @@ public class RedJewelCubeTurn extends LinearOpMode {
                 stop();
             }
 
-            if (stageNumber == 9 || stageNumber == 13) {
+            if (stageNumber == 9 || stageNumber == 11 || stageNumber == 15) {
                 if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
                     bot.right.setPower(1);
                 } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
