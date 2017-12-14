@@ -24,7 +24,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
 //@Disabled
 @Autonomous(name = "Red Club (straight)", group = "Test")
 
-public class RedCubeStraight extends LinearOpMode {
+public class RedCubeTurn extends LinearOpMode {
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
     public void runOpMode() {
 
@@ -53,10 +53,10 @@ public class RedCubeStraight extends LinearOpMode {
                 driveToPosition(bot.right, -30);
                 //driveToPosition(bot.left, 12);
                 bot.arm.setPower(0);
-                bot.left.setPower(-1);
+                bot.left.setPower(-0.8d);
                 stageNumber++;
             } else if (stageNumber == 1) {
-                if (isThere(bot.right, 100)) {
+                if (isThere(bot.right, 50)) {
                     bot.right.setPower(0);
                     bot.left.setPower(0);
                     stageNumber++;
@@ -70,6 +70,11 @@ public class RedCubeStraight extends LinearOpMode {
                         bot.left.setPower(0);
                     }
             } else if (stageNumber == 3) {
+                time.reset();
+                while (time.milliseconds() < 200) {
+                    bot.left.setPower(0.5d);
+                    bot.right.setPower(0.5d);
+                }
                 bot.left.setPower(0);
                 bot.right.setPower(0);
                 time.reset();
@@ -89,10 +94,25 @@ public class RedCubeStraight extends LinearOpMode {
                 stageNumber++;
 
             } else if (stageNumber == 4) {
-                //stop();
+                    //bot.arm.setTargetPosition(-977);
+                    driveToPosition(bot.right, 6);
+                    //driveToPosition(bot.left, 12);
+                    bot.arm.setPower(0);
+                    bot.left.setPower(1);
+                    stageNumber++;
+            } else if (stageNumber == 5) {
+                    if (isThere(bot.right, 100)) {
+                        bot.right.setPower(0);
+                        bot.left.setPower(0);
+                        stageNumber++;
+                    }
+            } else if (stageNumber == 6) {
+                bot.right.setPower(0);
+                bot.left.setPower(0);
+                stop();
             }
 
-            if (stageNumber == 1) {
+            if (stageNumber == 1 || stageNumber == 5) {
                 if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
                     bot.right.setPower(1);
                 } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
