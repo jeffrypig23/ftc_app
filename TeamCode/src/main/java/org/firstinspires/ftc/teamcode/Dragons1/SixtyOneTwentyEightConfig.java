@@ -203,10 +203,10 @@ public class SixtyOneTwentyEightConfig {
         final double equation = (28 * 49) * 1/(3.14*4);
         motorWithEncoder.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
 
-        if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 10) {
+        if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 15) {
             motorWithEncoder.setPower(1);
             motorWithoutEncoder.setPower(1);
-        } else if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) <= -10) {
+        } else if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) <= -15) {
             motorWithEncoder.setPower(-1);
             motorWithoutEncoder.setPower(-1);
         } else {
