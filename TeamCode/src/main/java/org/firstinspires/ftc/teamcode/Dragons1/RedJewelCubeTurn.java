@@ -53,6 +53,7 @@ public class RedJewelCubeTurn extends LinearOpMode {
                 time.reset();
                 while (time.seconds() < 2) {
                     // Just wait :P
+                    idle();
                 }
                 stageNumber = 2;
             }  else if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
@@ -64,7 +65,7 @@ public class RedJewelCubeTurn extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 5) {
-                if (((int) Math.round(colorValue / 3)) == 1) {
+                if (((int) Math.round(colorValue / 3)) == 1) { //checks color
                     color = "Red";
                     bot.app.post(new Runnable() {
                         public void run() {
@@ -81,42 +82,35 @@ public class RedJewelCubeTurn extends LinearOpMode {
                     });
                     stageNumber = 6;
                 }
-            } else if (stageNumber == 6) {
+            } else if (stageNumber == 6) { //spin to knock off
                 if (color.equals("Blue")) {
                     // Baby spin
-                    //bot.left.setPower(0);
-                    //driveToPosition(bot.right, 4);
-                    bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    turn(10, bot.left, bot.right, bot.gyro);
-                    bot.left.setPower(bot.right.getPower() * -1);
-                    if (bot.right.getPower() == 0) { // Turn completed
-                        stageNumber++;
-                    }
+                    bot.left.setPower(0);
+                    driveToPosition(bot.right, 4);
+                    stageNumber++;
                 } else {
-                    stageNumber = 8;
+                    stageNumber = 10;
                 }
-            } else if (stageNumber == 7) {
-                turn(0, bot.left, bot.right, bot.gyro);
-                bot.left.setPower(bot.right.getPower() * -1);
-                if (bot.right.getPower() == 0) { // Turn completed
+            } else if (stageNumber == 7) { //lift arm
+                if (isThere(bot.right, 100)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
+                    bot.rightServo.setPosition(bot.rightUp);
                     stageNumber++;
                 }
             } else if (stageNumber == 8) {
-                driveToPosition(bot.right, -2);
-                bot.left.setPower(-0.8d);
+                bot.left.setPower(0);
+                driveToPosition(bot.right, -5);
                 stageNumber++;
             } else if (stageNumber == 9) {
-                if (isThere(bot.right, 50)) {
-                    bot.right.setPower(0);
+                if (isThere(bot.right, 100)) {
                     bot.left.setPower(0);
+                    bot.right.setPower(0);
                     stageNumber++;
                 }
             } else if (stageNumber == 10) {
-                bot.rightServo.setPosition(bot.rightUp);
-                // Start cube program
-                driveToPosition(bot.right, -28);
-                bot.arm.setPower(0);
-                bot.left.setPower(-0.8d);
+                driveToPosition(bot.right, -2);
+                bot.left.setPower(-1);
                 stageNumber++;
             } else if (stageNumber == 11) {
                 if (isThere(bot.right, 50)) {
@@ -124,7 +118,20 @@ public class RedJewelCubeTurn extends LinearOpMode {
                     bot.left.setPower(0);
                     stageNumber++;
                 }
-            } else if (stageNumber == 12) {
+            } else if (stageNumber == 12) { //cube begins
+                bot.rightServo.setPosition(bot.rightUp);
+                // Start cube program
+                driveToPosition(bot.right, -30);
+                bot.arm.setPower(0);
+                bot.left.setPower(-0.8d);
+                stageNumber++;
+            } else if (stageNumber == 13) {
+                if (isThere(bot.right, 50)) {
+                    bot.right.setPower(0);
+                    bot.left.setPower(0);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 14) {
                 bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 turn(90, bot.left, bot.right, bot.gyro);
                 bot.left.setPower(bot.right.getPower() * -1);
@@ -132,7 +139,7 @@ public class RedJewelCubeTurn extends LinearOpMode {
                     stageNumber++;
                     bot.left.setPower(0);
                 }
-            } else if (stageNumber == 13) {
+            } else if (stageNumber == 15) {
                 time.reset();
                 while (time.milliseconds() < 200) {
                     bot.left.setPower(0.5d);
@@ -147,6 +154,12 @@ public class RedJewelCubeTurn extends LinearOpMode {
                 }
                 bot.arm.setPower(0);
                 time.reset();
+                bot.box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                while (time.milliseconds() < 1000) {
+                    bot.box.setPower(-1);
+                }
+                bot.box.setPower(0);
+                time.reset();
                 while (time.milliseconds() < 500) {
                     bot.lintake.setPower(-1);
                     bot.rintake.setPower(-1);
@@ -156,24 +169,24 @@ public class RedJewelCubeTurn extends LinearOpMode {
                 bot.arm.setPower(0);
                 stageNumber++;
 
-            } else if (stageNumber == 14) {
+            } else if (stageNumber == 16) {
                 driveToPosition(bot.right, 6);
                 bot.arm.setPower(0);
                 bot.left.setPower(1);
                 stageNumber++;
-            } else if (stageNumber == 15) {
+            } else if (stageNumber == 17) {
                 if (isThere(bot.right, 100)) {
                     bot.right.setPower(0);
                     bot.left.setPower(0);
                     stageNumber++;
                 }
-            } else if (stageNumber == 16) {
+            } else if (stageNumber == 18) {
                 bot.right.setPower(0);
                 bot.left.setPower(0);
                 stop();
             }
 
-            if (stageNumber == 9 || stageNumber == 11 || stageNumber == 15) {
+            if (stageNumber == 7 || stageNumber == 9 || stageNumber == 11 || stageNumber == 13 || stageNumber == 17) {
                 if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
                     bot.right.setPower(1);
                 } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
@@ -182,7 +195,6 @@ public class RedJewelCubeTurn extends LinearOpMode {
                     bot.right.setPower(0);
                 }
             }
-
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Color", color)
