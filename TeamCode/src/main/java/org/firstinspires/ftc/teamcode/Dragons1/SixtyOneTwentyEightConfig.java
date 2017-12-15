@@ -195,5 +195,24 @@ public class SixtyOneTwentyEightConfig {
         }
     }
 
+    public static void drive(DcMotor motorWithEncoder, DcMotor motorWithoutEncoder, double position_in_inches) {
+        motorWithEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorWithoutEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //motor.setTargetPosition(position * 25810);
+        // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
+        final double equation = (28 * 49) * 1/(3.14*4);
+        motorWithEncoder.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
 
+        if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 10) {
+            motorWithEncoder.setPower(1);
+            motorWithoutEncoder.setPower(1);
+        } else if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) <= -10) {
+            motorWithEncoder.setPower(-1);
+            motorWithoutEncoder.setPower(-1);
+        } else {
+            motorWithEncoder.setPower(0);
+            motorWithoutEncoder.setPower(0);
+        }
+
+    }
 }
