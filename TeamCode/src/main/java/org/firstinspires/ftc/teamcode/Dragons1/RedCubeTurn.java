@@ -49,9 +49,7 @@ public class RedCubeTurn extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (stageNumber == 0) {
-                //bot.arm.setTargetPosition(-977);
                 driveToPosition(bot.right, -30);
-                //driveToPosition(bot.left, 12);
                 bot.arm.setPower(0);
                 bot.left.setPower(-0.8d);
                 stageNumber++;
@@ -94,9 +92,7 @@ public class RedCubeTurn extends LinearOpMode {
                 stageNumber++;
 
             } else if (stageNumber == 4) {
-                    //bot.arm.setTargetPosition(-977);
                     driveToPosition(bot.right, 6);
-                    //driveToPosition(bot.left, 12);
                     bot.arm.setPower(0);
                     bot.left.setPower(1);
                     stageNumber++;

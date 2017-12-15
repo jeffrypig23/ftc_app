@@ -13,13 +13,13 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
 import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.turn;
 
 /**
- * Created by Stephen Ogden on 12/13/17.
+ * Created by Stephen Ogden on 12/14/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
-//@Disabled
+@Disabled
 @Autonomous(name = "Red Jewel and cube turn", group = "Test")
-public class RedJewelCubeTurn extends LinearOpMode {
+public class NewRedJewelCubeTurn extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
 
@@ -67,16 +67,26 @@ public class RedJewelCubeTurn extends LinearOpMode {
             } else if (stageNumber == 5) {
                 if (((int) Math.round(colorValue / 3)) == 1) { //checks color
                     color = "Red";
+                    bot.app.post(new Runnable() {
+                        public void run() {
+                            bot.app.setBackgroundColor(Color.argb(bot.rightColorSensor.alpha(), bot.rightColorSensor.red(), bot.rightColorSensor.green(), bot.rightColorSensor.blue()));
+                        }
+                    });
                     stageNumber = 6;
                 } else {
                     color = "Blue";
+                    bot.app.post(new Runnable() {
+                        public void run() {
+                            bot.app.setBackgroundColor(Color.argb(bot.rightColorSensor.alpha(), bot.rightColorSensor.red(), bot.rightColorSensor.green(), bot.rightColorSensor.blue()));
+                        }
+                    });
                     stageNumber = 6;
                 }
             } else if (stageNumber == 6) { //spin to knock off
                 if (color.equals("Blue")) {
                     // Baby spin
                     bot.left.setPower(0);
-                    driveToPosition(bot.right, 6);
+                    driveToPosition(bot.right, 4);
                     stageNumber++;
                 } else {
                     stageNumber = 10;
@@ -99,8 +109,7 @@ public class RedJewelCubeTurn extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 10) {
-                driveToPosition(bot.right, -4);
-                bot.right.setPower(-1);
+                driveToPosition(bot.right, -2);
                 bot.left.setPower(-1);
                 stageNumber++;
             } else if (stageNumber == 11) {
@@ -124,7 +133,7 @@ public class RedJewelCubeTurn extends LinearOpMode {
                 }
             } else if (stageNumber == 14) {
                 bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                turn(45, bot.left, bot.right, bot.gyro);
+                turn(90, bot.left, bot.right, bot.gyro);
                 bot.left.setPower(bot.right.getPower() * -1);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
