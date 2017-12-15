@@ -114,7 +114,7 @@ public class RedJewelCubeTurn extends LinearOpMode {
                 // Start cube program
                 driveToPosition(bot.right, -30);
                 bot.arm.setPower(0);
-                bot.left.setPower(-0.8d);
+                bot.left.setPower(-1.0d);
                 stageNumber++;
             } else if (stageNumber == 13) {
                 if (isThere(bot.right, 50)) {
