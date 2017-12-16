@@ -55,7 +55,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
 
             if (stageNumber == 0) {
                 //<editor-fold desc="Move servo down, and then wait 2 seconds">
-                bot.rightServo.setPosition(bot.rightDown);
+                bot.leftServo.setPosition(bot.leftDown);
                 time.reset();
                 while (time.seconds() < 2) {
                     // Just wait :P
@@ -65,7 +65,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 //</editor-fold>
             }  else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
                 //<editor-fold desc="Get the color of the jewel over 3 iterations">
-                if (bot.rightColorSensor.red() > bot.rightColorSensor.blue()) {
+                if (bot.leftColorSensor.red() > bot.leftColorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
                     stageNumber++;
                 } else {
@@ -89,40 +89,40 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                     // Baby spin
                     time.reset();
                     while (time.milliseconds() < 200) {
-                        bot.right.setPower(1);
+                        bot.left.setPower(1);
                     }
-                    bot.right.setPower(0);
+                    bot.left.setPower(0);
                     time.reset();
-                    bot.rightServo.setPosition(bot.rightUp);
+                    bot.leftServo.setPosition(bot.leftUp);
                     while (time.milliseconds() < 200) {
-                        bot.right.setPower(-1);
+                        bot.left.setPower(-1);
                     }
-                    bot.right.setPower(0);
+                    bot.left.setPower(0);
                     stageNumber++;
                 } else {
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 6) {
-                //<editor-fold desc="Move 4 inches forward and raise the color sensor">
+                //<editor-fold desc="Move 8 inches forward and raise the color sensor">
                 drive(bot.right, bot.left, 8);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 7) {
-                //<editor-fold desc="Go forward 30 inches">
-                bot.rightServo.setPosition(bot.rightUp);
+                //<editor-fold desc="Go forward 26 inches">
+                bot.leftServo.setPosition(bot.leftUp);
                 // Start cube program
-                drive(bot.right,bot.left, 30);
+                drive(bot.right,bot.left, 26);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 8) {
-                //<editor-fold desc="Turn 90 degrees">
-                turn(45, bot.left, bot.right, bot.gyro);
+                //<editor-fold desc="Turn 45 degrees">
+                turn(-45, bot.left, bot.right, bot.gyro);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
@@ -131,8 +131,8 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 //<editor-fold desc="Move back slightly, move the arm down, move the box forward, out-take">
                 time.reset();
                 while (time.milliseconds() < 200) {
-                    bot.left.setPower(0.5d);
-                    bot.right.setPower(0.5d);
+                    bot.left.setPower(-0.5d);
+                    bot.right.setPower(-0.5d);
                 }
                 bot.left.setPower(0);
                 bot.right.setPower(0);
@@ -144,15 +144,17 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 bot.arm.setPower(0);
                 time.reset();
                 bot.box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                while (time.milliseconds() < 1200) {
+                while (time.milliseconds() < 1400) {
                     bot.box.setPower(-1);
                 }
                 bot.box.setPower(0);
                 time.reset();
-                while (time.milliseconds() < 200) {
+                while (time.milliseconds() < 400) {
                     bot.arm.setPower(0);
                     bot.right.setPower(1);
                     bot.left.setPower(1);
+                    bot.lintake.setPower(-1);
+                    bot.rintake.setPower(-1);
                 }
                 bot.right.setPower(0);
                 bot.left.setPower(0);
@@ -171,8 +173,6 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 stop();
                 //</editor-fold>
             }
-
-
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Color", color)
