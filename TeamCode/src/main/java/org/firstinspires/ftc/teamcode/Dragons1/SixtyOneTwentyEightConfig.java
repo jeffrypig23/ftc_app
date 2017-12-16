@@ -183,10 +183,11 @@ public class SixtyOneTwentyEightConfig {
 
         Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double turn = (double) angles.firstAngle;
-        if ((int) Math.round(turn) > -85) {
+        degree = degree * -1;
+        if ((int) Math.round(turn) > (degree + 5)) {
             leftMotor.setPower(-0.5d);
             rightMotor.setPower(0.5d);
-        } else if ((int) Math.round(turn) < -95) {
+        } else if ((int) Math.round(turn) < (degree - 5)) {
             leftMotor.setPower(0.5d);
             rightMotor.setPower(-0.5d);
         } else {
@@ -203,12 +204,12 @@ public class SixtyOneTwentyEightConfig {
         final double equation = (28 * 49) * 1/(3.14*4);
         motorWithEncoder.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
 
-        if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 15) {
-            motorWithEncoder.setPower(1);
-            motorWithoutEncoder.setPower(1);
-        } else if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) <= -15) {
-            motorWithEncoder.setPower(-1);
-            motorWithoutEncoder.setPower(-1);
+        if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 25) {
+            motorWithEncoder.setPower(0.5d);
+            motorWithoutEncoder.setPower(0.5d);
+        } else if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) <= -25) {
+            motorWithEncoder.setPower(-0.5d);
+            motorWithoutEncoder.setPower(-0.5d);
         } else {
             motorWithEncoder.setPower(0);
             motorWithoutEncoder.setPower(0);

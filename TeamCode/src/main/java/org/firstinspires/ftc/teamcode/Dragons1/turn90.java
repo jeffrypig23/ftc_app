@@ -24,8 +24,6 @@ public class turn90 extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
 
-    BNO055IMU gyro = null;
-
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing");
@@ -42,7 +40,7 @@ public class turn90 extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            Orientation angles = bot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             turn(90, bot.left, bot.right, bot.gyro);
 
