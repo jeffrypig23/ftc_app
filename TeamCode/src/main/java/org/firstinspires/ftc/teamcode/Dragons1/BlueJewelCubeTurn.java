@@ -21,7 +21,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  */
 
 //@Disabled
-@Autonomous(name = "Blue Jewel and cube turn", group = "Test")
+@Autonomous(name = "Blue Jewel and cube turn", group = "Official")
 public class BlueJewelCubeTurn extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
@@ -83,8 +83,8 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                     stageNumber++;
                 }
                 //</editor-fold>
-            } else if (stageNumber == 5) { //spin to knock off
-                //<editor-fold desc="If its blue: start a baby turn; if its red: Do nothing">
+            } else if (stageNumber == 5) {
+                //<editor-fold desc="If its red: start a baby turn; if its blue: Do nothing">
                 if (color.equals("Red")) {
                     // Baby spin
                     time.reset();
@@ -128,7 +128,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
-                //<editor-fold desc="Move back slightly, move the arm down, move the box forward, out-take">
+                //<editor-fold desc="Move forward slightly, move the arm down, move the box forward, out-take while backing up">
                 time.reset();
                 while (time.milliseconds() < 200) {
                     bot.left.setPower(-0.5d);
@@ -167,7 +167,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 stageNumber++;
                 //</editor-fold>
             } else if (stageNumber == 10) {
-                //<editor-fold desc="Move back slightly">
+                //<editor-fold desc="Stop out-take and end">
                 bot.lintake.setPower(0);
                 bot.rintake.setPower(0);
                 stop();
