@@ -8,23 +8,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveToPosition;
 import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.isThere;
 import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.turn;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.drive;
 
 /**
- * Created by Stephen Ogden on 12/14/17.
+ * Created by Stephen Ogden on 12/13/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
-//@Disabled
-@Autonomous(name = "Red Jewel and cube turn", group = "Official")
-public class RedJewelCubeTurn extends LinearOpMode {
+@Disabled
+@Autonomous(name = "Red Jewel and cube turn", group = "Test")
+@Deprecated
+public class OLDRedJewelCubeTurn extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
 
@@ -53,84 +49,89 @@ public class RedJewelCubeTurn extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            Orientation angles = bot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
             if (stageNumber == 0) {
-                //<editor-fold desc="Move servo down, and then wait 2 seconds">
                 bot.rightServo.setPosition(bot.rightDown);
                 time.reset();
                 while (time.seconds() < 2) {
                     // Just wait :P
                     idle();
                 }
-                stageNumber++;
-                //</editor-fold>
-            }  else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
-                //<editor-fold desc="Get the color of the jewel over 3 iterations">
+                stageNumber = 2;
+            }  else if (stageNumber == 2 || stageNumber == 3 || stageNumber == 4) {
                 if (bot.rightColorSensor.red() > bot.rightColorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
                     stageNumber++;
                 } else {
-                    // Its blue, so don't add the color value
+                    // Its blue, so dont add the color value
                     stageNumber++;
                 }
-                //</editor-fold>
-            } else if (stageNumber == 4) {
-                //<editor-fold desc="Evaluate calculated color, and return a final color">
+            } else if (stageNumber == 5) {
                 if (((int) Math.round(colorValue / 3)) == 1) { //checks color
                     color = "Red";
-                    stageNumber++;
+                    stageNumber = 6;
                 } else {
                     color = "Blue";
-                    stageNumber++;
+                    stageNumber = 6;
                 }
-                //</editor-fold>
-            } else if (stageNumber == 5) { //spin to knock off
-                //<editor-fold desc="If its blue: start a baby turn; if its red: Do nothing">
+            } else if (stageNumber == 6) { //spin to knock off
                 if (color.equals("Blue")) {
                     // Baby spin
-                    time.reset();
-                    while (time.milliseconds() < 200) {
-                        bot.right.setPower(1);
-                    }
-                    bot.right.setPower(0);
-                    time.reset();
-                    bot.rightServo.setPosition(bot.rightUp);
-                    while (time.milliseconds() < 200) {
-                        bot.right.setPower(-1);
-                    }
-                    bot.right.setPower(0);
+                    bot.left.setPower(0);
+                    driveToPosition(bot.right, 6);
                     stageNumber++;
                 } else {
+                    stageNumber = 10;
+                }
+            } else if (stageNumber == 7) { //lift arm
+                if (isThere(bot.right, 100)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
+                    bot.rightServo.setPosition(bot.rightUp);
                     stageNumber++;
                 }
-                //</editor-fold>
-            } else if (stageNumber == 6) {
-                //<editor-fold desc="Move 4 inches forward and raise the color sensor">
-                drive(bot.right, bot.left, 8);
-                if (bot.right.getPower() == 0) {
+            } else if (stageNumber == 8) {
+                bot.left.setPower(0);
+                driveToPosition(bot.right, -5);
+                stageNumber++;
+            } else if (stageNumber == 9) {
+                if (isThere(bot.right, 100)) {
+                    bot.left.setPower(0);
+                    bot.right.setPower(0);
                     stageNumber++;
                 }
-                //</editor-fold>
-            } else if (stageNumber == 7) {
-                //<editor-fold desc="Go forward 30 inches">
+            } else if (stageNumber == 10) {
+                driveToPosition(bot.right, -4);
+                bot.right.setPower(-1);
+                bot.left.setPower(-1);
+                stageNumber++;
+            } else if (stageNumber == 11) {
+                if (isThere(bot.right, 50)) {
+                    bot.right.setPower(0);
+                    bot.left.setPower(0);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 12) { //cube begins
                 bot.rightServo.setPosition(bot.rightUp);
                 // Start cube program
-                drive(bot.right,bot.left, 30);
+                driveToPosition(bot.right, -30);
                 bot.arm.setPower(0);
-                if (bot.right.getPower() == 0) {
+                bot.left.setPower(-1.0d);
+                stageNumber++;
+            } else if (stageNumber == 13) {
+                if (isThere(bot.right, 50)) {
+                    bot.right.setPower(0);
+                    bot.left.setPower(0);
                     stageNumber++;
                 }
-                //</editor-fold>
-            } else if (stageNumber == 8) {
-                //<editor-fold desc="Turn 90 degrees">
+            } else if (stageNumber == 14) {
+                bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 turn(45, bot.left, bot.right, bot.gyro);
+                bot.left.setPower(bot.right.getPower() * -1);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
+                    bot.left.setPower(0);
                 }
-                //</editor-fold>
-            } else if (stageNumber == 9) {
-                //<editor-fold desc="Move back slightly, move the arm down, move the box forward, out-take">
+            } else if (stageNumber == 15) {
                 time.reset();
                 while (time.milliseconds() < 200) {
                     bot.left.setPower(0.5d);
@@ -140,45 +141,55 @@ public class RedJewelCubeTurn extends LinearOpMode {
                 bot.right.setPower(0);
                 time.reset();
                 bot.arm.setPower(0);
-                while (time.milliseconds() < 750) {
+                while (time.milliseconds() < 500) {
                     bot.arm.setPower(-0.5d);
                 }
                 bot.arm.setPower(0);
                 time.reset();
                 bot.box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                while (time.milliseconds() < 1200) {
+                while (time.milliseconds() < 1000) {
                     bot.box.setPower(-1);
                 }
                 bot.box.setPower(0);
-                time.reset();
-                while (time.milliseconds() < 200) {
-                    bot.arm.setPower(0);
-                    bot.right.setPower(1);
-                    bot.left.setPower(1);
-                }
-                bot.right.setPower(0);
-                bot.left.setPower(0);
                 time.reset();
                 while (time.milliseconds() < 500) {
                     bot.lintake.setPower(-1);
                     bot.rintake.setPower(-1);
                 }
-                bot.arm.setPower(0);
-                stageNumber++;
-                //</editor-fold>
-            } else if (stageNumber == 10) {
-                //<editor-fold desc="Move back slightly">
                 bot.lintake.setPower(0);
                 bot.rintake.setPower(0);
+                bot.arm.setPower(0);
+                stageNumber++;
+
+            } else if (stageNumber == 16) {
+                driveToPosition(bot.right, 6);
+                bot.arm.setPower(0);
+                bot.left.setPower(1);
+                stageNumber++;
+            } else if (stageNumber == 17) {
+                if (isThere(bot.right, 100)) {
+                    bot.right.setPower(0);
+                    bot.left.setPower(0);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 18) {
+                bot.right.setPower(0);
+                bot.left.setPower(0);
                 stop();
-                //</editor-fold>
             }
 
-
+            if (stageNumber == 7 || stageNumber == 9 || stageNumber == 11 || stageNumber == 13 || stageNumber == 17) {
+                if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
+                    bot.right.setPower(1);
+                } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
+                    bot.right.setPower(-1);
+                } else {
+                    bot.right.setPower(0);
+                }
+            }
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Color", color)
-                    .addData("Angle",angles.firstAngle)
                     .addData("Time", time.seconds())
                     .addData("Red value", bot.leftColorSensor.red())
                     .addData("Blue value", bot.leftColorSensor.blue())
