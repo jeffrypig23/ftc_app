@@ -1,9 +1,18 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import android.os.Environment;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Stephen Ogden on 12/16/17.
@@ -19,13 +28,18 @@ public class testLogging extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
-        PrintWriter writer = null;
 
+        //String path = Environment.getExternalStorageDirectory().toString();
+        File file = new File("Gary.txt");
+
+        PrintWriter writer = null;
         try {
-            writer = new PrintWriter("Gary.txt", "UTF-8");
-        } catch (Exception e) {
-            // Nothing
+            writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         writer.println("Finished initialization\n");
