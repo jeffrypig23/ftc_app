@@ -83,7 +83,7 @@ public class SixtyOneTwentyEightConfig {
 
     public final double leftUp = 0.5d;
     public final double leftOffset = 0.6d;
-    public final double leftDown = 0.95d;
+    public final double leftDown = 1.0d;
 
     public final double rightUp = 0.36d;
     public final double rightOffset = 0.29d;
