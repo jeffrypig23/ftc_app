@@ -13,6 +13,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by Stephen Ogden on 12/16/17.
@@ -29,12 +32,22 @@ public class testLogging extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        //String path = Environment.getExternalStorageDirectory().toString();
-        File file = new File("Gary.txt");
+        Logger logger = Logger.getLogger("Gary");
+        FileHandler fh;
 
-        PrintWriter writer = null;
         try {
-            writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+
+            // This block configure the logger with handler and formatter
+            fh = new FileHandler("C:/temp/test/Gary.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+
+            // the following statement is used to log any messages
+            logger.info("Log file successfully created");
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,20 +55,19 @@ public class testLogging extends LinearOpMode {
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
-        writer.println("Finished initialization\n");
+        logger.info("Finished initialization\n");
         waitForStart();
 
         while (opModeIsActive()) {
 
-            writer.println("I have logged successfully ヽ༼ຈل͜ຈ༽ﾉ ");
+            logger.info("I have logged successfully ヽ༼ຈل͜ຈ༽ﾉ ");
             stop();
 
         }
 
         telemetry.addData("Status", "Done!");
         telemetry.update();
-        writer.println("\n\nOpMode ended");
-        writer.close();
+        logger.info("\n\nOpMode ended");
 
     }
 
