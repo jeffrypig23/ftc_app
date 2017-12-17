@@ -172,8 +172,8 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                 bot.rintake.setPower(0);
                 time.reset();
                 bot.arm.setPower(0);
-                while (time.milliseconds() < 750) {
-                    bot.arm.setPower(0.75d);
+                while (time.milliseconds() < 2000) {
+                    bot.arm.setPower(1);
                 }
                 bot.arm.setPower(0);
                 stop();

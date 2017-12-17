@@ -123,7 +123,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 }
                 //</editor-fold>
             } else if (stageNumber == 8) {
-                //<editor-fold desc="Turn 90 degrees">
+                //<editor-fold desc="Turn 45 degrees">
                 turn(45, bot.left, bot.right, bot.gyro);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
@@ -172,15 +172,13 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 bot.rintake.setPower(0);
                 time.reset();
                 bot.arm.setPower(0);
-                while (time.milliseconds() < 750) {
-                    bot.arm.setPower(0.75d);
+                while (time.milliseconds() < 2000) {
+                    bot.arm.setPower(1);
                 }
                 bot.arm.setPower(0);
                 stop();
                 //</editor-fold>
             }
-
-
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Color", color)

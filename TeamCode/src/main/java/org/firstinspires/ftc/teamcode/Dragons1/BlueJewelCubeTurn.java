@@ -130,7 +130,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
             } else if (stageNumber == 9) {
                 //<editor-fold desc="Move forward slightly, move the arm down, move the box forward, out-take while backing up">
                 time.reset();
-                while (time.milliseconds() < 200) {
+                while (time.milliseconds() < 400) {
                     bot.left.setPower(-0.5d);
                     bot.right.setPower(-0.5d);
                 }
@@ -144,12 +144,12 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 bot.arm.setPower(0);
                 time.reset();
                 bot.box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                while (time.milliseconds() < 1400) {
+                while (time.milliseconds() < 1500) {
                     bot.box.setPower(-1);
                 }
                 bot.box.setPower(0);
                 time.reset();
-                while (time.milliseconds() < 400) {
+                while (time.milliseconds() < 300) {
                     bot.arm.setPower(0);
                     bot.right.setPower(1);
                     bot.left.setPower(1);

@@ -21,7 +21,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  * FRC 1595
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name = "Red Club (straight)", group = "Test")
 
 public class RedCubeTurn extends LinearOpMode {
