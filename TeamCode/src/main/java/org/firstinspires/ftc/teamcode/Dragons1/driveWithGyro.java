@@ -21,7 +21,6 @@ public class driveWithGyro {
 
         motorWithEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorWithoutEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //motor.setTargetPosition(position * 25810);
         // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
         final double equation = (28 * 49) * 1/(3.14*4);
         motorWithEncoder.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
@@ -31,7 +30,6 @@ public class driveWithGyro {
 
         double motorWithEncoderPower = 0;
         double motorWithoutEncoderPower = 0;
-
 
         //<editor-fold desc="Manage position">
         if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 25) {
@@ -61,6 +59,5 @@ public class driveWithGyro {
 
         motorWithEncoder.setPower(motorWithEncoderPower);
         motorWithoutEncoder.setPower(motorWithoutEncoderPower);
-
     }
 }

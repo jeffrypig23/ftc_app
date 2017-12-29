@@ -6,9 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.drive;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveToPosition;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.isThere;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+import static org.firstinspires.ftc.teamcode.Dragons1.driveWithGyro.driveWithGyro;
 
 /**
  * Created by Stephen Ogden on 12/28/17.
@@ -30,6 +33,7 @@ public class BlueJewelTest extends LinearOpMode {
         bot.getConfig(hardwareMap);
 
         ElapsedTime time = new ElapsedTime();
+        Orientation angles = null;
 
         int stageNumber = 0;
         int armPos = -583;
@@ -47,6 +51,8 @@ public class BlueJewelTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
+            angles = bot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             if (stageNumber == 0) {
                 //<editor-fold desc="Move servo down, and then wait 1 second">
@@ -100,7 +106,7 @@ public class BlueJewelTest extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 6) {
                 //<editor-fold desc="Move 8 inches forward and raise the color sensor">
-                drive(bot.right, bot.left, 8);
+                driveWithGyro(bot.right, bot.left, 8, 0, bot.gyro);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
@@ -109,32 +115,24 @@ public class BlueJewelTest extends LinearOpMode {
                 //<editor-fold desc="Go forward 26 inches">
                 bot.leftServo.setPosition(bot.leftUp);
                 // Start cube program
-                drive(bot.right, bot.left, 26);
+                driveWithGyro(bot.right, bot.left, 26, 0, bot.gyro);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
-                }
-            }
-
-            if (stageNumber != 12) {
-                if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) >= 10) {
-                    bot.right.setPower(1);
-                } else if ((bot.right.getTargetPosition() - bot.right.getCurrentPosition()) <= -10) {
-                    bot.right.setPower(-1);
-                } else {
-                    bot.right.setPower(0);
+                    stop();
                 }
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Color", color)
-                    .addData("Time", time.seconds())
-                    .addData("Red value", bot.leftColorSensor.red())
-                    .addData("Blue value", bot.leftColorSensor.blue())
-                    .addData("", "").addData("lefFront pos", bot.left.getCurrentPosition())
+                    .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
+                    .addData("", "")
+                    .addData("Angle (all angles)", angles.firstAngle+ "("+ angles + ")")
+                    .addData("", "")
+                    .addData("lefFront pos", bot.left.getCurrentPosition())
                     .addData("left target", bot.left.getTargetPosition())
                     .addData("left ∆", Math.abs(bot.left.getTargetPosition() - bot.left.getCurrentPosition()))
-                    .addData("", "").addData("right pos", bot.right.getCurrentPosition())
+                    .addData("", "")
+                    .addData("right pos", bot.right.getCurrentPosition())
                     .addData("right target", bot.right.getTargetPosition())
                     .addData("right ∆", Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()));
             telemetry.update();
