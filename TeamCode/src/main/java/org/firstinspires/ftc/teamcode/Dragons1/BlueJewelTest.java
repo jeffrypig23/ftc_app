@@ -114,7 +114,6 @@ public class BlueJewelTest extends LinearOpMode {
             } else if (stageNumber == 7) {
                 //<editor-fold desc="Go forward 26 inches">
                 bot.leftServo.setPosition(bot.leftUp);
-                // Start cube program
                 driveWithGyro(bot.right, bot.left, 26, 0, bot.gyro);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
@@ -128,13 +127,8 @@ public class BlueJewelTest extends LinearOpMode {
                     .addData("", "")
                     .addData("Angle (all angles)", angles.firstAngle+ "("+ angles + ")")
                     .addData("", "")
-                    .addData("lefFront pos", bot.left.getCurrentPosition())
-                    .addData("left target", bot.left.getTargetPosition())
-                    .addData("left ∆", Math.abs(bot.left.getTargetPosition() - bot.left.getCurrentPosition()))
-                    .addData("", "")
                     .addData("right pos", bot.right.getCurrentPosition())
-                    .addData("right target", bot.right.getTargetPosition())
-                    .addData("right ∆", Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()));
+                    .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
             telemetry.update();
 
             idle();
