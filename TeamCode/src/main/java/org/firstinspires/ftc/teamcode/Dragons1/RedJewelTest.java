@@ -1,18 +1,9 @@
 package org.firstinspires.ftc.teamcode.Dragons1;
 
-import android.graphics.Color;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveWithGyro;
-
 
 /**
  * Created by Stephen Ogden on 12/28/17.
@@ -21,21 +12,17 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  */
 
 @Autonomous(name = "Red Jewel Test", group = "Test")
-//@Disabled
-
+@Disabled
 public class RedJewelTest extends LinearOpMode {
-
-    private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
-
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
-
+        SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
         ElapsedTime time = new ElapsedTime();
-        Orientation angles = null;
+
+        bot.getConfig(hardwareMap);
 
         int stageNumber = 0;
         int armPos = -583;
@@ -54,16 +41,13 @@ public class RedJewelTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            angles = bot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
             if (stageNumber == 0) {
                 bot.rightServo.setPosition(bot.rightDown);
                 time.reset();
-                if (time.seconds() < 2) {
+                while (time.seconds() < 1) {
                     idle();
-                } else {
-                    stageNumber++;
                 }
+                stageNumber++;
             } else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
                 if (bot.rightColorSensor.red() > bot.rightColorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
@@ -102,7 +86,7 @@ public class RedJewelTest extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 6) {
                 //<editor-fold desc="Move 4 inches forward and raise the color sensor">
-                driveWithGyro(bot.right, bot.left, 8, 0, bot.gyro);
+                bot.driveWithGyro(8, 0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
@@ -110,28 +94,29 @@ public class RedJewelTest extends LinearOpMode {
             } else if (stageNumber == 7) {
                 //<editor-fold desc="Go forward 30 inches">
                 bot.rightServo.setPosition(bot.rightUp);
-                // Start cube program
-                driveWithGyro(bot.right, bot.left, 30, 0, bot.gyro);
+                bot.driveWithGyro(30, 0);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
                 //</editor-fold>
-
-                telemetry.addData("Stage number", stageNumber)
-                        .addData("Determined color, (Red value | Blue value)", color + ", (" + bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue() + ")")
-                        .addData("", "")
-                        .addData("Angle (all angles)", angles.firstAngle + "(" + angles + ")")
-                        .addData("", "")
-                        .addData("right pos", bot.right.getCurrentPosition())
-                        .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
-                telemetry.update();
-
-                idle();
+            } else if (stageNumber == 8) {
+                stop();
             }
-            telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
+
+            telemetry.addData("Stage number", stageNumber)
+                    .addData("Determined color, (Red value | Blue value)", color + ", (" + bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue() + ")")
+                    .addData("", "")
+                    .addData("Angle (all angles)", bot.getAngle().firstAngle + "(" + bot.getAngle() + ")")
+                    .addData("", "")
+                    .addData("right pos", bot.right.getCurrentPosition())
+                    .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
             telemetry.update();
+
+            idle();
         }
+        telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
+        telemetry.update();
     }
 }
 

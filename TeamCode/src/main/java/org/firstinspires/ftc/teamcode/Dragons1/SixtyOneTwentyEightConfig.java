@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.Dragons1;
 
-import android.app.Activity;
-import android.view.View;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -44,15 +41,15 @@ public class SixtyOneTwentyEightConfig {
     Servo rightServo;
     Servo leftServo;
 
-    View app;
+    //View app;
 
     VuforiaTrackables vision;
     VuforiaLocalizer vuforia;
 
     BNO055IMU gyro;
     
-    static VuforiaTrackable relicTemplate;
-    static RelicRecoveryVuMark vuMark;
+    VuforiaTrackable relicTemplate;
+    //RelicRecoveryVuMark vuMark;
 
     // Left upMost =  .5 | Offset = .6 | Down = .95
     // Right upMost =  .36 | Offset = .29 | Down = .12
@@ -105,7 +102,7 @@ public class SixtyOneTwentyEightConfig {
         rightServo = config.servo.get("right servo");
         leftServo = config.servo.get("left servo");
 
-        app = ((Activity) config.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
+        //app = ((Activity) config.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
 
         gyro = config.get(BNO055IMU.class, "gyro");
 
@@ -132,88 +129,58 @@ public class SixtyOneTwentyEightConfig {
         relicTemplate.setName("relicVuMarkTemplate");
     }
 
-    public static void driveToPosition(DcMotor motor, double position_in_inches) {
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //motor.setTargetPosition(position * 25810);
-        // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
-        final double equation = (28 * 49) * 1/(3.14*4);
-        motor.setTargetPosition((int) (equation * position_in_inches));
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-    public static boolean isThere(DcMotor motor, int discrepancy) {
+    public boolean isThere(DcMotor motor, int discrepancy) {
         int currentPosition = motor.getCurrentPosition();
         int targetPos = motor.getTargetPosition();
         return Math.abs((targetPos - currentPosition)) <= discrepancy;
     }
-
-    public static String format(OpenGLMatrix transformationMatrix) {
+    
+    public String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 
-    public static void getVuMark() {
-        vuMark = RelicRecoveryVuMark.from(relicTemplate);
+    public RelicRecoveryVuMark getVuMark() {
+        return RelicRecoveryVuMark.from(relicTemplate);
     }
 
-    public static void turn(int degree, DcMotor leftMotor, DcMotor rightMotor, BNO055IMU gyro) {
+    public Orientation getAngle() {
+        Orientation angle = this.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return angle;
+    }
 
-        Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double turn = (double) angles.firstAngle;
+    public void turn(int degree) {
+        double turn = (double) this.getAngle().firstAngle;
         degree = degree * -1;
         if ((int) Math.round(turn) > (degree + 5)) {
-            leftMotor.setPower(-0.5d);
-            rightMotor.setPower(0.5d);
+            this.left.setPower(-0.5d);
+            this.right.setPower(0.5d);
         } else if ((int) Math.round(turn) < (degree - 5)) {
-            leftMotor.setPower(0.5d);
-            rightMotor.setPower(-0.5d);
+            this.left.setPower(0.5d);
+            this.right.setPower(-0.5d);
         } else {
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
+            this.left.setPower(0);
+            this.right.setPower(0);
         }
     }
 
-    public static void drive(DcMotor motorWithEncoder, DcMotor motorWithoutEncoder, double position_in_inches) {
-        motorWithEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorWithoutEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //motor.setTargetPosition(position * 25810);
+    public void driveWithGyro(double position_in_inches, int degree) {
+        this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
         final double equation = (28 * 49) * 1/(3.14*4);
-        motorWithEncoder.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
+        this.right.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
 
-        if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 25) {
-            motorWithEncoder.setPower(0.5d);
-            motorWithoutEncoder.setPower(0.5d);
-        } else if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) <= -25) {
-            motorWithEncoder.setPower(-0.5d);
-            motorWithoutEncoder.setPower(-0.5d);
-        } else {
-            motorWithEncoder.setPower(0);
-            motorWithoutEncoder.setPower(0);
-        }
-
-    }
-
-    public static void driveWithGyro(DcMotor motorWithEncoder, DcMotor motorWithoutEncoder, double position_in_inches, int degree, BNO055IMU gyro) {
-
-        Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        motorWithEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorWithoutEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
-        final double equation = (28 * 49) * 1/(3.14*4);
-        motorWithEncoder.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
-
-        double turn = (double) angles.firstAngle;
+        double turn = (double) this.getAngle().firstAngle;
         degree = degree * -1; // Aaaalll the things get inverted
 
         double motorWithEncoderPower = 0;
         double motorWithoutEncoderPower = 0;
 
         //<editor-fold desc="Manage position">
-        if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) >= 25) {
+        if ((this.right.getTargetPosition() - this.right.getCurrentPosition()) >= 25) {
             motorWithEncoderPower = 0.5d;
             motorWithoutEncoderPower = 0.5d;
-        } else if ((motorWithEncoder.getTargetPosition() - motorWithEncoder.getCurrentPosition()) <= -25) {
+        } else if ((this.right.getTargetPosition() - this.right.getCurrentPosition()) <= -25) {
             motorWithEncoderPower = -0.5d;
             motorWithoutEncoderPower = -0.5d;
         } else {
@@ -235,13 +202,13 @@ public class SixtyOneTwentyEightConfig {
         }
         //</editor-fold>
 
-        motorWithEncoder.setPower(motorWithEncoderPower);
-        motorWithoutEncoder.setPower(motorWithoutEncoderPower);
+        this.right.setPower(motorWithEncoderPower);
+        this.left.setPower(motorWithoutEncoderPower);
     }
 
-    public static void resetEncoder(DcMotor motorWithEncoder) {
-        motorWithEncoder.setPower(0);
-        motorWithEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorWithEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    public void resetEncoder() {
+        this.right.setPower(0);
+        this.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
