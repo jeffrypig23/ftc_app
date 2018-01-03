@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * FTC 6128 | 7935
  * FRC 1595
  */
-
+@Deprecated
 public class driveWithGyro {
     public static void driveWithGyro(DcMotor motorWithEncoder, DcMotor motorWithoutEncoder, double position_in_inches, int degree, BNO055IMU gyro) {
 
@@ -45,10 +45,10 @@ public class driveWithGyro {
         //</editor-fold>
 
         //<editor-fold desc="Manage degree">
-        if ((int) Math.round(turn) > (degree + 5)) {
+        if ((int) Math.round(turn) > (degree + 2)) {
             motorWithoutEncoderPower = motorWithoutEncoderPower + -0.25d;
             motorWithEncoderPower = motorWithEncoderPower + 0.25d;
-        } else if ((int) Math.round(turn) < (degree - 5)) {
+        } else if ((int) Math.round(turn) < (degree - 2)) {
             motorWithoutEncoderPower = motorWithoutEncoderPower + 0.25d;
             motorWithEncoderPower = motorWithEncoderPower + -0.25d;
         } else {
@@ -59,5 +59,11 @@ public class driveWithGyro {
 
         motorWithEncoder.setPower(motorWithEncoderPower);
         motorWithoutEncoder.setPower(motorWithoutEncoderPower);
+    }
+
+    public static void resetEncoder(DcMotor motorWithEncoder) {
+        motorWithEncoder.setPower(0);
+        motorWithEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorWithEncoder.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-import static org.firstinspires.ftc.teamcode.Dragons1.driveWithGyro.driveWithGyro;
+import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveWithGyro;
 
 /**
  * Created by Stephen Ogden on 12/29/17.
