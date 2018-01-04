@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.isThere;
-
 /**
  * Created by Stephen Ogden on 10/30/17.
  * FTC 6128 | 7935
@@ -173,11 +171,12 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
             }
             bot.box.setTargetPosition(boxPos);
 
+
             if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) >= 40) {
                 bot.box.setPower(1.0d);
             } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -40) {
                 bot.box.setPower(-1.0d);
-            } else if (isThere(bot.box, 9)) {
+            } else if (bot.isThere(bot.box, 9)) {
                 bot.box.setPower(0);
             }
 
@@ -185,7 +184,7 @@ public class SixtyOneTwentyEightTeleopTest extends LinearOpMode {
                 bot.box.setPower(-0.75d);
             } else if ((bot.box.getTargetPosition() - bot.box.getCurrentPosition()) <= -10 && (bot.box.getTargetPosition() - bot.box.getCurrentPosition()) > -40) {
                 bot.box.setPower(0.75d);
-            } else if (isThere(bot.box, 9)) {
+            } else if (bot.isThere(bot.box, 9)) {
                 bot.box.setPower(0);
             }
 
