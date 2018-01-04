@@ -6,21 +6,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.drive;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.turn;
-
 /**
  * Created by Stephen Ogden on 12/15/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name = "Blue Jewel and cube turn", group = "Official")
 public class BlueJewelCubeTurn extends LinearOpMode {
 
@@ -50,8 +42,6 @@ public class BlueJewelCubeTurn extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-
-            Orientation angles = bot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             if (stageNumber == 0) {
                 //<editor-fold desc="Move servo down, and then wait 2 seconds">
@@ -105,7 +95,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 6) {
                 //<editor-fold desc="Move 8 inches forward and raise the color sensor">
-                drive(bot.right, bot.left, 8);
+                bot.driveWithGyro(8,0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
@@ -114,7 +104,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 //<editor-fold desc="Go forward 26 inches">
                 bot.leftServo.setPosition(bot.leftUp);
                 // Start cube program
-                drive(bot.right,bot.left, 26);
+                bot.driveWithGyro(26, 0);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
@@ -122,7 +112,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 45 degrees">
-                turn(-45, bot.left, bot.right, bot.gyro);
+                bot.turn(-45);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
@@ -176,7 +166,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Color", color)
-                    .addData("Angle",angles.firstAngle)
+                    .addData("Angle", bot.getAngle().firstAngle)
                     .addData("Time", time.seconds())
                     .addData("Red value", bot.leftColorSensor.red())
                     .addData("Blue value", bot.leftColorSensor.blue())

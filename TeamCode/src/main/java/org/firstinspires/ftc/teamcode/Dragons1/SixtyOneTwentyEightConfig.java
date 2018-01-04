@@ -98,8 +98,6 @@ public class SixtyOneTwentyEightConfig {
         rightServo = config.servo.get("right servo");
         leftServo = config.servo.get("left servo");
 
-        //app = ((Activity) config.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
-
         gyro = config.get(BNO055IMU.class, "gyro");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -125,6 +123,7 @@ public class SixtyOneTwentyEightConfig {
         relicTemplate.setName("relicVuMarkTemplate");
     }
 
+    @SuppressWarnings("SameParameterValue")
     public boolean isThere(DcMotor motor, int discrepancy) {
         int currentPosition = motor.getCurrentPosition();
         int targetPos = motor.getTargetPosition();
