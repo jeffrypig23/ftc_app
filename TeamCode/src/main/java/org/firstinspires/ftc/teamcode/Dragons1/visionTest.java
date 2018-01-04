@@ -15,10 +15,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.format;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.getVuMark;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.relicTemplate;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.vuMark;
 
 /**
  * Created by Stephen Ogden on 12/6/17.
@@ -26,7 +22,7 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  * FRC 1595
  */
 @TeleOp(name = "Vision test", group = "Test")
-//@Disabled
+@Disabled
 public class visionTest extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
@@ -44,11 +40,10 @@ public class visionTest extends LinearOpMode {
         waitForStart();
         bot.vision.activate();
         while (opModeIsActive()) {
-            getVuMark();
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                telemetry.addData("Status", "%s visible", vuMark);
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-                telemetry.addData("Pose", format(pose));
+            if (bot.getVuMark() != RelicRecoveryVuMark.UNKNOWN) {
+                telemetry.addData("Status", "%s visible", bot.getVuMark());
+                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)bot.relicTemplate.getListener()).getPose();
+                telemetry.addData("Pose", bot.format(pose));
                 if (pose != null) {
                     VectorF trans = pose.getTranslation();
                     Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);

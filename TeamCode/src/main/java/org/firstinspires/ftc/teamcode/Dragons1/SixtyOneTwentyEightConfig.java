@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -41,15 +40,12 @@ public class SixtyOneTwentyEightConfig {
     Servo rightServo;
     Servo leftServo;
 
-    //View app;
-
     VuforiaTrackables vision;
     VuforiaLocalizer vuforia;
 
     BNO055IMU gyro;
     
     VuforiaTrackable relicTemplate;
-    //RelicRecoveryVuMark vuMark;
 
     // Left upMost =  .5 | Offset = .6 | Down = .95
     // Right upMost =  .36 | Offset = .29 | Down = .12
@@ -134,7 +130,7 @@ public class SixtyOneTwentyEightConfig {
         int targetPos = motor.getTargetPosition();
         return Math.abs((targetPos - currentPosition)) <= discrepancy;
     }
-    
+
     public String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
@@ -144,8 +140,7 @@ public class SixtyOneTwentyEightConfig {
     }
 
     public Orientation getAngle() {
-        Orientation angle = this.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return angle;
+        return this.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
     public void turn(int degree) {
@@ -163,6 +158,7 @@ public class SixtyOneTwentyEightConfig {
         }
     }
 
+    @SuppressWarnings("PointlessArithmeticExpression")
     public void driveWithGyro(double position_in_inches, int degree) {
         this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Tests;
 import android.os.Environment;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.io.BufferedWriter;
@@ -23,7 +24,7 @@ import java.util.logging.SimpleFormatter;
  * FRC 1595
  */
 
-//@Disabled
+@Disabled
 @Autonomous(name = "Logging test", group = "Test")
 
 public class testLogging extends LinearOpMode {
