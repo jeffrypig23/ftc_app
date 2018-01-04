@@ -31,14 +31,16 @@ public class RedJewelTest extends LinearOpMode {
 
         String color = "";
 
+        // TODO: Reset the encoder on init, as to eliminate the need for doing it manually
+
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
         bot.arm.setPower(0);
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
-        waitForStart();
 
+        waitForStart();
         while (opModeIsActive()) {
 
             if (stageNumber == 0) {

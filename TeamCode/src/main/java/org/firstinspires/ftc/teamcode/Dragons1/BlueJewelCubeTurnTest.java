@@ -6,34 +6,24 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.drive;
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.turn;
-
 /**
  * Created by Stephen Ogden on 12/15/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
+@Autonomous(name = "Blue Jewel Cube turn Test", group = "Test")
 //@Disabled
-@Autonomous(name = "Blue Jewel and cube turn Test", group = "Test")
 public class BlueJewelCubeTurnTest extends LinearOpMode {
-
-    SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
-
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
-
+        SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
         ElapsedTime time = new ElapsedTime();
+
+        bot.getConfig(hardwareMap);
 
         int stageNumber = 0;
 
@@ -45,25 +35,22 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         bot.rightServo.setPosition(bot.rightUp);
         bot.arm.setPower(0);
 
-        telemetry.addData("Status", "Done! Press play to start");
+        telemetry.addData("Status", "Done");
         telemetry.update();
-        waitForStart();
 
+        waitForStart();
         while (opModeIsActive()) {
 
-            Orientation angles = bot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
             if (stageNumber == 0) {
-                //<editor-fold desc="Move servo down, and then wait 2 seconds">
+                //<editor-fold desc="Move servo down, and then wait 1 second">
                 bot.leftServo.setPosition(bot.leftDown);
                 time.reset();
-                while (time.seconds() < 2) {
-                    // Just wait :P
+                while (time.seconds() < 1) {
                     idle();
                 }
                 stageNumber++;
                 //</editor-fold>
-            }  else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
+            } else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
                 //<editor-fold desc="Get the color of the jewel over 3 iterations">
                 if (bot.leftColorSensor.red() > bot.leftColorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
@@ -105,7 +92,7 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 6) {
                 //<editor-fold desc="Move 8 inches forward and raise the color sensor">
-                drive(bot.right, bot.left, 8);
+                bot.driveWithGyro(8, 0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
@@ -114,7 +101,7 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                 //<editor-fold desc="Go forward 26 inches">
                 bot.leftServo.setPosition(bot.leftUp);
                 // Start cube program
-                drive(bot.right,bot.left, 26);
+                bot.driveWithGyro(26,0);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
@@ -122,13 +109,14 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 45 degrees">
-                turn(-45, bot.left, bot.right, bot.gyro);
+                bot.turn(-45);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
                 //<editor-fold desc="Move forward slightly, move the arm down, move the box forward, out-take while backing up">
+                bot.resetEncoder();
                 time.reset();
                 while (time.milliseconds() < 400) {
                     bot.left.setPower(-0.5d);
@@ -181,17 +169,12 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Color", color)
-                    .addData("Angle",angles.firstAngle)
-                    .addData("Time", time.seconds())
-                    .addData("Red value", bot.leftColorSensor.red())
-                    .addData("Blue value", bot.leftColorSensor.blue())
-                    .addData("", "").addData("lefFront pos", bot.left.getCurrentPosition())
-                    .addData("left target", bot.left.getTargetPosition())
-                    .addData("left ∆", Math.abs(bot.left.getTargetPosition() - bot.left.getCurrentPosition()))
-                    .addData("", "").addData("right pos", bot.right.getCurrentPosition())
-                    .addData("right target", bot.right.getTargetPosition())
-                    .addData("right ∆", Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()));
+                    .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
+                    .addData("", "")
+                    .addData("Angle (all angles)", bot.getAngle().firstAngle+ "("+ bot.getAngle() + ")")
+                    .addData("", "")
+                    .addData("right pos", bot.right.getCurrentPosition())
+                    .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
             telemetry.update();
 
             idle();
@@ -199,5 +182,4 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
     }
-
 }

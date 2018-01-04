@@ -6,13 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
-import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.driveWithGyro;
-
 /**
  * Created by Stephen Ogden on 12/29/17.
  * FTC 6128 | 7935
@@ -20,9 +13,8 @@ import static org.firstinspires.ftc.teamcode.Dragons1.SixtyOneTwentyEightConfig.
  */
 
 @Autonomous(name = "Blue Jewel Cube Straight Test", group = "Test")
-@Disabled
+//@Disabled
 public class BlueJewelCubeStraightTest extends LinearOpMode {
-
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
@@ -39,22 +31,25 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
 
         String color = "";
 
-        Orientation angles = null;
+        bot.leftServo.setPosition(bot.leftUp);
+        bot.rightServo.setPosition(bot.rightUp);
+        bot.arm.setPower(0);
 
         telemetry.addData("Status", "Done");
         telemetry.update();
+
         waitForStart();
         while (opModeIsActive()) {
 
-            angles = bot.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
             if (stageNumber == 0) {
+                //<editor-fold desc="Move servo down, and then wait 1 second">
                 bot.leftServo.setPosition(bot.leftDown);
                 time.reset();
                 while (time.seconds() < 1) {
                     idle();
                 }
                 stageNumber++;
+                //</editor-fold>
             } else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
                 //<editor-fold desc="Get the color of the jewel over 3 iterations">
                 if (bot.leftColorSensor.red() > bot.leftColorSensor.blue()) {
@@ -96,59 +91,67 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
                 }
                 //</editor-fold>
             } else if (stageNumber == 6) {
-               driveWithGyro(bot.right, bot.left, 4, 0, bot.gyro);
+                //<editor-fold desc="Drive forward 4 inches, then raise the arm">
+                bot.driveWithGyro(4, 0);
                if (bot.right.getPower() == 0) {
                    bot.leftServo.setPosition(bot.leftUp);
                    stageNumber++;
                }
+                //</editor-fold>
             } else if (stageNumber == 7) {
-                driveWithGyro(bot.right,bot.left,28,0,bot.gyro);
+                //<editor-fold desc="Drive forward 28 inches">
+                bot.driveWithGyro(28, 0);
                 if (bot.right.getPower() == 0) {
                     time.reset();
-                    while (time.milliseconds() < 2500) {
-                        bot.arm.setPower(0.75d);
-                    }
-                    bot.arm.setPower(0);
-                    time.reset();
-                    bot.box.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    while (time.milliseconds() < 1500) {
-                        bot.box.setPower(-1);
-                    }
-                    bot.box.setPower(0);
-                    time.reset();
-                    while (time.milliseconds() < 500) {
-                        bot.right.setPower(0.5d);
-                        bot.left.setPower(0.5d);
-                        bot.lintake.setPower(-1);
-                        bot.rintake.setPower(-1);
-                    }
-                    bot.right.setPower(0);
-                    bot.left.setPower(0);
-                    time.reset();
-                    while (time.seconds() < 2) {
-                        bot.arm.setPower(-1);
-                    }
-                    bot.arm.setPower(0);
-                    bot.lintake.setPower(0);
-                    bot.rintake.setPower(0);
                     stageNumber++;
                 }
+                //</editor-fold>
             } else if (stageNumber == 8) {
+                //<editor-fold desc="Lower arm, out-take, raise arm, then stop out-taking">
+                while (time.milliseconds() < 2500) {
+                    bot.arm.setPower(-0.5d);
+                }
+                bot.arm.setPower(0);
+                time.reset();
+                bot.box.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                while (time.milliseconds() < 1500) {
+                    bot.box.setPower(-1);
+                }
+                bot.box.setPower(0);
+                time.reset();
+                while (time.milliseconds() < 500) {
+                    bot.right.setPower(0.5d);
+                    bot.left.setPower(0.5d);
+                    bot.lintake.setPower(-1);
+                    bot.rintake.setPower(-1);
+                }
+                bot.right.setPower(0);
+                bot.left.setPower(0);
+                time.reset();
+                while (time.seconds() < 2) {
+                    bot.arm.setPower(1);
+                }
+                bot.arm.setPower(0);
+                bot.lintake.setPower(0);
+                bot.rintake.setPower(0);
+                stageNumber++;
+                //</editor-fold>
+            } else if (stageNumber == 9) {
                 stop();
             }
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
                     .addData("", "")
-                    .addData("Angle (all angles)", angles.firstAngle+ "("+ angles + ")")
+                    .addData("Angle (all angles)", bot.getAngle().firstAngle+ "("+ bot.getAngle() + ")")
                     .addData("", "")
                     .addData("right pos", bot.right.getCurrentPosition())
                     .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
             telemetry.update();
 
+            idle();
         }
-        telemetry.addData("Status", "Done");
+        telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
     }
-
 }
