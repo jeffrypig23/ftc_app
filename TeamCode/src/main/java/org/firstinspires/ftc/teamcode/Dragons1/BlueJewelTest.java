@@ -31,8 +31,6 @@ public class BlueJewelTest extends LinearOpMode {
 
         String color = "";
 
-        // TODO: Reset the encoder on init, as to eliminate the need for doing it manually
-
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
         bot.arm.setPower(0);
