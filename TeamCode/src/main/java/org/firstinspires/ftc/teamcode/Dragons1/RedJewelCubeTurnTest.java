@@ -41,127 +41,38 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            if (stageNumber == 0) {
-                //<editor-fold desc="Move servo down, and then wait 1 second">
-                bot.rightServo.setPosition(bot.rightDown);
-                time.reset();
-                while (time.seconds() < 1) {
-                    idle();
-                }
-                stageNumber++;
-                //</editor-fold>
-            } else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
-                //<editor-fold desc="Get the color of the jewel over 3 iterations">
-                if (bot.rightColorSensor.red() > bot.rightColorSensor.blue()) {
-                    colorValue = (colorValue + 1.0);
-                    stageNumber++;
-                } else {
-                    // Its blue, so don't add the color value
-                    stageNumber++;
-                }
-                //</editor-fold>
-            } else if (stageNumber == 4) {
-                //<editor-fold desc="Evaluate calculated color, and return a final color">
-                if (((int) Math.round(colorValue / 3)) == 1) { //checks color
-                    color = "Red";
-                    stageNumber++;
-                } else {
-                    color = "Blue";
-                    stageNumber++;
-                }
-                //</editor-fold>
-            } else if (stageNumber == 5) { //spin to knock off
-                //<editor-fold desc="If its blue: start a baby turn; if its red: Do nothing">
-                if (color.equals("Blue")) {
-                    // Baby spin
-                    time.reset();
-                    while (time.milliseconds() < 200) {
-                        bot.right.setPower(1);
-                    }
-                    bot.right.setPower(0);
-                    time.reset();
-                    bot.rightServo.setPosition(bot.rightUp);
-                    while (time.milliseconds() < 200) {
-                        bot.right.setPower(-1);
-                    }
-                    bot.right.setPower(0);
-                    stageNumber++;
-                } else {
-                    stageNumber++;
-                }
-                //</editor-fold>
-            } else if (stageNumber == 6) {
-                //<editor-fold desc="Move 6 inches forward and raise the color sensor">
-                bot.driveWithGyro(6,0);
-                if (bot.right.getPower() == 0) {
-                    stageNumber++;
-                }
-                //</editor-fold>
-            } else if (stageNumber == 7) {
-                //<editor-fold desc="Go forward 30 inches">
-                bot.rightServo.setPosition(bot.rightUp);
-                bot.driveWithGyro(30, 0);
-                bot.arm.setPower(0);
-                if (bot.right.getPower() == 0) {
-                    stageNumber++;
-                }
-                //</editor-fold>
-            } else if (stageNumber == 8) {
-                //<editor-fold desc="Turn 45 degrees">
-                bot.turn(45);
+            // TODO: Re-evaluate jewewl code, and once done, insert here!
+            /*} else */ if (stageNumber == 8) {
+                //<editor-fold desc="Turn 90 degrees">
+                bot.turn(-90);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
-                //<editor-fold desc="Move back slightly, move the arm down, move the box forward, out-take while backing up">
-                time.reset();
-                while (time.milliseconds() < 200) {
-                    bot.left.setPower(0.5d);
-                    bot.right.setPower(0.5d);
+                //<editor-fold desc="Backup slightly">
+                bot.driveWithGyro(-8,-90);
+                if (bot.right.getPower() == 0) {
+                    stageNumber++;
+                    time.reset();
                 }
-                bot.left.setPower(0);
-                bot.right.setPower(0);
-                time.reset();
-                bot.arm.setPower(0);
-                while (time.milliseconds() < 750) {
-                    bot.arm.setPower(-0.5d);
-                }
-                bot.arm.setPower(0);
-                time.reset();
-                bot.box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                while (time.milliseconds() < 1200) {
-                    bot.box.setPower(-1);
-                }
-                bot.box.setPower(0);
-                time.reset();
-                while (time.milliseconds() < 200) {
-                    bot.arm.setPower(0);
-                    bot.right.setPower(1);
-                    bot.left.setPower(1);
-                }
-                bot.right.setPower(0);
-                bot.left.setPower(0);
-                time.reset();
-                while (time.milliseconds() < 500) {
-                    bot.lintake.setPower(-1);
-                    bot.rintake.setPower(-1);
+                //</editor-fold>
+            } else if (stageNumber == 10) {
+                //<editor-fold desc="Raise your dongers! ヽ༼ຈل͜ຈ༽ﾉ">
+                while (time.seconds() < 1) {
+                    bot.arm.setPower(1);
                 }
                 bot.arm.setPower(0);
                 stageNumber++;
                 //</editor-fold>
-            } else if (stageNumber == 10) {
-                //<editor-fold desc="Stop out-take, lift up arm and end">
-                bot.lintake.setPower(0);
-                bot.rintake.setPower(0);
-                time.reset();
-                bot.arm.setPower(0);
-                while (time.milliseconds() < 2000) {
-                    bot.arm.setPower(1);
+            } else if (stageNumber == 11) {
+                //<editor-fold desc="Drive forward a tiny bit to get away from the box">
+                bot.driveWithGyro(4,-90);
+                if (bot.right.getPower() == 0) {
+                    stageNumber++;
                 }
-                bot.arm.setPower(0);
-                stop();
-                //</editor-fold>
+            } else if (stageNumber == 12) {
+                return;
             }
 
             telemetry.addData("Stage number", stageNumber)

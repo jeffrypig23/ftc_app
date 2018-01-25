@@ -32,7 +32,7 @@ public class SixtyOneTwentyEightConfig {
     DcMotor lintake;
     DcMotor rintake;
     DcMotor arm;
-    DcMotor box;
+    // DcMotor box;
 
     ColorSensor leftColorSensor;
     ColorSensor rightColorSensor;
@@ -87,10 +87,12 @@ public class SixtyOneTwentyEightConfig {
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        /*
         box = config.dcMotor.get("box");
         box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         box.setDirection(DcMotorSimple.Direction.FORWARD);
+        */
 
         leftColorSensor = config.colorSensor.get("left color");
         rightColorSensor = config.colorSensor.get("right color");

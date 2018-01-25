@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Dragons1;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,16 +14,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * FRC 1595
  */
 
-// Teleop for 6128
-@TeleOp(name = "6128 TeleOp", group = "Official")
+@TeleOp(name = "TeleOp Test", group = "Test")
 //@Disabled
 
-public class SixtyOneTwentyEightTeleop extends LinearOpMode {
+public class TeleopTest extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
     ElapsedTime armTime = new ElapsedTime();
 
-    @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
@@ -37,19 +36,15 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
         double throttle;
         double turn;
         double sensitivity=0.4d;
-        double slow = 1.0d;
         double turnSpeed=0.7d;
-
-        bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
-        bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
+        double slow = 1;
 
         int armPos = -583;
-        int boxPos = 0;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
-        waitForStart();
 
+        waitForStart();
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x * gamepad1.right_stick_x;
             throttle = gamepad1.left_stick_y;
@@ -82,29 +77,26 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
             }
             bot.right.setPower(slow * powR);
             bot.left.setPower(slow * powL);
-            
-            if (gamepad2.left_bumper) {
-                if (gamepad2.left_trigger > 0.1f) {
-                    bot.rintake.setPower(-1);
-                } else {
-                    bot.rintake.setPower(1);
-                }
-                bot.lintake.setPower(1);
 
-            } else if (gamepad2.right_bumper) {
-                if (gamepad2.right_trigger > 0.1f) {
-                    bot.rintake.setPower(1);
-                } else {
-                    bot.rintake.setPower(-1);
-                }
+            if (gamepad2.right_trigger > 0.1f) {
+                bot.rintake.setPower(1);
                 bot.lintake.setPower(-1);
-
+            } else if (gamepad2.left_trigger > 0.1f) {
+                bot.rintake.setPower(-1);
+                bot.lintake.setPower(1);
+            } else if (gamepad2.left_bumper) {
+                bot.lintake.setPower(1);
+                bot.rintake.setPower(1);
+            } else if (gamepad2.right_bumper) {
+                bot.lintake.setPower(-1);
+                bot.rintake.setPower(-1);
             } else {
                 bot.lintake.setPower(0);
                 bot.rintake.setPower(0);
             }
 
             bot.arm.setPower(gamepad2.left_stick_y); // Manual control
+
             if (bot.arm.isBusy() || (bot.arm.getPower() != 0.0d)) {
                 armTime.reset();
                 bot.leftServo.setPosition(bot.leftOffset);
@@ -116,16 +108,13 @@ public class SixtyOneTwentyEightTeleop extends LinearOpMode {
                 }
             }
 
-            bot.box.setPower(gamepad2.right_stick_y); // Manuual control
-
-            telemetry.addData("Left Pow", powL)
-                    .addData("RPow", powR)
-                    .addData("Right motor", bot.right.getCurrentPosition())
+            telemetry.addData("Right motor", bot.right.getCurrentPosition())
                     .addData("Left motor", bot.left.getCurrentPosition())
-                    .addData("Arm position", armPos + " (" + bot.arm.getCurrentPosition() + ")")
-                    .addData("Box position", boxPos +  " (" + bot.box.getCurrentPosition() + ")");
+                    .addData("Arm position", armPos + " (" + bot.arm.getCurrentPosition() + ")");
             telemetry.update();
         }
+        telemetry.addData("Status", "Done");
+        telemetry.update();
     }
 
 }
