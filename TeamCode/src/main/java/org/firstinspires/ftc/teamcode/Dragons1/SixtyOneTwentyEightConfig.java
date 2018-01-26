@@ -86,7 +86,7 @@ public class SixtyOneTwentyEightConfig {
         arm = config.dcMotor.get("arm");
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        
+
         box = config.dcMotor.get("box");
         box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

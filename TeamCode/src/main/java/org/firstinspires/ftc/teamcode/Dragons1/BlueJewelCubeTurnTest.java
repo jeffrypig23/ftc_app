@@ -25,7 +25,7 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
-        int stageNumber = 8;
+        int stageNumber = 7;
 
         double colorValue = 0.0;
 
@@ -42,18 +42,29 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewewl code, and once done, insert here!
-            /*} else */if (stageNumber == 8) {
+            if (stageNumber == 7) {
+                //<editor-fold desc="Go forward 30 inches">
+                bot.leftServo.setPosition(bot.leftUp);
+                bot.driveWithGyro(38, 2);
+                bot.arm.setPower(0);
+                if (bot.right.getPower() == 0) {
+                    stageNumber++;
+                }
+            } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 90 degrees">
                 bot.turn(90);
                 if (bot.right.getPower() == 0) {
+                    bot.resetEncoder();
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
                 //<editor-fold desc="Backup slightly">
-                bot.driveWithGyro(-8,90);
-                if (bot.right.getPower() == 0) {
-                    stageNumber++;
+                bot.driveWithGyro(-4,90);
+                if (bot.right.getPower() == 0 || bot.isThere(bot.right, 20)) {
+                    bot.right.setPower(0);
+                    bot.left.setPower(0);
+                    stageNumber=100;
                     time.reset();
                 }
                 //</editor-fold>

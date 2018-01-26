@@ -25,7 +25,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
-        int stageNumber = 0;
+        int stageNumber = 7;
 
         double colorValue = 0.0;
 
@@ -42,17 +42,28 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewewl code, and once done, insert here!
-            /*} else */ if (stageNumber == 8) {
+            if (stageNumber == 7) {
+            //<editor-fold desc="Go forward 30 inches">
+            bot.leftServo.setPosition(bot.leftUp);
+            bot.driveWithGyro(38, -2);
+            bot.arm.setPower(0);
+            if (bot.right.getPower() == 0) {
+                stageNumber++;
+            }
+            } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 90 degrees">
-                bot.turn(-90);
+                bot.turn(90);
                 if (bot.right.getPower() == 0) {
+                    bot.resetEncoder();
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
                 //<editor-fold desc="Backup slightly">
-                bot.driveWithGyro(-8,-90);
-                if (bot.right.getPower() == 0) {
+                bot.driveWithGyro(-4,-90);
+                if (bot.right.getPower() == 0 || bot.isThere(bot.right, 20)) {
+                    bot.right.setPower(0);
+                    bot.left.setPower(0);
                     stageNumber++;
                     time.reset();
                 }
@@ -68,7 +79,9 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
             } else if (stageNumber == 11) {
                 //<editor-fold desc="Drive forward a tiny bit to get away from the box">
                 bot.driveWithGyro(4,-90);
-                if (bot.right.getPower() == 0) {
+                if (bot.right.getPower() == 0 || bot.isThere(bot.right, 20)) {
+                    bot.right.setPower(0);
+                    bot.left.setPower(0);
                     stageNumber++;
                 }
             } else if (stageNumber == 12) {

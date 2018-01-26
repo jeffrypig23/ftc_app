@@ -25,7 +25,7 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
-        int stageNumber = 0;
+        int stageNumber = 8;
 
         double colorValue = 0.0;
 
@@ -42,7 +42,12 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewewl code, and once done, insert here!
-            /*} else */ if (stageNumber == 8) {
+            if (stageNumber == 7) {
+                //<editor-fold desc="Go forward 30 inches">
+                bot.leftServo.setPosition(bot.leftUp);
+                bot.driveWithGyro(30, 2);
+                bot.arm.setPower(0);
+            } else if (stageNumber == 8) {
                 //<editor-fold desc="Lower arm, out-take, back up, raise arm, and stop">
                 while (time.milliseconds() < 2500) {
                     bot.arm.setPower(-0.5d);
