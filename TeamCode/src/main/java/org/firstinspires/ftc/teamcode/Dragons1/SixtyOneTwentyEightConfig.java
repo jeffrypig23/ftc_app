@@ -32,12 +32,17 @@ public class SixtyOneTwentyEightConfig {
     DcMotor lintake;
     DcMotor rintake;
     DcMotor arm;
+
+    @Deprecated
     DcMotor box;
 
     ColorSensor leftColorSensor;
     ColorSensor rightColorSensor;
 
+    @Deprecated
     Servo rightServo;
+
+    @Deprecated
     Servo leftServo;
 
     VuforiaTrackables vision;
@@ -49,6 +54,8 @@ public class SixtyOneTwentyEightConfig {
 
     // Left upMost =  .5 | Offset = .6 | Down = .95
     // Right upMost =  .36 | Offset = .29 | Down = .12
+
+    // TODO: Many devices are going to be deprecated soon!
 
     public final double leftUp = 0.5d;
     public final double leftOffset = 0.6d;

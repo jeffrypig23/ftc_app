@@ -45,7 +45,7 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
             if (stageNumber == 7) {
                 //<editor-fold desc="Go forward 30 inches">
                 bot.leftServo.setPosition(bot.leftUp);
-                bot.driveWithGyro(38, 2);
+                bot.driveWithGyro(-38, -2);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
