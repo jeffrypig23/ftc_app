@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name = "Red Jewel", group = "Official")
-@Disabled
 public class RedJewel extends LinearOpMode {
     public void runOpMode() {
 

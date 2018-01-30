@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * FRC 1595
  */
 
-@Disabled
 @Autonomous(name = "Red Jewel and cube turn", group = "Official")
 public class RedJewelCubeTurn extends LinearOpMode {
 

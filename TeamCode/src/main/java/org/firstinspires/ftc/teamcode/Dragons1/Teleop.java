@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Teleop for 6128
 @TeleOp(name = "6128 TeleOp", group = "Official")
-@Disabled
+//@Disabled
 
 public class Teleop extends LinearOpMode {
 
