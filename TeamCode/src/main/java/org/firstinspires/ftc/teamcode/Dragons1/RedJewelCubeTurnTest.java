@@ -24,12 +24,14 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
         ElapsedTime time = new ElapsedTime();
 
         bot.getConfig(hardwareMap);
+        bot.getVision(hardwareMap);
 
-        int stageNumber = 7;
+        int stageNumber = 6;
 
         double colorValue = 0.0;
 
         String color = "";
+        String pos = "";
 
         bot.leftServo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
@@ -39,16 +41,20 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+        bot.vision.activate();
         while (opModeIsActive()) {
 
-            // TODO: Re-evaluate jewewl code, and once done, insert here!
-            if (stageNumber == 7) {
+            // TODO: Re-evaluate jewel code, and once done, insert here!
+            // Todo: Implement vision
+            if (stageNumber == 6) {
+                bot.getVuMark();
+            } else if (stageNumber == 7) {
             //<editor-fold desc="Go forward 30 inches">
-            bot.leftServo.setPosition(bot.leftUp);
-            bot.driveWithGyro(-38, 2);
-            bot.arm.setPower(0);
-            if (bot.right.getPower() == 0) {
-                stageNumber++;
+                // Do one for center, left, and right
+                bot.driveWithGyro(-38, 2);
+                bot.arm.setPower(0);
+                if (bot.right.getPower() == 0) {
+                    stageNumber++;
             }
             } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 90 degrees">
@@ -71,7 +77,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
             } else if (stageNumber == 10) {
                 //<editor-fold desc="Raise your dongers! ヽ༼ຈل͜ຈ༽ﾉ">
                 while (time.seconds() < 1) {
-                    bot.arm.setPower(1);
+                    // bot.arm.setPower(1);
                 }
                 bot.arm.setPower(0);
                 stageNumber++;
@@ -90,6 +96,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
+                    .addData("Special column", bot.getVuMark())
                     .addData("", "")
                     .addData("Angle (all angles)", bot.getAngle().firstAngle+ "("+ bot.getAngle() + ")")
                     .addData("", "")

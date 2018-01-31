@@ -142,7 +142,7 @@ public class SixtyOneTwentyEightConfig {
     }
 
     public RelicRecoveryVuMark getVuMark() {
-        return RelicRecoveryVuMark.from(relicTemplate);
+        return RelicRecoveryVuMark.from(this.relicTemplate);
     }
 
     public Orientation getAngle() {

@@ -31,8 +31,6 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
 
         String color = "";
 
-        bot.leftServo.setPosition(bot.leftUp);
-        bot.rightServo.setPosition(bot.rightUp);
         bot.arm.setPower(0);
 
         telemetry.addData("Status", "Done");
@@ -42,9 +40,9 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewewl code, and once done, insert here!
+            // Todo: Implement vision
             if (stageNumber == 7) {
                 //<editor-fold desc="Go forward 30 inches">
-                bot.leftServo.setPosition(bot.leftUp);
                 bot.driveWithGyro(-38, -2);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
@@ -71,7 +69,7 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
             } else if (stageNumber == 10) {
                 //<editor-fold desc="Raise your dongers! ヽ༼ຈل͜ຈ༽ﾉ">
                 while (time.seconds() < 1) {
-                    bot.arm.setPower(1);
+                    //bot.arm.setPower(1);
                 }
                 bot.arm.setPower(0);
                 stageNumber++;
