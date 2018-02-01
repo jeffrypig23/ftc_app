@@ -1,20 +1,21 @@
-package org.firstinspires.ftc.teamcode.Dragons1;
+package org.firstinspires.ftc.teamcode.Auto.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
+
 /**
- * Created by Stephen Ogden on 11/28/17.
+ * Created by Stephen Ogden on 12/29/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-@Autonomous(name = "Red Jewel Cube Straight Test", group = "Test")
-//@Disabled
-public class RedJewelCubeStraightTest extends LinearOpMode {
+@Autonomous(name = "Blue Jewel Cube Straight Test", group = "Test")
+@Disabled
+public class BlueJewelCubeStraightTest extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
@@ -25,7 +26,7 @@ public class RedJewelCubeStraightTest extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
-        int stageNumber = 0;
+        int stageNumber = 8;
 
         double colorValue = 0.0;
 
@@ -42,7 +43,12 @@ public class RedJewelCubeStraightTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewewl code, and once done, insert here!
-            /*} else */if (stageNumber == 8) {
+            if (stageNumber == 7) {
+                //<editor-fold desc="Go forward 30 inches">
+                bot.leftServo.setPosition(bot.leftUp);
+                bot.driveWithGyro(30, 2);
+                bot.arm.setPower(0);
+            } else if (stageNumber == 8) {
                 //<editor-fold desc="Lower arm, out-take, back up, raise arm, and stop">
                 while (time.milliseconds() < 2500) {
                     bot.arm.setPower(-0.5d);
@@ -65,9 +71,7 @@ public class RedJewelCubeStraightTest extends LinearOpMode {
                 bot.lintake.setPower(0);
                 bot.rintake.setPower(0);
                 stageNumber++;
-                //</editor-fold>
-            } else if (stageNumber == 9) {
-                stop();
+                //</editor-fold>"
             }
 
             telemetry.addData("Stage number", stageNumber)

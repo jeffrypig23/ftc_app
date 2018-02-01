@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.Dragons1;
+package org.firstinspires.ftc.teamcode.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
  * Created by Stephen Ogden on 12/8/17.

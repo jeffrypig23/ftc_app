@@ -1,12 +1,11 @@
-package org.firstinspires.ftc.teamcode.Dragons1;
-
-import android.graphics.Color;
+package org.firstinspires.ftc.teamcode.Auto.Official;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
  * Created by Stephen Ogden on 12/14/17.

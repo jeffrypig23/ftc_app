@@ -1,21 +1,21 @@
-package org.firstinspires.ftc.teamcode.Dragons1;
+package org.firstinspires.ftc.teamcode.Auto.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
+
 /**
- * Created by Stephen Ogden on 11/9/17.
+ * Created by Stephen Ogden on 12/28/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-@Autonomous(name = "Red Jewel", group = "Official")
-public class RedJewel extends LinearOpMode {
+@Autonomous(name = "Red Jewel Test", group = "Test")
+@Disabled
+public class RedJewelTest extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
@@ -39,8 +39,8 @@ public class RedJewel extends LinearOpMode {
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
-        waitForStart();
 
+        waitForStart();
         while (opModeIsActive()) {
 
             if (stageNumber == 0) {
@@ -121,3 +121,4 @@ public class RedJewel extends LinearOpMode {
         telemetry.update();
     }
 }
+

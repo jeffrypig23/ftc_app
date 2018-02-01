@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.Dragons1;
+package org.firstinspires.ftc.teamcode.Tests;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
  * Created by Stephen Ogden on 12/8/17.

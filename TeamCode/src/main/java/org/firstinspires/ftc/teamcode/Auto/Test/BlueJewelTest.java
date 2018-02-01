@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.Dragons1;
+package org.firstinspires.ftc.teamcode.Auto.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
  * Created by Stephen Ogden on 12/28/17.
@@ -11,9 +13,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * FRC 1595
  */
 
-@Autonomous(name = "Red Jewel Test", group = "Test")
+@Autonomous(name = "Blue Jewel Test", group = "Test")
 @Disabled
-public class RedJewelTest extends LinearOpMode {
+public class BlueJewelTest extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
@@ -42,72 +44,76 @@ public class RedJewelTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (stageNumber == 0) {
-                bot.rightServo.setPosition(bot.rightDown);
+                //<editor-fold desc="Move servo down, and then wait 1 second">
+                bot.leftServo.setPosition(bot.leftDown);
                 time.reset();
                 while (time.seconds() < 1) {
                     idle();
                 }
                 stageNumber++;
-            } else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
-                if (bot.rightColorSensor.red() > bot.rightColorSensor.blue()) {
+                //</editor-fold>
+            }  else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
+                //<editor-fold desc="Get the color of the jewel over 3 iterations">
+                if (bot.leftColorSensor.red() > bot.leftColorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
                     stageNumber++;
                 } else {
-                    // Its blue, so dont add the color value
+                    // Its blue, so don't add the color value
                     stageNumber++;
                 }
+                //</editor-fold>
             } else if (stageNumber == 4) {
-                if (((int) Math.round(colorValue / 3)) == 1) {
+                //<editor-fold desc="Evaluate calculated color, and return a final color">
+                if (((int) Math.round(colorValue / 3)) == 1) { //checks color
                     color = "Red";
                     stageNumber++;
                 } else {
                     color = "Blue";
                     stageNumber++;
                 }
-            } else if (stageNumber == 5) { //spin to knock off
-                //<editor-fold desc="If its blue: start a baby turn; if its red: Do nothing">
-                if (color.equals("Blue")) {
+                //</editor-fold>
+            } else if (stageNumber == 5) {
+                //<editor-fold desc="If its red: start a baby turn; if its blue: Do nothing">
+                if (color.equals("Red")) {
                     // Baby spin
                     time.reset();
                     while (time.milliseconds() < 200) {
-                        bot.right.setPower(1);
+                        bot.left.setPower(1);
                     }
-                    bot.right.setPower(0);
+                    bot.left.setPower(0);
                     time.reset();
-                    bot.rightServo.setPosition(bot.rightUp);
+                    bot.leftServo.setPosition(bot.leftUp);
                     while (time.milliseconds() < 200) {
-                        bot.right.setPower(-1);
+                        bot.left.setPower(-1);
                     }
-                    bot.right.setPower(0);
+                    bot.left.setPower(0);
                     stageNumber++;
                 } else {
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 6) {
-                //<editor-fold desc="Move 4 inches forward and raise the color sensor">
+                //<editor-fold desc="Move 8 inches forward and raise the color sensor">
                 bot.driveWithGyro(8, 0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 7) {
-                //<editor-fold desc="Go forward 30 inches">
-                bot.rightServo.setPosition(bot.rightUp);
-                bot.driveWithGyro(30, 0);
+                //<editor-fold desc="Go forward 26 inches">
+                bot.leftServo.setPosition(bot.leftUp);
+                bot.driveWithGyro(26, 0);
                 bot.arm.setPower(0);
                 if (bot.right.getPower() == 0) {
                     stageNumber++;
+                    stop();
                 }
-                //</editor-fold>
-            } else if (stageNumber == 8) {
-                stop();
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Determined color, (Red value | Blue value)", color + ", (" + bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue() + ")")
+                    .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
                     .addData("", "")
-                    .addData("Angle (all angles)", bot.getAngle().firstAngle + "(" + bot.getAngle() + ")")
+                    .addData("Angle (all angles)", bot.getAngle().firstAngle+ "("+ bot.getAngle() + ")")
                     .addData("", "")
                     .addData("right pos", bot.right.getCurrentPosition())
                     .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
@@ -119,4 +125,3 @@ public class RedJewelTest extends LinearOpMode {
         telemetry.update();
     }
 }
-

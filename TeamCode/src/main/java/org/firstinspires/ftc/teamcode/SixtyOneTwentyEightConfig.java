@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Dragons1;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -27,45 +27,53 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class SixtyOneTwentyEightConfig {
 
-    DcMotor left;
-    DcMotor right;
-    DcMotor lintake;
-    DcMotor rintake;
-    DcMotor arm;
+    public DcMotor left;
+    public DcMotor right;
+    public DcMotor lintake;
+    public DcMotor rintake;
+    public DcMotor arm;
 
     @Deprecated
-    DcMotor box;
+    public DcMotor box;
 
-    ColorSensor leftColorSensor;
-    ColorSensor rightColorSensor;
-
-    @Deprecated
-    Servo rightServo;
+    public ColorSensor leftColorSensor;
+    public ColorSensor rightColorSensor;
 
     @Deprecated
-    Servo leftServo;
+    public Servo rightServo;
 
-    VuforiaTrackables vision;
-    VuforiaLocalizer vuforia;
+    @Deprecated
+    public Servo leftServo;
 
-    BNO055IMU gyro;
-    
-    VuforiaTrackable relicTemplate;
+    public VuforiaTrackables vision;
+    public VuforiaLocalizer vuforia;
+
+    public BNO055IMU gyro;
+
+    public VuforiaTrackable relicTemplate;
 
     // Left upMost =  .5 | Offset = .6 | Down = .95
     // Right upMost =  .36 | Offset = .29 | Down = .12
 
     // TODO: Many devices are going to be deprecated soon!
 
+    @Deprecated
     public final double leftUp = 0.5d;
+    @Deprecated
     public final double leftOffset = 0.6d;
+    @Deprecated
     public final double leftDown = 1.0d;
 
+    @Deprecated
     public final double rightUp = 0.36d;
+    @Deprecated
     public final double rightOffset = 0.29d;
+    @Deprecated
     public final double rightDown = 0.0d;
 
+    @Deprecated
     public final int topBoxPos = -950;
+    @Deprecated
     public final int bottomBoxPos = -30;
 
     public void getConfig(HardwareMap config) {
@@ -122,12 +130,14 @@ public class SixtyOneTwentyEightConfig {
     public void getAutoConfig(HardwareMap config) {
         left = config.dcMotor.get("left");
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Encoder machine 🅱️roke
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
 
         right = config.dcMotor.get("right");
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setDirection(DcMotorSimple.Direction.FORWARD);
 
         lintake = config.dcMotor.get("lintake");
         lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -202,29 +212,21 @@ public class SixtyOneTwentyEightConfig {
         }
     }
 
-
     // TODO: Lookup new PID methods!
-
-    public void driveWithGyroPID(double position, int degree) {
+    @SuppressWarnings("PointlessArithmeticExpression")
+    public void driveWithPID(double position, int degree) {
         // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
         final double equation = (28 * 49) * 1/(3.14*4);
+        this.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.right.setTargetPosition((int) (equation * position) * -1); // Need to make it negative, as forward is negative...
+        this.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.left.setTargetPosition((int) (equation * position * -1));
 
         double turn = (double) this.getAngle().firstAngle;
         degree = degree * -1; // Aaaalll the things get inverted
 
         double motorWithEncoderPower = 0.45d;
-        double motorWithoutEncoderPower = 0;
-
-        //<editor-fold desc="Manage degree">
-        if ((int) Math.round(turn) > (degree + 2)) {
-            motorWithoutEncoderPower = this.right.getPower() + -0.25d;
-        } else if ((int) Math.round(turn) < (degree - 2)) {
-            motorWithoutEncoderPower = this.right.getPower() + 0.25d;
-        } else {
-            motorWithoutEncoderPower = this.right.getPower() + 0;
-        }
-        //</editor-fold>
+        double motorWithoutEncoderPower = 0.45;
 
         this.right.setPower(motorWithEncoderPower);
         this.left.setPower(motorWithoutEncoderPower);
