@@ -119,6 +119,44 @@ public class SixtyOneTwentyEightConfig {
 
     }
 
+    public void getAutoConfig(HardwareMap config) {
+        left = config.dcMotor.get("left");
+        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Encoder machine 🅱️roke
+
+        right = config.dcMotor.get("right");
+        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        lintake = config.dcMotor.get("lintake");
+        lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lintake.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        rintake = config.dcMotor.get("rintake");
+        rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rintake.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        arm = config.dcMotor.get("arm");
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        gyro = config.get(BNO055IMU.class, "gyro");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        gyro = config.get(BNO055IMU.class, "gyro");
+        gyro.initialize(parameters);
+    }
+
+
     public void getVision(HardwareMap config) {
         int cameraMonitorViewId = config.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", config.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -153,23 +191,53 @@ public class SixtyOneTwentyEightConfig {
         double turn = (double) this.getAngle().firstAngle;
         degree = degree * -1;
         if ((int) Math.round(turn) > (degree + 5)) {
-            this.left.setPower(-0.5d);
-            this.right.setPower(0.5d);
+            this.left.setPower(-0.4d);
+            this.right.setPower(0.4d);
         } else if ((int) Math.round(turn) < (degree - 5)) {
-            this.left.setPower(0.5d);
-            this.right.setPower(-0.5d);
+            this.left.setPower(0.4d);
+            this.right.setPower(-0.4d);
         } else {
             this.left.setPower(0);
             this.right.setPower(0);
         }
     }
 
+
+    // TODO: Lookup new PID methods!
+
+    public void driveWithGyroPID(double position, int degree) {
+        // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
+        final double equation = (28 * 49) * 1/(3.14*4);
+        this.right.setTargetPosition((int) (equation * position) * -1); // Need to make it negative, as forward is negative...
+
+        double turn = (double) this.getAngle().firstAngle;
+        degree = degree * -1; // Aaaalll the things get inverted
+
+        double motorWithEncoderPower = 0.45d;
+        double motorWithoutEncoderPower = 0;
+
+        //<editor-fold desc="Manage degree">
+        if ((int) Math.round(turn) > (degree + 2)) {
+            motorWithoutEncoderPower = this.right.getPower() + -0.25d;
+        } else if ((int) Math.round(turn) < (degree - 2)) {
+            motorWithoutEncoderPower = this.right.getPower() + 0.25d;
+        } else {
+            motorWithoutEncoderPower = this.right.getPower() + 0;
+        }
+        //</editor-fold>
+
+        this.right.setPower(motorWithEncoderPower);
+        this.left.setPower(motorWithoutEncoderPower);
+    }
+
     @SuppressWarnings("PointlessArithmeticExpression")
     public void driveWithGyro(double position_in_inches, int degree) {
         this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
         final double equation = (28 * 49) * 1/(3.14*4);
+
         this.right.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
 
         double turn = (double) this.getAngle().firstAngle;
@@ -210,6 +278,7 @@ public class SixtyOneTwentyEightConfig {
 
     public void resetEncoder() {
         this.right.setPower(0);
+        this.left.setPower(0);
         this.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }

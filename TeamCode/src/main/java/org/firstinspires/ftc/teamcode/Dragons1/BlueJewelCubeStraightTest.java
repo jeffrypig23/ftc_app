@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name = "Blue Jewel Cube Straight Test", group = "Test")
-//@Disabled
+@Disabled
 public class BlueJewelCubeStraightTest extends LinearOpMode {
     public void runOpMode() {
 
