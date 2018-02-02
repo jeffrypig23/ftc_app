@@ -1,21 +1,20 @@
 package org.firstinspires.ftc.teamcode.Auto.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
- * Created by Stephen Ogden on 12/15/17.
+ * Created by Stephen Ogden on 11/28/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-@Autonomous(name = "Blue Jewel Cube turn Test", group = "Test")
-@Disabled
-public class BlueJewelCubeTurnTest extends LinearOpMode {
+@Autonomous(name = "Blue Jewel Cube Straight Test", group = "Test")
+//@Disabled
+public class BJCST extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
@@ -26,12 +25,14 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
-        int stageNumber = 7;
+        int stageNumber = 0;
 
         double colorValue = 0.0;
 
         String color = "";
 
+        bot.leftServo.setPosition(bot.leftUp);
+        bot.rightServo.setPosition(bot.rightUp);
         bot.arm.setPower(0);
 
         telemetry.addData("Status", "Done");
@@ -41,48 +42,32 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewewl code, and once done, insert here!
-            // Todo: Implement vision
-            if (stageNumber == 7) {
-                //<editor-fold desc="Go forward 30 inches">
-                bot.driveWithGyro(-38, -2);
-                bot.arm.setPower(0);
-                if (bot.right.getPower() == 0) {
-                    stageNumber++;
-                }
-            } else if (stageNumber == 8) {
-                //<editor-fold desc="Turn 90 degrees">
-                bot.turn(90);
-                if (bot.right.getPower() == 0) {
-                    bot.resetEncoder();
-                    stageNumber++;
-                }
-                //</editor-fold>
-            } else if (stageNumber == 9) {
-                //<editor-fold desc="Backup slightly">
-                bot.driveWithGyro(-4,90);
-                if (bot.right.getPower() == 0 || bot.isThere(bot.right, 20)) {
-                    bot.right.setPower(0);
-                    bot.left.setPower(0);
-                    stageNumber=100;
-                    time.reset();
-                }
-                //</editor-fold>
-            } else if (stageNumber == 10) {
-                //<editor-fold desc="Raise your dongers! ヽ༼ຈل͜ຈ༽ﾉ">
-                while (time.seconds() < 1) {
-                    //bot.arm.setPower(1);
+            /*} else */if (stageNumber == 8) {
+                //<editor-fold desc="Lower arm, out-take, back up, raise arm, and stop">
+                while (time.milliseconds() < 2500) {
+                    bot.arm.setPower(-0.5d);
                 }
                 bot.arm.setPower(0);
+                time.reset();
+                while (time.milliseconds() < 500) {
+                    bot.right.setPower(0.5d);
+                    bot.left.setPower(0.5d);
+                    bot.lintake.setPower(-1);
+                    bot.rintake.setPower(-1);
+                }
+                bot.right.setPower(0);
+                bot.left.setPower(0);
+                time.reset();
+                while (time.seconds() < 2) {
+                    bot.arm.setPower(1);
+                }
+                bot.arm.setPower(0);
+                bot.lintake.setPower(0);
+                bot.rintake.setPower(0);
                 stageNumber++;
                 //</editor-fold>
-            } else if (stageNumber == 11) {
-                //<editor-fold desc="Drive forward a tiny bit to get away from the box">
-                bot.driveWithGyro(4,90);
-                if (bot.right.getPower() == 0) {
-                    stageNumber++;
-                }
-            } else if (stageNumber == 12) {
-                return;
+            } else if (stageNumber == 9) {
+                stop();
             }
 
             telemetry.addData("Stage number", stageNumber)

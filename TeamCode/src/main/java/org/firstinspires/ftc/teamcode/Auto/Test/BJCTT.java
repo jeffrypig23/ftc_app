@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  * FRC 1595
  */
 
-@Autonomous(name = "Red Jewel Cube turn Test", group = "Test")
+@Autonomous(name = "Blue Jewel Cube Turn Test", group = "Test")
 //@Disabled
-public class RedJewelCubeTurnTest extends LinearOpMode {
+public class BJCTT extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
