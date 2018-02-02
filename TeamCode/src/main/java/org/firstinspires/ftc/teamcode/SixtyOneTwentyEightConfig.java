@@ -170,6 +170,49 @@ public class SixtyOneTwentyEightConfig {
         gyro.initialize(parameters);
     }
 
+    public void getTeleOpConfig(HardwareMap config) {
+
+        left = config.dcMotor.get("left");
+        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        right = config.dcMotor.get("right");
+        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        lintake = config.dcMotor.get("lintake");
+        lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lintake.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        rintake = config.dcMotor.get("rintake");
+        rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rintake.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        arm = config.dcMotor.get("arm");
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        rightServo = config.servo.get("right servo");
+        leftServo = config.servo.get("left servo");
+
+        gyro = config.get(BNO055IMU.class, "gyro");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        gyro = config.get(BNO055IMU.class, "gyro");
+        gyro.initialize(parameters);
+
+    }
 
     public void getVision(HardwareMap config) {
         int cameraMonitorViewId = config.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", config.appContext.getPackageName());

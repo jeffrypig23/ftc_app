@@ -27,7 +27,7 @@ public class TeleopTest extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
+        bot.getTeleOpConfig(hardwareMap);
 
         double powR;
         double powL;
@@ -39,9 +39,6 @@ public class TeleopTest extends LinearOpMode {
 
         bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
         bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        int armPos = -583;
-        int boxPos = 0;
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -108,7 +105,8 @@ public class TeleopTest extends LinearOpMode {
                     .addData("RPow", powR)
                     .addData("Right motor", bot.right.getCurrentPosition())
                     .addData("Left motor", bot.left.getCurrentPosition())
-                    .addData("Arm position", armPos + " (" + bot.arm.getCurrentPosition() + ")");
+                    .addData("Angle", bot.getAngle())
+                    .addData("Arm position", bot.arm.getCurrentPosition());
             telemetry.update();
         }
     }
