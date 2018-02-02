@@ -39,11 +39,10 @@ public class SixtyOneTwentyEightConfig {
     public ColorSensor leftColorSensor;
     public ColorSensor rightColorSensor;
 
-    @Deprecated
     public Servo rightServo;
-
-    @Deprecated
     public Servo leftServo;
+    public Servo rightSpinner;
+    public Servo leftSpinner;
 
     public VuforiaTrackables vision;
     public VuforiaLocalizer vuforia;
@@ -153,6 +152,11 @@ public class SixtyOneTwentyEightConfig {
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        rightServo = config.servo.get("right servo");
+        leftServo = config.servo.get("left servo");
+        rightSpinner = config.servo.get("left jewel");
+        leftSpinner = config.servo.get("right jewel");
+
         gyro = config.get(BNO055IMU.class, "gyro");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -200,6 +204,8 @@ public class SixtyOneTwentyEightConfig {
     public void turn(int degree) {
         double turn = (double) this.getAngle().firstAngle;
         degree = degree * -1;
+        this.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if ((int) Math.round(turn) > (degree + 5)) {
             this.left.setPower(-0.4d);
             this.right.setPower(0.4d);
@@ -217,19 +223,15 @@ public class SixtyOneTwentyEightConfig {
     public void driveWithPID(double position, int degree) {
         // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
         final double equation = (28 * 49) * 1/(3.14*4);
+
         this.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.right.setTargetPosition((int) (equation * position) * -1); // Need to make it negative, as forward is negative...
+
         this.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.left.setTargetPosition((int) (equation * position * -1));
 
-        double turn = (double) this.getAngle().firstAngle;
-        degree = degree * -1; // Aaaalll the things get inverted
-
-        double motorWithEncoderPower = 0.45d;
-        double motorWithoutEncoderPower = 0.45;
-
-        this.right.setPower(motorWithEncoderPower);
-        this.left.setPower(motorWithoutEncoderPower);
+        this.right.setPower(0.45);
+        this.left.setPower(0.45);
     }
 
     @SuppressWarnings("PointlessArithmeticExpression")
@@ -282,6 +284,8 @@ public class SixtyOneTwentyEightConfig {
         this.right.setPower(0);
         this.left.setPower(0);
         this.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

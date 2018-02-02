@@ -116,7 +116,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Determined color, (Red value | Blue value)", "%s", color)
+                    .addData("Determined color", "%s", color)
                     .addData("Special column", pos)
                     .addData("", "")
                     .addData("Angle", "%s", bot.getAngle().firstAngle)
