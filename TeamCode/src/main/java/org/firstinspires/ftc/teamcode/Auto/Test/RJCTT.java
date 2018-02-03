@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.Auto.Test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
@@ -24,13 +26,16 @@ public class RJCTT extends LinearOpMode {
         SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
         ElapsedTime time = new ElapsedTime();
 
-        bot.getConfig(hardwareMap);
+        bot.getAutoConfig(hardwareMap);
+        bot.getVision(hardwareMap);
+        bot.resetEncoder();
 
-        int stageNumber = 7;
+        int stageNumber = 6;
 
         double colorValue = 0.0;
 
         String color = "";
+        RelicRecoveryVuMark pos = RelicRecoveryVuMark.UNKNOWN;
 
         bot.arm.setPower(0);
 
@@ -38,64 +43,79 @@ public class RJCTT extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+        bot.vision.activate();
         while (opModeIsActive()) {
 
-            // TODO: Re-evaluate jewewl code, and once done, insert here!
-            // Todo: Implement vision
-            if (stageNumber == 7) {
-                //<editor-fold desc="Go forward 30 inches">
-                bot.driveWithGyro(-38, -2);
-                bot.arm.setPower(0);
-                if (bot.right.getPower() == 0) {
+            // TODO: Re-evaluate jewel code, and once done, insert here!
+            if (stageNumber == 6) {
+                pos = bot.getVuMark();
+                if (!pos.equals(RelicRecoveryVuMark.UNKNOWN)) {
                     stageNumber++;
                 }
+            } else if (stageNumber == 7) {
+                //<editor-fold desc="Go forward based on distance from image">
+                // Do one for center, left, and right
+                if (pos.equals(RelicRecoveryVuMark.LEFT)) {
+                    // First one
+                    bot.driveWithPID(-24);
+                } else if (pos.equals(RelicRecoveryVuMark.CENTER)) {
+                    // Second one
+                    bot.driveWithPID(-34);
+                } else if (pos.equals(RelicRecoveryVuMark.RIGHT)) {
+                    // Last one
+                    bot.driveWithPID(-38);
+                } else {
+                    stageNumber--;
+                    bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                }
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
+
             } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 90 degrees">
-                bot.turn(90);
-                if (bot.right.getPower() == 0) {
+                bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                bot.left.setTargetPosition(-1277);
+                bot.right.setTargetPosition(1639);
+
+                bot.right.setPower(0.45);
+                bot.left.setPower(0.45);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
-                //<editor-fold desc="Backup slightly">
-                bot.driveWithGyro(-4,90);
-                if (bot.right.getPower() == 0 || bot.isThere(bot.right, 20)) {
-                    bot.right.setPower(0);
-                    bot.left.setPower(0);
-                    stageNumber=100;
-                    time.reset();
+                //<editor-fold desc="Backup 10 inches">
+                bot.driveWithPID(-10);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    // TODO: Change me back when done!
+                    stageNumber = 12;
                 }
                 //</editor-fold>
-            } else if (stageNumber == 10) {
-                //<editor-fold desc="Raise your dongers! ヽ༼ຈل͜ຈ༽ﾉ">
-                while (time.seconds() < 1) {
-                    //bot.arm.setPower(1);
-                }
-                bot.arm.setPower(0);
-                stageNumber++;
-                //</editor-fold>
-            } else if (stageNumber == 11) {
-                //<editor-fold desc="Drive forward a tiny bit to get away from the box">
-                bot.driveWithGyro(4,90);
-                if (bot.right.getPower() == 0) {
-                    stageNumber++;
-                }
             } else if (stageNumber == 12) {
-                return;
+                // return;
+                idle();
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
+                    .addData("Determined color", "%s", color)
+                    .addData("Special column", pos)
                     .addData("", "")
-                    .addData("Angle (all angles)", bot.getAngle().firstAngle+ "("+ bot.getAngle() + ")")
+                    .addData("Angle", "%s", bot.getAngle().firstAngle)
                     .addData("", "")
                     .addData("right pos", bot.right.getCurrentPosition())
-                    .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
+                    .addData("right target (∆)", "%s (%s)", bot.right.getTargetPosition(),  Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()))
+                    .addData("Power (R|L)", "%s,%s", bot.right.getPower(), bot.left.getPower());
             telemetry.update();
 
             idle();
         }
+        
         telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
     }

@@ -264,7 +264,7 @@ public class SixtyOneTwentyEightConfig {
 
     // TODO: Lookup new PID methods!
     @SuppressWarnings("PointlessArithmeticExpression")
-    public void driveWithPID(double position, int degree) {
+    public void driveWithPID(double position) {
         // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
         final double equation = (28 * 49) * 1/(3.14*4);
 
@@ -332,4 +332,5 @@ public class SixtyOneTwentyEightConfig {
         this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
 }

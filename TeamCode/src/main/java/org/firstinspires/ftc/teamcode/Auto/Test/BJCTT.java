@@ -56,60 +56,46 @@ public class BJCTT extends LinearOpMode {
                 // Do one for center, left, and right
                 if (pos.equals(RelicRecoveryVuMark.LEFT)) {
                     // First one
-                    bot.driveWithPID(-19, 2);
+                    bot.driveWithPID(-24);
                 } else if (pos.equals(RelicRecoveryVuMark.CENTER)) {
                     // Second one
-                    bot.driveWithPID(-36, 2);
+                    bot.driveWithPID(-34);
                 } else if (pos.equals(RelicRecoveryVuMark.RIGHT)) {
                     // Last one
-                    bot.driveWithPID(-40, 2);
+                    bot.driveWithPID(-38);
                 } else {
                     stageNumber--;
                     bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 }
-                if (bot.right.getPower() == 0) {
-                    //stageNumber++;
-                    bot.left.setPower(0);
-                    bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    // TODO: Change me back when ready!
-                    stageNumber = 12;
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber++;
                 }
 
             } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 90 degrees">
-                bot.turn(-90);
-                if (bot.right.getPower() == 0) {
+                bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                bot.right.setTargetPosition(-1277);
+                bot.left.setTargetPosition(1639);
+
+                bot.right.setPower(0.45);
+                bot.left.setPower(0.45);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
                     stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
-                //<editor-fold desc="Backup slightly">
-                bot.driveWithPID(-4,-90);
-                if (bot.right.getPower() == 0 || bot.isThere(bot.right, 20)) {
-                    bot.right.setPower(0);
-                    bot.left.setPower(0);
-                    stageNumber++;
-                    time.reset();
+                //<editor-fold desc="Backup 10 inches">
+                bot.driveWithPID(-10);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    // TODO: Change me back when done!
+                    stageNumber = 12;
                 }
                 //</editor-fold>
-            } else if (stageNumber == 10) {
-                //<editor-fold desc="Raise your dongers! ヽ༼ຈل͜ຈ༽ﾉ">
-                while (time.milliseconds() < 500) {
-                    // bot.arm.setPower(1);
-                }
-                bot.arm.setPower(0);
-                stageNumber++;
-                //</editor-fold>
-            } else if (stageNumber == 11) {
-                //<editor-fold desc="Drive forward a tiny bit to get away from the box">
-                bot.driveWithPID(4,-90);
-                if (bot.right.getPower() == 0 || bot.isThere(bot.right, 20)) {
-                    bot.right.setPower(0);
-                    bot.left.setPower(0);
-                    bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    stageNumber++;
-                }
             } else if (stageNumber == 12) {
                 // return;
                 idle();
