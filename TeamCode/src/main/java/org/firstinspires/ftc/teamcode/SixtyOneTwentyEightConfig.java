@@ -75,6 +75,7 @@ public class SixtyOneTwentyEightConfig {
     @Deprecated
     public final int bottomBoxPos = -30;
 
+    @Deprecated
     public void getConfig(HardwareMap config) {
 
         left = config.dcMotor.get("left");
@@ -154,8 +155,8 @@ public class SixtyOneTwentyEightConfig {
 
         rightServo = config.servo.get("right servo");
         leftServo = config.servo.get("left servo");
-        rightSpinner = config.servo.get("left jewel");
-        leftSpinner = config.servo.get("right jewel");
+        //rightSpinner = config.servo.get("left jewel");
+        //leftSpinner = config.servo.get("right jewel");
 
         gyro = config.get(BNO055IMU.class, "gyro");
 
