@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 @Autonomous(name = "Red Jewel Cube Straight Test", group = "Test")
 @Disabled
-public class RJCST extends LinearOpMode {
+public class RedJewelCubeStraightTest extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");

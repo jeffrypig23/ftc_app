@@ -1,29 +1,28 @@
 package org.firstinspires.ftc.teamcode.Auto.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
- * Created by Stephen Ogden on 12/14/17.
+ * Created by Stephen Ogden on 12/15/17.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-@Autonomous(name = "Blue Jewel Cube Turn Test", group = "Test")
+@Autonomous(name = "Red Jewel Cube Turn Test", group = "Test")
 //@Disabled
-public class BJCTT extends LinearOpMode {
+public class RedJewelCubeTurnTest extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
         SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
-        ElapsedTime time = new ElapsedTime();
 
         bot.getAutoConfig(hardwareMap);
         bot.getVision(hardwareMap);
@@ -77,8 +76,8 @@ public class BJCTT extends LinearOpMode {
                 bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                bot.right.setTargetPosition(-1277);
-                bot.left.setTargetPosition(1639);
+                bot.left.setTargetPosition(-1277);
+                bot.right.setTargetPosition(1639);
 
                 bot.right.setPower(0.45);
                 bot.left.setPower(0.45);
@@ -114,6 +113,7 @@ public class BJCTT extends LinearOpMode {
 
             idle();
         }
+
         telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
     }
