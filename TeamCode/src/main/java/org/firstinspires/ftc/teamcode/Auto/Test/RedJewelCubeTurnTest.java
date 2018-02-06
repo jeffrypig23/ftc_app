@@ -60,9 +60,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 } else if (pos.equals(RelicRecoveryVuMark.CENTER)) {
                     bot.driveWithPID(-28);
                 } else if (pos.equals(RelicRecoveryVuMark.RIGHT)) {
-
-                    // TODO: Right is too far
-                    bot.driveWithPID(-20);
+                    bot.driveWithPID(-22);
                 } else {
                     stageNumber--;
                     bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -88,13 +86,30 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
-                //<editor-fold desc="Backup 10 inches">
-                bot.driveWithPID(-12);
+                //<editor-fold desc="Backup 15 inches">
+                bot.driveWithPID(-15);
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
+                    bot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     stageNumber++;
                 }
                 //</editor-fold>
+            } else if (stageNumber == 10) {
+                bot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.arm.setTargetPosition(535);
+                bot.arm.setPower(75);
+                if (!bot.arm.isBusy()) {
+                    stageNumber++;
+                }
+            } else if (stageNumber == 11) {
+                bot.driveWithPID(4);
+                bot.arm.setTargetPosition(-112);
+                bot.arm.setPower(50);
+                if (!bot.right.isBusy() && !bot.left.isBusy() && !bot.arm.isBusy()) {
+                    bot.arm.setPower(0);
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
             } else if (stageNumber == 12) {
                 // return;
                 idle();
@@ -106,8 +121,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                     .addData("", "")
                     .addData("Angle", "%s", bot.getAngle().firstAngle)
                     .addData("", "")
-                    .addData("right pos", bot.right.getCurrentPosition())
-                    .addData("right target (∆)", "%s (%s)", bot.right.getTargetPosition(),  Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()))
+                    .addData("Arm power", bot.arm.getPower())
                     .addData("Power (R|L)", "%s,%s", bot.right.getPower(), bot.left.getPower());
             telemetry.update();
 
