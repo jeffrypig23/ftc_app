@@ -34,8 +34,6 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
 
         String color = "";
 
-        bot.leftServo.setPosition(bot.leftUp);
-        bot.rightServo.setPosition(bot.rightUp);
         bot.arm.setPower(0);
 
         telemetry.addData("Status", "Done");
@@ -55,6 +53,7 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
                 pos = bot.getVuMark();
                 if (!pos.equals(RelicRecoveryVuMark.UNKNOWN)) {
                     //stageNumber++;
+                    // TODO: Change me back!
                     stageNumber = 10;
                 }
             } else if (stageNumber == 7) {

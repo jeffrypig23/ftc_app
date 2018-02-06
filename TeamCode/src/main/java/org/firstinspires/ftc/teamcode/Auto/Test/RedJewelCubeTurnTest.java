@@ -37,6 +37,8 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
 
         bot.arm.setPower(0);
 
+        bot.resetEncoder();
+
         telemetry.addData("Status", "Done");
         telemetry.update();
 
@@ -54,14 +56,13 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 //<editor-fold desc="Go forward based on distance from image">
                 // Do one for center, left, and right
                 if (pos.equals(RelicRecoveryVuMark.LEFT)) {
-                    // First one
-                    bot.driveWithPID(-24);
-                } else if (pos.equals(RelicRecoveryVuMark.CENTER)) {
-                    // Second one
-                    bot.driveWithPID(-34);
-                } else if (pos.equals(RelicRecoveryVuMark.RIGHT)) {
-                    // Last one
                     bot.driveWithPID(-38);
+                } else if (pos.equals(RelicRecoveryVuMark.CENTER)) {
+                    bot.driveWithPID(-28);
+                } else if (pos.equals(RelicRecoveryVuMark.RIGHT)) {
+
+                    // TODO: Right is too far
+                    bot.driveWithPID(-20);
                 } else {
                     stageNumber--;
                     bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -88,11 +89,10 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 9) {
                 //<editor-fold desc="Backup 10 inches">
-                bot.driveWithPID(-10);
+                bot.driveWithPID(-12);
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
-                    // TODO: Change me back when done!
-                    stageNumber = 12;
+                    stageNumber++;
                 }
                 //</editor-fold>
             } else if (stageNumber == 12) {
