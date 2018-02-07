@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Auto.Test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
@@ -22,12 +23,13 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         telemetry.update();
 
         SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+        ElapsedTime time = new ElapsedTime();
 
         bot.getAutoConfig(hardwareMap);
         bot.getVision(hardwareMap);
         bot.resetEncoder();
 
-        int stageNumber = 6;
+        int stageNumber = 5;
 
         double colorValue = 0.0;
 
@@ -35,6 +37,8 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         RelicRecoveryVuMark pos = RelicRecoveryVuMark.UNKNOWN;
 
         bot.arm.setPower(0);
+        bot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bot.resetEncoder();
 
         telemetry.addData("Status", "Done");
         telemetry.update();
@@ -44,7 +48,15 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewel code, and once done, insert here!
-            if (stageNumber == 6) {
+            if (stageNumber == 5) {
+                bot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.arm.setTargetPosition(-112);
+                bot.arm.setPower(50);
+                if (!bot.arm.isBusy()) {
+                    bot.arm.setPower(0);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 6) {
                 pos = bot.getVuMark();
                 if (!pos.equals(RelicRecoveryVuMark.UNKNOWN)) {
                     stageNumber++;
@@ -53,14 +65,11 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                 //<editor-fold desc="Go forward based on distance from image">
                 // Do one for center, left, and right
                 if (pos.equals(RelicRecoveryVuMark.LEFT)) {
-                    // First one
-                    bot.driveWithPID(-24);
+                    bot.driveWithPID(37); // 38
                 } else if (pos.equals(RelicRecoveryVuMark.CENTER)) {
-                    // Second one
-                    bot.driveWithPID(-34);
+                    bot.driveWithPID(43); // -28
                 } else if (pos.equals(RelicRecoveryVuMark.RIGHT)) {
-                    // Last one
-                    bot.driveWithPID(-38);
+                    bot.driveWithPID(52); // -22
                 } else {
                     stageNumber--;
                     bot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -69,14 +78,13 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                     bot.resetEncoder();
                     stageNumber++;
                 }
-
             } else if (stageNumber == 8) {
                 //<editor-fold desc="Turn 90 degrees">
                 bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                bot.right.setTargetPosition(-1277);
-                bot.left.setTargetPosition(1639);
+                bot.right.setTargetPosition(1280);
+                bot.left.setTargetPosition(-1640);
 
                 bot.right.setPower(0.45);
                 bot.left.setPower(0.45);
@@ -86,14 +94,29 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                 }
                 //</editor-fold>
             } else if (stageNumber == 9) {
-                //<editor-fold desc="Backup 10 inches">
-                bot.driveWithPID(-10);
+                //<editor-fold desc="Backup 15 inches">
+                bot.driveWithPID(-13);
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
-                    // TODO: Change me back when done!
-                    stageNumber = 12;
+
+                    stageNumber++;
                 }
                 //</editor-fold>
+            } else if (stageNumber == 10) {
+                bot.arm.setTargetPosition(535);
+                bot.arm.setPower(75);
+                if (!bot.arm.isBusy()) {
+                    stageNumber++;
+                }
+            } else if (stageNumber == 11) {
+                bot.driveWithPID(4);
+                bot.arm.setTargetPosition(-112);
+                bot.arm.setPower(50);
+                if (!bot.right.isBusy() && !bot.left.isBusy() && !bot.arm.isBusy()) {
+                    bot.arm.setPower(0);
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
             } else if (stageNumber == 12) {
                 // return;
                 idle();
@@ -105,9 +128,9 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                     .addData("", "")
                     .addData("Angle", "%s", bot.getAngle().firstAngle)
                     .addData("", "")
-                    .addData("right pos", bot.right.getCurrentPosition())
-                    .addData("right target (∆)", "%s (%s)", bot.right.getTargetPosition(),  Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()))
-                    .addData("Power (R|L)", "%s,%s", bot.right.getPower(), bot.left.getPower());
+                    .addData("Arm power", bot.arm.getPower())
+                    .addData("Power (R|L)", "%s,%s", bot.right.getPower(), bot.left.getPower())
+                    .addData("R∆ | L∆", "%s | %s", Math.round(Math.abs(bot.right.getCurrentPosition() - bot.right.getTargetPosition())/100), Math.round(Math.abs(bot.left.getCurrentPosition() - bot.left.getTargetPosition())/100));
             telemetry.update();
 
             idle();
@@ -116,3 +139,28 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
         telemetry.update();
     }
 }
+/*
+            } else if (stageNumber == 8) {
+                bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                bot.right.setTargetPosition(1277);
+                bot.left.setTargetPosition(-1639);
+
+                bot.right.setPower(-0.45);
+                bot.left.setPower(-0.45);
+
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber = 12;
+                }
+            } else if (stageNumber == 9) {
+                //<editor-fold desc="Backup 10 inches">
+                bot.driveWithPID(-10);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    // TODO: Change me back when done!
+                    stageNumber = 12;
+                }
+                //</editor-fold>
+                */

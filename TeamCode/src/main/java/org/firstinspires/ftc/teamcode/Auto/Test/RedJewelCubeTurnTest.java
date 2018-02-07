@@ -28,7 +28,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
         bot.getVision(hardwareMap);
         bot.resetEncoder();
 
-        int stageNumber = 6;
+        int stageNumber = 5;
 
         double colorValue = 0.0;
 
@@ -36,7 +36,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
         RelicRecoveryVuMark pos = RelicRecoveryVuMark.UNKNOWN;
 
         bot.arm.setPower(0);
-
+        bot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bot.resetEncoder();
 
         telemetry.addData("Status", "Done");
@@ -47,7 +47,15 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             // TODO: Re-evaluate jewel code, and once done, insert here!
-            if (stageNumber == 6) {
+            if (stageNumber == 5) {
+                bot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.arm.setTargetPosition(-112);
+                bot.arm.setPower(50);
+                if (!bot.arm.isBusy()) {
+                    bot.arm.setPower(0);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 6) {
                 pos = bot.getVuMark();
                 if (!pos.equals(RelicRecoveryVuMark.UNKNOWN)) {
                     stageNumber++;
@@ -87,10 +95,9 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 //</editor-fold>
             } else if (stageNumber == 9) {
                 //<editor-fold desc="Backup 15 inches">
-                bot.driveWithPID(-15);
+                bot.driveWithPID(-12);
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
-                    bot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     stageNumber++;
                 }
                 //</editor-fold>

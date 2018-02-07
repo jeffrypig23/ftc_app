@@ -274,8 +274,8 @@ public class SixtyOneTwentyEightConfig {
         this.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.left.setTargetPosition((int) (equation * position * -1));
 
-        this.right.setPower(0.45);
-        this.left.setPower(0.45);
+        this.right.setPower(0.45d);
+        this.left.setPower(0.45d);
     }
 
     @SuppressWarnings("PointlessArithmeticExpression")
