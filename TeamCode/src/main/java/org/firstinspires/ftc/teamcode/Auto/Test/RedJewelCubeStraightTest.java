@@ -3,8 +3,9 @@ package org.firstinspires.ftc.teamcode.Auto.Test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 @Autonomous(name = "Red Jewel Cube Straight Test", group = "Test")
-@Disabled
+//@Disabled
 public class RedJewelCubeStraightTest extends LinearOpMode {
     public void runOpMode() {
 
@@ -22,68 +23,78 @@ public class RedJewelCubeStraightTest extends LinearOpMode {
         telemetry.update();
 
         SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
-        ElapsedTime time = new ElapsedTime();
 
-        bot.getConfig(hardwareMap);
+        bot.getAutoConfig(hardwareMap);
+        bot.getVision(hardwareMap);
+        bot.resetEncoder();
 
-        int stageNumber = 8;
+        int stageNumber = 5;
 
         double colorValue = 0.0;
 
         String color = "";
+        RelicRecoveryVuMark pos = RelicRecoveryVuMark.UNKNOWN;
 
-        bot.leftServo.setPosition(bot.leftUp);
-        bot.rightServo.setPosition(bot.rightUp);
         bot.arm.setPower(0);
+        bot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bot.resetEncoder();
 
         telemetry.addData("Status", "Done");
         telemetry.update();
 
         waitForStart();
+        bot.vision.activate();
         while (opModeIsActive()) {
 
-            // TODO: Re-evaluate jewewl code, and once done, insert here!
-            if (stageNumber == 7) {
-                //<editor-fold desc="Go forward 30 inches">
-                bot.leftServo.setPosition(bot.leftUp);
-                bot.driveWithGyro(30, 2);
-                bot.arm.setPower(0);
+            // TODO: Re-evaluate jewel code, and once done, insert here!
+            if (stageNumber == 5) {
+                bot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.arm.setTargetPosition(-112);
+                bot.arm.setPower(50);
+                if (!bot.arm.isBusy()) {
+                    bot.arm.setPower(0);
+                    stageNumber++;
+                }
+            } else if (stageNumber == 6) {
+                pos = bot.getVuMark();
+                if (!pos.equals(RelicRecoveryVuMark.UNKNOWN)) {
+                    stageNumber++;
+                }
+            } else if (stageNumber == 7) {
+                bot.driveWithPID(-12);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
             } else if (stageNumber == 8) {
-                //<editor-fold desc="Lower arm, out-take, back up, raise arm, and stop">
-                while (time.milliseconds() < 2500) {
-                    bot.arm.setPower(-0.5d);
+                bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                bot.right.setTargetPosition(1280);
+                bot.left.setTargetPosition(-1640);
+
+                bot.right.setPower(0.45);
+                bot.left.setPower(0.45);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber++;
                 }
-                bot.arm.setPower(0);
-                time.reset();
-                while (time.milliseconds() < 500) {
-                    bot.right.setPower(0.5d);
-                    bot.left.setPower(0.5d);
-                    bot.lintake.setPower(-1);
-                    bot.rintake.setPower(-1);
-                }
-                bot.right.setPower(0);
-                bot.left.setPower(0);
-                time.reset();
-                while (time.seconds() < 2) {
-                    bot.arm.setPower(1);
-                }
-                bot.arm.setPower(0);
-                bot.lintake.setPower(0);
-                bot.rintake.setPower(0);
-                stageNumber++;
-                //</editor-fold>"
+            } else if (stageNumber == 12) {
+                // return;
+                idle();
             }
 
-            telemetry.addData("Stage number", stageNumber)
-                    .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
-                    .addData("", "")
-                    .addData("Angle (all angles)", bot.getAngle().firstAngle+ "("+ bot.getAngle() + ")")
-                    .addData("", "")
-                    .addData("right pos", bot.right.getCurrentPosition())
-                    .addData("right target (∆)", bot.right.getTargetPosition() + " (" + Math.abs(bot.right.getTargetPosition() - bot.right.getCurrentPosition()) + ")");
-            telemetry.update();
+        telemetry.addData("Stage number", stageNumber)
+                .addData("Determined color", "%s", color)
+                .addData("Special column", pos)
+                .addData("", "")
+                .addData("Angle", "%s", bot.getAngle().firstAngle)
+                .addData("", "")
+                .addData("Arm power", bot.arm.getPower())
+                .addData("Power (R|L)", "%s,%s", bot.right.getPower(), bot.left.getPower());
+        telemetry.update();
 
-            idle();
+        idle();
         }
         telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
