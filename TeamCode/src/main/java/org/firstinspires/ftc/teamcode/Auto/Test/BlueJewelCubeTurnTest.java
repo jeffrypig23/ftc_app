@@ -49,7 +49,7 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
             // TODO: Re-evaluate jewel code, and once done, insert here!
             if (stageNumber == 5) {
                 bot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                bot.arm.setTargetPosition(-110);
+                bot.arm.setTargetPosition(bot.armDown);
                 bot.arm.setPower(50);
                 if (!bot.arm.isBusy()) {
                     bot.arm.setPower(0);
@@ -100,14 +100,14 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 10) {
-                bot.arm.setTargetPosition(500);
+                bot.arm.setTargetPosition(bot.armUp);
                 bot.arm.setPower(75);
                 if (!bot.arm.isBusy()) {
                     stageNumber++;
                 }
             } else if (stageNumber == 11) {
                 bot.driveWithPID(4);
-                bot.arm.setTargetPosition(-110);
+                bot.arm.setTargetPosition(bot.armDown);
                 bot.arm.setPower(50);
                 if (!bot.right.isBusy() && !bot.left.isBusy() && !bot.arm.isBusy()) {
                     bot.arm.setPower(0);

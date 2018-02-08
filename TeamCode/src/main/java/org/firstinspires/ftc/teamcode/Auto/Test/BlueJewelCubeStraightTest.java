@@ -48,7 +48,7 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
             // TODO: Re-evaluate jewel code, and once done, insert here!
             if (stageNumber == 5) {
                 bot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                bot.arm.setTargetPosition(-112);
+                bot.arm.setTargetPosition(bot.armDown);
                 bot.arm.setPower(50);
                 if (!bot.arm.isBusy()) {
                     bot.arm.setPower(0);
@@ -130,6 +130,24 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
                     bot.resetEncoder();
                     stageNumber++;
                 }
+            } else if (stageNumber == 14) {
+                bot.arm.setTargetPosition(bot.armUp);
+                bot.arm.setPower(75);
+                if (!bot.arm.isBusy()) {
+                    stageNumber++;
+                }
+            } else if (stageNumber == 15) {
+                bot.driveWithPID(3);
+                bot.arm.setTargetPosition(bot.armDown);
+                bot.arm.setPower(50);
+                if (!bot.right.isBusy() && !bot.left.isBusy() && !bot.arm.isBusy()) {
+                    bot.arm.setPower(0);
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
+            } else if (stageNumber == 16) {
+                idle();
+                // TODO: Idle -> Stop
             }
 
             telemetry.addData("Stage number", stageNumber)

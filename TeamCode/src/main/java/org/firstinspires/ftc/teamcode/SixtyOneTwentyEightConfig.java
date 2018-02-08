@@ -51,10 +51,10 @@ public class SixtyOneTwentyEightConfig {
 
     public VuforiaTrackable relicTemplate;
 
-    // Left upMost =  .5 | Offset = .6 | Down = .95
-    // Right upMost =  .36 | Offset = .29 | Down = .12
-
     // TODO: Many devices are going to be deprecated soon!
+
+    public final int armDown = -112;
+    public final int armUp = 500;
 
     public final double leftIn = 0;
     public final double leftOut = 1;
