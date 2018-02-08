@@ -139,16 +139,6 @@ public class SixtyOneTwentyEightConfig {
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        lintake = config.dcMotor.get("lintake");
-        lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lintake.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        rintake = config.dcMotor.get("rintake");
-        rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rintake.setDirection(DcMotorSimple.Direction.REVERSE);
-
         arm = config.dcMotor.get("arm");
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -157,6 +147,9 @@ public class SixtyOneTwentyEightConfig {
         leftServo = config.servo.get("left servo");
         //rightSpinner = config.servo.get("left jewel");
         //leftSpinner = config.servo.get("right jewel");
+
+        leftColorSensor = config.colorSensor.get("left color");
+        rightColorSensor = config.colorSensor.get("right color");
 
         gyro = config.get(BNO055IMU.class, "gyro");
 
