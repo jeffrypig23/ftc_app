@@ -56,6 +56,14 @@ public class SixtyOneTwentyEightConfig {
 
     // TODO: Many devices are going to be deprecated soon!
 
+    public final double leftIn = 0;
+    public final double leftOut = 1;
+    public final double leftMid = 0.5d;
+
+    public final double rightIn = 0;
+    public final double rightOut = 1;
+    public final double rightMid = 0.5d;
+
     @Deprecated
     public final double leftUp = 0.5d;
     @Deprecated
@@ -69,11 +77,6 @@ public class SixtyOneTwentyEightConfig {
     public final double rightOffset = 0.29d;
     @Deprecated
     public final double rightDown = 0.0d;
-
-    @Deprecated
-    public final int topBoxPos = -950;
-    @Deprecated
-    public final int bottomBoxPos = -30;
 
     @Deprecated
     public void getConfig(HardwareMap config) {
@@ -219,6 +222,7 @@ public class SixtyOneTwentyEightConfig {
         relicTemplate.setName("relicVuMarkTemplate");
     }
 
+    @Deprecated
     @SuppressWarnings("SameParameterValue")
     public boolean isThere(DcMotor motor, int discrepancy) {
         int currentPosition = motor.getCurrentPosition();
@@ -238,6 +242,7 @@ public class SixtyOneTwentyEightConfig {
         return this.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     }
 
+    @Deprecated
     public void turn(int degree) {
         double turn = (double) this.getAngle().firstAngle;
         degree = degree * -1;
@@ -271,6 +276,7 @@ public class SixtyOneTwentyEightConfig {
     }
 
     @SuppressWarnings("PointlessArithmeticExpression")
+    @Deprecated
     public void driveWithGyro(double position_in_inches, int degree) {
         this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

@@ -26,7 +26,6 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
 
         bot.getAutoConfig(hardwareMap);
         bot.getVision(hardwareMap);
-        bot.resetEncoder();
 
         int stageNumber = 5;
 
@@ -61,8 +60,6 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 7) {
-                //<editor-fold desc="Go forward based on distance from image">
-                // Do one for center, left, and right
                 if (pos.equals(RelicRecoveryVuMark.LEFT)) {
                     bot.driveWithPID(-38);
                 } else if (pos.equals(RelicRecoveryVuMark.CENTER)) {
@@ -79,7 +76,6 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                 }
 
             } else if (stageNumber == 8) {
-                //<editor-fold desc="Turn 90 degrees">
                 bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -92,15 +88,12 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                     bot.resetEncoder();
                     stageNumber++;
                 }
-                //</editor-fold>
             } else if (stageNumber == 9) {
-                //<editor-fold desc="Backup 15 inches">
                 bot.driveWithPID(-12);
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
                     stageNumber++;
                 }
-                //</editor-fold>
             } else if (stageNumber == 10) {
                 bot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 bot.arm.setTargetPosition(500);
@@ -118,8 +111,8 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 12) {
-                // return;
                 idle();
+                // TODO: Idle -> Stop
             }
 
             telemetry.addData("Stage number", stageNumber)

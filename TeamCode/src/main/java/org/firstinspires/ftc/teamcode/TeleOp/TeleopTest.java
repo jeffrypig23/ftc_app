@@ -37,9 +37,6 @@ public class TeleopTest extends LinearOpMode {
         double slow = 1.0d;
         double turnSpeed=0.7d;
 
-        bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
-        bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
-
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();

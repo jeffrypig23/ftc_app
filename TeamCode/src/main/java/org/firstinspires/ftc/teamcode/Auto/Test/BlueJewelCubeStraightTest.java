@@ -26,7 +26,6 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
 
         bot.getAutoConfig(hardwareMap);
         bot.getVision(hardwareMap);
-        bot.resetEncoder();
 
         int stageNumber = 5;
 
@@ -134,17 +133,17 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
             }
 
             telemetry.addData("Stage number", stageNumber)
-                        .addData("Determined color", "%s", color)
-                        .addData("Special column", pos)
-                        .addData("", "")
-                        .addData("Angle", "%s", bot.getAngle().firstAngle)
-                        .addData("", "")
-                        .addData("Arm power", bot.arm.getPower())
-                        .addData("Power (R|L)", "%s,%s", bot.right.getPower(), bot.left.getPower());
-                telemetry.update();
+                    .addData("Determined color", "%s", color)
+                    .addData("Special column", pos)
+                    .addData("", "")
+                    .addData("Angle", "%s", bot.getAngle().firstAngle)
+                    .addData("", "")
+                    .addData("Arm power", bot.arm.getPower())
+                    .addData("Power (R|L)", "%s,%s", bot.right.getPower(), bot.left.getPower());
+            telemetry.update();
 
-                idle();
-            }
+            idle();
+        }
         telemetry.addData("Status", "Done!").addData("Stage number", stageNumber);
         telemetry.update();
     }
