@@ -61,7 +61,7 @@ public class RedJewelCubeStraightTest extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 7) {
-                bot.driveWithPID(-12);
+                bot.driveWithPID(-24);
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
                     stageNumber++;
@@ -79,7 +79,53 @@ public class RedJewelCubeStraightTest extends LinearOpMode {
                     bot.resetEncoder();
                     stageNumber++;
                 }
+            } else if (stageNumber == 9) {
+                if (pos == RelicRecoveryVuMark.RIGHT) {
+                    bot.driveWithPID(3);
+                } else if (pos == RelicRecoveryVuMark.CENTER) {
+                    bot.driveWithPID(10);
+                } else if (pos == RelicRecoveryVuMark.LEFT) {
+                    bot.driveWithPID(18);
+                }
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
+            } else if (stageNumber == 10) {
+                bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                bot.right.setTargetPosition(-1433);
+                bot.left.setTargetPosition(1536);
+
+                bot.right.setPower(0.45);
+                bot.left.setPower(0.45);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
+            } else if (stageNumber == 11) {
+                bot.driveWithPID(-4);
+                if (!bot.right.isBusy() && !bot.left.isBusy()) {
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
             } else if (stageNumber == 12) {
+                bot.arm.setTargetPosition(500);
+                bot.arm.setPower(75);
+                if (!bot.arm.isBusy()) {
+                    stageNumber++;
+                }
+            } else if (stageNumber == 13) {
+                bot.driveWithPID(3);
+                bot.arm.setTargetPosition(-110);
+                bot.arm.setPower(50);
+                if (!bot.right.isBusy() && !bot.left.isBusy() && !bot.arm.isBusy()) {
+                    bot.arm.setPower(0);
+                    bot.resetEncoder();
+                    stageNumber++;
+                }
+            } else if (stageNumber == 14) {
                 // return;
                 idle();
             }
