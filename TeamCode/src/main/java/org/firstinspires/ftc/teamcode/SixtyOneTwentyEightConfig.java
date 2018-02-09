@@ -64,12 +64,10 @@ public class SixtyOneTwentyEightConfig {
     public final double rightOut = 1;
     public final double rightMid = 0.5d;
 
+    public final double leftUp = 0.43d;
     @Deprecated
-    public final double leftUp = 0.5d;
-    @Deprecated
-    public final double leftOffset = 0.6d;
-    @Deprecated
-    public final double leftDown = 1.0d;
+    public final double leftOffset = 0.5d;
+    public final double leftDown = 0.92d;
 
     @Deprecated
     public final double rightUp = 0.36d;

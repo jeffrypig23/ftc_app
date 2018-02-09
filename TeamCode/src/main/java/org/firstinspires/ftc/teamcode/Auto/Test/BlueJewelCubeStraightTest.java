@@ -89,9 +89,17 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
             } else if (stageNumber == 10) {
                 bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (pos == RelicRecoveryVuMark.LEFT) {
+                    bot.right.setTargetPosition(384); // 30%
+                    bot.left.setTargetPosition(-492);
+                } else if (pos == RelicRecoveryVuMark.CENTER) {
+                    bot.right.setTargetPosition(640); // 50%
+                    bot.left.setTargetPosition(-820);
 
-                bot.right.setTargetPosition(384); // 30%
-                bot.left.setTargetPosition(-492);
+                } else if (pos == RelicRecoveryVuMark.RIGHT){
+                    bot.right.setTargetPosition(896); // 70%
+                    bot.left.setTargetPosition(-1148);
+                }
 
                 bot.right.setPower(0.45);
                 bot.left.setPower(0.45);
@@ -103,9 +111,9 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
                 if (pos == RelicRecoveryVuMark.LEFT) {
                     bot.driveWithPID(-22);
                 } else if (pos == RelicRecoveryVuMark.CENTER) {
-                    bot.driveWithPID(-18);
+                    bot.driveWithPID(-16);
                 } else if (pos == RelicRecoveryVuMark.RIGHT) {
-                    bot.driveWithPID(-12);
+                    bot.driveWithPID(-10);
                 }
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
@@ -115,8 +123,16 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
                 bot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 bot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                bot.right.setTargetPosition(896); // 70%
-                bot.left.setTargetPosition(-1148);
+                if (pos == RelicRecoveryVuMark.LEFT) {
+                    bot.right.setTargetPosition(896); // 70%
+                    bot.left.setTargetPosition(-1148);
+                } else if (pos == RelicRecoveryVuMark.CENTER) {
+                    bot.right.setTargetPosition(640); // 50%
+                    bot.left.setTargetPosition(-820);
+                } else if (pos == RelicRecoveryVuMark.RIGHT) {
+                    bot.right.setTargetPosition(384); // 30%
+                    bot.left.setTargetPosition(-492);
+                }
 
                 bot.right.setPower(0.45);
                 bot.left.setPower(0.45);
@@ -125,7 +141,13 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
                     stageNumber++;
                 }
             } else if (stageNumber == 13) {
-                //bot.driveWithPID(-4);
+                if (pos == RelicRecoveryVuMark.RIGHT) {
+                    bot.driveWithPID(-7);
+                } else if (pos == RelicRecoveryVuMark.CENTER) {
+                    bot.driveWithPID(-3);
+                } else if (pos == RelicRecoveryVuMark.LEFT) {
+                    bot.driveWithPID(-3);
+                }
                 if (!bot.right.isBusy() && !bot.left.isBusy()) {
                     bot.resetEncoder();
                     stageNumber++;
