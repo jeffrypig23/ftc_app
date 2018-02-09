@@ -34,15 +34,41 @@ public class BlueJewelTest extends LinearOpMode {
         String color = "";
 
         bot.leftServo.setPosition(bot.leftUp);
-        bot.rightServo.setPosition(bot.rightUp);
         bot.leftSpinner.setPosition(bot.leftIn);
-        bot.rightSpinner.setPosition(bot.rightIn);
+        //bot.rightSpinner.setPosition(bot.rightIn);
+        //bot.rightServo.setPosition(bot.rightIn)
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
 
         waitForStart();
+        time.reset();
         while (opModeIsActive()) {
+
+            if (stageNumber == 0) {
+                bot.leftSpinner.setPosition(bot.leftMid);
+                if (time.seconds() > 1) {
+                    bot.leftServo.setPosition(bot.leftDown);
+                    time.reset();
+                    stageNumber++;
+                }
+            } else if (stageNumber == 1) {
+                if (time.seconds() > 1) {
+                    if (bot.leftColorSensor.blue() > bot.leftColorSensor.red()) {
+                        color = "BLUE";
+                        stageNumber++;
+                        time.reset();
+                    } else {
+                        color = "RED";
+                        stageNumber++;
+                        time.reset();
+                    }
+                }
+            } else if (stageNumber == 2) {
+                // Knock off specific jewel
+            } else if (stageNumber == 3) {
+                bot.leftServo.setPosition(bot.leftUp);
+            }
 
             telemetry.addData("Stage number", stageNumber)
                     .addData("Determined color", "%s", color)

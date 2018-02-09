@@ -146,8 +146,8 @@ public class SixtyOneTwentyEightConfig {
 
         rightServo = config.servo.get("right servo");
         leftServo = config.servo.get("left servo");
-        //rightSpinner = config.servo.get("left jewel");
-        //leftSpinner = config.servo.get("right jewel");
+        //rightSpinner = config.servo.get("right jewel");
+        leftSpinner = config.servo.get("left spin");
 
         leftColorSensor = config.colorSensor.get("left color");
         rightColorSensor = config.colorSensor.get("right color");
