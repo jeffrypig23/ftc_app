@@ -55,7 +55,7 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                 //</editor-fold>
             }  else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
                 //<editor-fold desc="Get the color of the jewel over 3 iterations">
-                if (bot.leftColorSensor.red() > bot.leftColorSensor.blue()) {
+                if (bot.colorSensor.red() > bot.colorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
                     stageNumber++;
                 } else {
@@ -168,8 +168,8 @@ public class BlueJewelCubeTurn extends LinearOpMode {
                     .addData("Color", color)
                     .addData("Angle", bot.getAngle().firstAngle)
                     .addData("Time", time.seconds())
-                    .addData("Red value", bot.leftColorSensor.red())
-                    .addData("Blue value", bot.leftColorSensor.blue())
+                    .addData("Red value", bot.colorSensor.red())
+                    .addData("Blue value", bot.colorSensor.blue())
                     .addData("", "").addData("lefFront pos", bot.left.getCurrentPosition())
                     .addData("left target", bot.left.getTargetPosition())
                     .addData("left ∆", Math.abs(bot.left.getTargetPosition() - bot.left.getCurrentPosition()))

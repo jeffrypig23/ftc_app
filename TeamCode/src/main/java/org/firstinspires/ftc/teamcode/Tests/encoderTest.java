@@ -37,7 +37,7 @@ public class encoderTest extends LinearOpMode {
                         .addData("Left servo", bot.leftServo.getPosition())
                         .addData("Right servo", bot.rightServo.getPosition())
                         .addData("Right color sensor (RGB)", bot.rightColorSensor.red() + ", " + bot.rightColorSensor.green() + ", " + bot.rightColorSensor.blue())
-                        .addData("Left color sensor (RGB)", bot.leftColorSensor.red() + ", " + bot.leftColorSensor.green() + ", " + bot.leftColorSensor.blue());
+                        .addData("Left color sensor (RGB)", bot.colorSensor.red() + ", " + bot.colorSensor.green() + ", " + bot.colorSensor.blue());
             telemetry.update();
         }
     }

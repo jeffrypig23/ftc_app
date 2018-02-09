@@ -35,7 +35,6 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
 
         bot.leftServo.setPosition(bot.leftUp);
         bot.leftSpinner.setPosition(bot.leftIn);
-        // TODO: Right servo and spinner!
 
         bot.arm.setPower(0);
         bot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -57,7 +56,7 @@ public class BlueJewelCubeTurnTest extends LinearOpMode {
                 }
             } else if (stageNumber == 1) {
                 if (time.seconds() > 1) {
-                    if (bot.leftColorSensor.blue() > bot.leftColorSensor.red()) {
+                    if (bot.colorSensor.blue() > bot.colorSensor.red()) {
                         color = "BLUE";
                         stageNumber++;
                         time.reset();

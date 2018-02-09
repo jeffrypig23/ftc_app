@@ -107,7 +107,7 @@ public class RedJewelTest extends LinearOpMode {
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Determined color, (Red value | Blue value)", color + ", (" + bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue() + ")")
+                    .addData("Determined color, (Red value | Blue value)", color + ", (" + bot.colorSensor.red() + " | " + bot.colorSensor.blue() + ")")
                     .addData("", "")
                     .addData("Angle (all angles)", bot.getAngle().firstAngle + "(" + bot.getAngle() + ")")
                     .addData("", "")

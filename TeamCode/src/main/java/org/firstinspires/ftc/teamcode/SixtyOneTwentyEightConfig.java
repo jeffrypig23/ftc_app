@@ -36,11 +36,14 @@ public class SixtyOneTwentyEightConfig {
     @Deprecated
     public DcMotor box;
 
-    public ColorSensor leftColorSensor;
+    public ColorSensor colorSensor;
+    @Deprecated
     public ColorSensor rightColorSensor;
 
+    @Deprecated
     public Servo rightServo;
     public Servo leftServo;
+    @Deprecated
     public Servo rightSpinner;
     public Servo leftSpinner;
 
@@ -108,7 +111,7 @@ public class SixtyOneTwentyEightConfig {
         box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         box.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftColorSensor = config.colorSensor.get("left color");
+        colorSensor = config.colorSensor.get("left color");
         rightColorSensor = config.colorSensor.get("right color");
 
         rightServo = config.servo.get("right servo");
@@ -144,13 +147,10 @@ public class SixtyOneTwentyEightConfig {
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rightServo = config.servo.get("right servo");
         leftServo = config.servo.get("left servo");
-        //rightSpinner = config.servo.get("right jewel");
         leftSpinner = config.servo.get("left spin");
 
-        leftColorSensor = config.colorSensor.get("left color");
-        rightColorSensor = config.colorSensor.get("right color");
+        colorSensor = config.colorSensor.get("left color");
 
         gyro = config.get(BNO055IMU.class, "gyro");
 

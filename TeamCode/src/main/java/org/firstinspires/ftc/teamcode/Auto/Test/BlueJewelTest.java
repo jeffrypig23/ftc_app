@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Auto.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -51,7 +50,7 @@ public class BlueJewelTest extends LinearOpMode {
                 }
             } else if (stageNumber == 1) {
                 if (time.seconds() > 1) {
-                    if (bot.leftColorSensor.blue() > bot.leftColorSensor.red()) {
+                    if (bot.colorSensor.blue() > bot.colorSensor.red()) {
                         color = "BLUE";
                         stageNumber++;
                         time.reset();

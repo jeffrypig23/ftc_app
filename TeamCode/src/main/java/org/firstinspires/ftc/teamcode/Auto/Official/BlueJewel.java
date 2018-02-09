@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto.Official;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 @Autonomous(name = "Blue Jewel", group = "Official")
+@Disabled
+@Deprecated
 public class BlueJewel extends LinearOpMode {
     public void runOpMode() {
 
@@ -52,7 +55,7 @@ public class BlueJewel extends LinearOpMode {
                 //</editor-fold>
             }  else if (stageNumber == 1 || stageNumber == 2 || stageNumber == 3) {
                 //<editor-fold desc="Get the color of the jewel over 3 iterations">
-                if (bot.leftColorSensor.red() > bot.leftColorSensor.blue()) {
+                if (bot.colorSensor.red() > bot.colorSensor.blue()) {
                     colorValue = (colorValue + 1.0);
                     stageNumber++;
                 } else {
@@ -109,7 +112,7 @@ public class BlueJewel extends LinearOpMode {
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Determined color, (Red value | Blue value)", color+", ("+bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue()+")")
+                    .addData("Determined color, (Red value | Blue value)", color+", ("+bot.colorSensor.red() + " | " + bot.colorSensor.blue()+")")
                     .addData("", "")
                     .addData("Angle (all angles)", bot.getAngle().firstAngle+ "("+ bot.getAngle() + ")")
                     .addData("", "")

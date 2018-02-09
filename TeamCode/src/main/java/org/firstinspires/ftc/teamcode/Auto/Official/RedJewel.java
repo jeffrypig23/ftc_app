@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto.Official;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 @Autonomous(name = "Red Jewel", group = "Official")
+@Disabled
+@Deprecated
 public class RedJewel extends LinearOpMode {
     public void runOpMode() {
 
@@ -105,7 +108,7 @@ public class RedJewel extends LinearOpMode {
             }
 
             telemetry.addData("Stage number", stageNumber)
-                    .addData("Determined color, (Red value | Blue value)", color + ", (" + bot.leftColorSensor.red() + " | " + bot.leftColorSensor.blue() + ")")
+                    .addData("Determined color, (Red value | Blue value)", color + ", (" + bot.colorSensor.red() + " | " + bot.colorSensor.blue() + ")")
                     .addData("", "")
                     .addData("Angle (all angles)", bot.getAngle().firstAngle + "(" + bot.getAngle() + ")")
                     .addData("", "")
