@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 @Autonomous(name = "Blue Jewel Test", group = "Test")
-@Disabled
+//@Disabled
 public class BlueJewelTest extends LinearOpMode {
     public void runOpMode() {
 
@@ -27,7 +27,6 @@ public class BlueJewelTest extends LinearOpMode {
         bot.getAutoConfig(hardwareMap);
 
         int stageNumber = 0;
-        int armPos = -583;
 
         double colorValue = 0.0;
 
@@ -47,7 +46,7 @@ public class BlueJewelTest extends LinearOpMode {
 
             if (stageNumber == 0) {
                 bot.leftSpinner.setPosition(bot.leftMid);
-                if (time.seconds() > 1) {
+                if (time.milliseconds() > 500) {
                     bot.leftServo.setPosition(bot.leftDown);
                     time.reset();
                     stageNumber++;
@@ -65,7 +64,14 @@ public class BlueJewelTest extends LinearOpMode {
                     }
                 }
             } else if (stageNumber == 2) {
-                // Knock off specific jewel
+                if (color == "RED") {
+                    bot.leftSpinner.setPosition(bot.leftOut);
+                } else {
+                    bot.leftSpinner.setPosition(bot.leftIn);
+                }
+                if (time.milliseconds() > 500) {
+                    stageNumber++;
+                }
             } else if (stageNumber == 3) {
                 bot.leftServo.setPosition(bot.leftUp);
             }
