@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  * FRC 1595
  */
 
-@Autonomous(name = "Blue Jewel Test", group = "Test")
+@Autonomous(name = "Jewel Test", group = "Test")
 //@Disabled
 public class BlueJewelTest extends LinearOpMode {
     public void runOpMode() {

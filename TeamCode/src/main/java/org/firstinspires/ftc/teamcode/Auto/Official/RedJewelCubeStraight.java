@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.Auto.Test;
+package org.firstinspires.ftc.teamcode.Auto.Official;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,14 +9,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 /**
- * Created by Stephen Ogden on 12/29/17.
+ * Created by Stephen Ogden on 2/9/18.
  * FTC 6128 | 7935
  * FRC 1595
  */
 
-@Autonomous(name = "Red Jewel Cube Straight Test", group = "Test")
-@Disabled
-public class RedJewelCubeStraightTest extends LinearOpMode {
+@Autonomous(name = "Red Jewel Cube Straight", group = "Official")
+//@Disabled
+public class RedJewelCubeStraight extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");

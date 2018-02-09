@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  * FRC 1595
  */
 
+@Deprecated
 @Autonomous(name = "Red Jewel Test", group = "Test")
 @Disabled
 public class RedJewelTest extends LinearOpMode {
