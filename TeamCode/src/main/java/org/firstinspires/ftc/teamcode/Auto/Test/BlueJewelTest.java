@@ -28,8 +28,6 @@ public class BlueJewelTest extends LinearOpMode {
 
         int stageNumber = 0;
 
-        double colorValue = 0.0;
-
         String color = "";
 
         bot.leftServo.setPosition(bot.leftUp);
