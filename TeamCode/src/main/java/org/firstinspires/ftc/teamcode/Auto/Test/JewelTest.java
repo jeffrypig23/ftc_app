@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 @Autonomous(name = "Jewel Test", group = "Test")
 //@Disabled
-public class BlueJewelTest extends LinearOpMode {
+public class JewelTest extends LinearOpMode {
     public void runOpMode() {
 
         telemetry.addData("Status", "Initializing...");

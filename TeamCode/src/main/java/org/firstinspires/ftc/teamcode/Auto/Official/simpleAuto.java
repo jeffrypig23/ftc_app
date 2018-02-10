@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * FRC 1595
  */
 
-@Autonomous(name = "6128: Just go forward lol", group = "Official")
+@Autonomous(name = "Just go forward lol", group = "Official")
 @Disabled
 public class simpleAuto extends LinearOpMode {
 

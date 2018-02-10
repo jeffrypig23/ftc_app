@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auto.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,7 +16,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 @Autonomous(name = "Blue Jewel Cube Straight Test", group = "Test")
-//@Disabled
+@Disabled
 public class BlueJewelCubeStraightTest extends LinearOpMode {
     public void runOpMode() {
 
