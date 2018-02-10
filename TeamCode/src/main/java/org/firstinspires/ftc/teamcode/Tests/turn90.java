@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -10,8 +11,9 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  * FTC 6128 | 7935
  * FRC 1595
  */
+@Deprecated
 @TeleOp(name="Turn", group = "Test")
-//@Disabled
+@Disabled
 public class turn90 extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
@@ -21,18 +23,15 @@ public class turn90 extends LinearOpMode {
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
+        bot.getAutoConfig(hardwareMap);
 
-        bot.leftServo.setPosition(bot.leftUp);
-        bot.rightServo.setPosition(bot.rightUp);
+        bot.servo.setPosition(bot.leftUp);
 
         telemetry.addData("Status", "Done");
         telemetry.update();
 
         waitForStart();
         while (opModeIsActive()) {
-
-            bot.turn(90);
 
             telemetry.addData("Angles", bot.getAngle() + " (" + (int)Math.round((double) bot.getAngle().firstAngle) + ")");
             telemetry.update();

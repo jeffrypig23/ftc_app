@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
@@ -18,16 +16,16 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 //@Disabled
 
 public class TeleopTest extends LinearOpMode {
-
-    SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
-    ElapsedTime armTime = new ElapsedTime();
-
-    @Override
     public void runOpMode() {
+
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
+        SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+
         bot.getTeleOpConfig(hardwareMap);
+
+        bot.servo.setPosition(bot.leftUp);
 
         double powR;
         double powL;
@@ -40,7 +38,6 @@ public class TeleopTest extends LinearOpMode {
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();
-
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x * gamepad1.right_stick_x;
             throttle = gamepad1.left_stick_y;

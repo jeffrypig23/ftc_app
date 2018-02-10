@@ -34,8 +34,8 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
         String color = "";
         RelicRecoveryVuMark pos = RelicRecoveryVuMark.UNKNOWN;
 
-        bot.leftServo.setPosition(bot.leftUp);
-        bot.leftSpinner.setPosition(bot.leftIn);
+        bot.servo.setPosition(bot.leftUp);
+        bot.spinner.setPosition(bot.leftIn);
 
         bot.arm.setPower(0);
         bot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -50,9 +50,9 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (stageNumber == 0) {
-                bot.leftSpinner.setPosition(bot.leftMid);
+                bot.spinner.setPosition(bot.leftMid);
                 if (time.milliseconds() > 500) {
-                    bot.leftServo.setPosition(bot.leftDown);
+                    bot.servo.setPosition(bot.leftDown);
                     time.reset();
                     stageNumber++;
                 }
@@ -70,16 +70,16 @@ public class BlueJewelCubeStraightTest extends LinearOpMode {
                 }
             } else if (stageNumber == 2) {
                 if (color == "RED") {
-                    bot.leftSpinner.setPosition(bot.leftOut);
+                    bot.spinner.setPosition(bot.leftOut);
                 } else {
-                    bot.leftSpinner.setPosition(bot.leftIn);
+                    bot.spinner.setPosition(bot.leftIn);
                 }
                 if (time.milliseconds() > 500) {
                     stageNumber++;
                     time.reset();
                 }
             } else if (stageNumber == 3) {
-                bot.leftServo.setPosition(bot.leftUp);
+                bot.servo.setPosition(bot.leftUp);
                 if (time.milliseconds() > 500) {
                     stageNumber++;
                 }

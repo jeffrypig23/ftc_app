@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  * FRC 1595
  */
 
+@Deprecated
 @Autonomous(name = "Drive forward 3 feet", group = "Test")
 @Disabled
 public class driveForwardXInches extends LinearOpMode {
@@ -23,10 +24,9 @@ public class driveForwardXInches extends LinearOpMode {
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
+        bot.getAutoConfig(hardwareMap);
 
-        bot.rightServo.setPosition(bot.rightUp);
-        bot.leftServo.setPosition(bot.leftUp);
+        bot.servo.setPosition(bot.leftUp);
 
         bot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -34,7 +34,7 @@ public class driveForwardXInches extends LinearOpMode {
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
-            bot.driveWithGyro(36, 0);
+            bot.driveWithPID(36);
             if (bot.right.getPower() == 0) {
                 bot.resetEncoder();
                 stop();

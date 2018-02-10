@@ -26,7 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 
 public class SixtyOneTwentyEightConfig {
-
+    // TODO: Many devices are going to be deprecated soon!
     public DcMotor left;
     public DcMotor right;
     public DcMotor lintake;
@@ -37,15 +37,11 @@ public class SixtyOneTwentyEightConfig {
     public DcMotor box;
 
     public ColorSensor colorSensor;
-    @Deprecated
-    public ColorSensor rightColorSensor;
 
     @Deprecated
     public Servo rightServo;
-    public Servo leftServo;
-    @Deprecated
-    public Servo rightSpinner;
-    public Servo leftSpinner;
+    public Servo servo;
+    public Servo spinner;
 
     public VuforiaTrackables vision;
     public VuforiaLocalizer vuforia;
@@ -53,8 +49,6 @@ public class SixtyOneTwentyEightConfig {
     public BNO055IMU gyro;
 
     public VuforiaTrackable relicTemplate;
-
-    // TODO: Many devices are going to be deprecated soon!
 
     public final int armDown = -112;
     public final int armUp = 500;
@@ -76,8 +70,6 @@ public class SixtyOneTwentyEightConfig {
     public final double rightUp = 0.36d;
     @Deprecated
     public final double rightOffset = 0.29d;
-    @Deprecated
-    public final double rightDown = 0.0d;
 
     @Deprecated
     public void getConfig(HardwareMap config) {
@@ -112,10 +104,9 @@ public class SixtyOneTwentyEightConfig {
         box.setDirection(DcMotorSimple.Direction.FORWARD);
 
         colorSensor = config.colorSensor.get("left color");
-        rightColorSensor = config.colorSensor.get("right color");
 
         rightServo = config.servo.get("right servo");
-        leftServo = config.servo.get("left servo");
+        servo = config.servo.get("left servo");
 
         gyro = config.get(BNO055IMU.class, "gyro");
 
@@ -147,8 +138,8 @@ public class SixtyOneTwentyEightConfig {
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftServo = config.servo.get("left servo");
-        leftSpinner = config.servo.get("left spin");
+        servo = config.servo.get("left servo");
+        spinner = config.servo.get("left spin");
 
         colorSensor = config.colorSensor.get("left color");
 
@@ -190,10 +181,8 @@ public class SixtyOneTwentyEightConfig {
         arm = config.dcMotor.get("arm");
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-        rightServo = config.servo.get("right servo");
-        leftServo = config.servo.get("left servo");
+        
+        servo = config.servo.get("left servo");
 
         gyro = config.get(BNO055IMU.class, "gyro");
 
@@ -220,14 +209,6 @@ public class SixtyOneTwentyEightConfig {
         relicTemplate.setName("relicVuMarkTemplate");
     }
 
-    @Deprecated
-    @SuppressWarnings("SameParameterValue")
-    public boolean isThere(DcMotor motor, int discrepancy) {
-        int currentPosition = motor.getCurrentPosition();
-        int targetPos = motor.getTargetPosition();
-        return Math.abs((targetPos - currentPosition)) <= discrepancy;
-    }
-
     public String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
@@ -238,24 +219,6 @@ public class SixtyOneTwentyEightConfig {
 
     public Orientation getAngle() {
         return this.gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-    }
-
-    @Deprecated
-    public void turn(int degree) {
-        double turn = (double) this.getAngle().firstAngle;
-        degree = degree * -1;
-        this.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        if ((int) Math.round(turn) > (degree + 5)) {
-            this.left.setPower(-0.4d);
-            this.right.setPower(0.4d);
-        } else if ((int) Math.round(turn) < (degree - 5)) {
-            this.left.setPower(0.4d);
-            this.right.setPower(-0.4d);
-        } else {
-            this.left.setPower(0);
-            this.right.setPower(0);
-        }
     }
 
     @SuppressWarnings("PointlessArithmeticExpression")
@@ -271,53 +234,6 @@ public class SixtyOneTwentyEightConfig {
 
         this.right.setPower(0.45d);
         this.left.setPower(0.45d);
-    }
-
-    @SuppressWarnings("PointlessArithmeticExpression")
-    @Deprecated
-    public void driveWithGyro(double position_in_inches, int degree) {
-        this.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        // 28 (ticks)/(rot motor) * 49 (rot motor/rot wheel) * 1/(3.14*4) (rot wheel/in) = 109 ticks/in
-        final double equation = (28 * 49) * 1/(3.14*4);
-
-        this.right.setTargetPosition((int) (equation * position_in_inches) * -1); // Need to make it negative, as forward is negative...
-
-        double turn = (double) this.getAngle().firstAngle;
-        degree = degree * -1; // Aaaalll the things get inverted
-
-        double motorWithEncoderPower = 0;
-        double motorWithoutEncoderPower = 0;
-
-        //<editor-fold desc="Manage position">
-        if ((this.right.getTargetPosition() - this.right.getCurrentPosition()) >= 25) {
-            motorWithEncoderPower = 0.5d;
-            motorWithoutEncoderPower = 0.5d;
-        } else if ((this.right.getTargetPosition() - this.right.getCurrentPosition()) <= -25) {
-            motorWithEncoderPower = -0.5d;
-            motorWithoutEncoderPower = -0.5d;
-        } else {
-            motorWithEncoderPower = 0;
-            motorWithoutEncoderPower = 0;
-        }
-        //</editor-fold>
-
-        //<editor-fold desc="Manage degree">
-        if ((int) Math.round(turn) > (degree + 2)) {
-            motorWithoutEncoderPower = motorWithoutEncoderPower + -0.25d;
-            motorWithEncoderPower = motorWithEncoderPower + 0.25d;
-        } else if ((int) Math.round(turn) < (degree - 2)) {
-            motorWithoutEncoderPower = motorWithoutEncoderPower + 0.25d;
-            motorWithEncoderPower = motorWithEncoderPower + -0.25d;
-        } else {
-            motorWithoutEncoderPower = motorWithoutEncoderPower + 0;
-            motorWithEncoderPower = motorWithEncoderPower + 0;
-        }
-        //</editor-fold>
-
-        this.right.setPower(motorWithEncoderPower);
-        this.left.setPower(motorWithoutEncoderPower);
     }
 
     public void resetEncoder() {

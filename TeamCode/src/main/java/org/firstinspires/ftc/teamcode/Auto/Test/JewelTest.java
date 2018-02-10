@@ -29,8 +29,8 @@ public class JewelTest extends LinearOpMode {
 
         String color = "";
 
-        bot.leftServo.setPosition(bot.leftUp);
-        bot.leftSpinner.setPosition(bot.leftIn);
+        bot.servo.setPosition(bot.leftUp);
+        bot.spinner.setPosition(bot.leftIn);
         //bot.rightSpinner.setPosition(bot.rightIn);
         //bot.rightServo.setPosition(bot.rightIn)
 
@@ -42,9 +42,9 @@ public class JewelTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (stageNumber == 0) {
-                bot.leftSpinner.setPosition(bot.leftMid);
+                bot.spinner.setPosition(bot.leftMid);
                 if (time.milliseconds() > 500) {
-                    bot.leftServo.setPosition(bot.leftDown);
+                    bot.servo.setPosition(bot.leftDown);
                     time.reset();
                     stageNumber++;
                 }
@@ -62,15 +62,15 @@ public class JewelTest extends LinearOpMode {
                 }
             } else if (stageNumber == 2) {
                 if (color == "RED") {
-                    bot.leftSpinner.setPosition(bot.leftOut);
+                    bot.spinner.setPosition(bot.leftOut);
                 } else {
-                    bot.leftSpinner.setPosition(bot.leftIn);
+                    bot.spinner.setPosition(bot.leftIn);
                 }
                 if (time.milliseconds() > 500) {
                     stageNumber++;
                 }
             } else if (stageNumber == 3) {
-                bot.leftServo.setPosition(bot.leftUp);
+                bot.servo.setPosition(bot.leftUp);
             }
 
             telemetry.addData("Stage number", stageNumber)

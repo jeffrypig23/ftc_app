@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  * FRC 1595
  */
 
-@TeleOp(name = "6128 get servo position", group = "Test")
+@TeleOp(name = "Servo positions", group = "Test")
 //@Disabled
 public class getServoPos extends LinearOpMode {
 
@@ -32,7 +32,7 @@ public class getServoPos extends LinearOpMode {
 
         boolean left = true;
 
-        bot.getConfig(hardwareMap);
+        bot.getAutoConfig(hardwareMap);
 
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
@@ -67,11 +67,11 @@ public class getServoPos extends LinearOpMode {
                 rPos = .3;
                 lPos = .53;
             }
-            bot.leftServo.setPosition(lPos);
-            bot.rightServo.setPosition(rPos);
+            bot.servo.setPosition(lPos);
+            bot.spinner.setPosition(rPos);
 
-            telemetry.addData("Right servo pos", bot.rightServo.getPosition())
-                    .addData("Left servo pos", bot.leftServo.getPosition());
+            telemetry.addData("Servo pos", bot.servo.getPosition())
+                    .addData("Spinner pos", bot.spinner.getPosition());
             telemetry.update();
             idle();
         }

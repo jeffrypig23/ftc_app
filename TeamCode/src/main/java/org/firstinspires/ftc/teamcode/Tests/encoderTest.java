@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,8 +13,9 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  * FRC 1595
  */
 
+@Deprecated
 @TeleOp(name = "Encoder and color test", group = "Test")
-//@Disabled
+@Disabled
 public class encoderTest extends LinearOpMode {
 
     private SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
@@ -23,7 +25,7 @@ public class encoderTest extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
+        bot.getTeleOpConfig(hardwareMap);
 
         telemetry.addData("Status", "Done! Press play to start" );
         telemetry.update();
@@ -33,10 +35,7 @@ public class encoderTest extends LinearOpMode {
                 telemetry.addData("Left drive", bot.left.getCurrentPosition())
                         .addData("Right drive", bot.right.getCurrentPosition())
                         .addData("Arm", bot.arm.getCurrentPosition())
-                        .addData("Box", bot.box.getCurrentPosition())
-                        .addData("Left servo", bot.leftServo.getPosition())
-                        .addData("Right servo", bot.rightServo.getPosition())
-                        .addData("Right color sensor (RGB)", bot.rightColorSensor.red() + ", " + bot.rightColorSensor.green() + ", " + bot.rightColorSensor.blue())
+                        .addData("Servo", bot.servo.getPosition())
                         .addData("Left color sensor (RGB)", bot.colorSensor.red() + ", " + bot.colorSensor.green() + ", " + bot.colorSensor.blue());
             telemetry.update();
         }

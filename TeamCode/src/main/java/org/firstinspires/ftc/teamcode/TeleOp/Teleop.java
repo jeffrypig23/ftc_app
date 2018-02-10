@@ -29,7 +29,7 @@ public class Teleop extends LinearOpMode {
 
         bot.getConfig(hardwareMap);
 
-        bot.leftServo.setPosition(bot.leftUp);
+        bot.servo.setPosition(bot.leftUp);
         bot.rightServo.setPosition(bot.rightUp);
 
         double powR;
@@ -107,11 +107,11 @@ public class Teleop extends LinearOpMode {
             bot.arm.setPower(gamepad2.left_stick_y); // Manual control
             if (bot.arm.isBusy() || (bot.arm.getPower() != 0.0d)) {
                 armTime.reset();
-                bot.leftServo.setPosition(bot.leftOffset);
+                bot.servo.setPosition(bot.leftOffset);
                 bot.rightServo.setPosition(bot.rightOffset);
             } else {
                 if (armTime.seconds() > 1) {
-                    bot.leftServo.setPosition(bot.leftUp);
+                    bot.servo.setPosition(bot.leftUp);
                     bot.rightServo.setPosition(bot.rightUp);
                 }
             }
