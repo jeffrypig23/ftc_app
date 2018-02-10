@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 @TeleOp(name = "Drive Methods", group = "Test")
 @Disabled
-
 public class DriveMethods extends LinearOpMode {
 
     SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
@@ -27,7 +26,7 @@ public class DriveMethods extends LinearOpMode {
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
+        bot.getTeleOpConfig(hardwareMap);
 
         double powR = 0.0;
         double powL = 0.0;

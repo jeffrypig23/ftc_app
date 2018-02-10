@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,9 +13,8 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 // Teleop for 6128
-@TeleOp(name = "6128 TeleOp Test", group = "Test")
-//@Disabled
-
+@TeleOp(name = "TeleOp Test", group = "Test")
+@Disabled
 public class TeleopTest extends LinearOpMode {
     public void runOpMode() {
 

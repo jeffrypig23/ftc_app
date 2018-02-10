@@ -26,20 +26,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 
 public class SixtyOneTwentyEightConfig {
-    // TODO: Many devices are going to be deprecated soon!
     public DcMotor left;
     public DcMotor right;
     public DcMotor lintake;
     public DcMotor rintake;
     public DcMotor arm;
 
-    @Deprecated
-    public DcMotor box;
-
     public ColorSensor colorSensor;
 
-    @Deprecated
-    public Servo rightServo;
     public Servo servo;
     public Servo spinner;
 
@@ -57,70 +51,8 @@ public class SixtyOneTwentyEightConfig {
     public final double leftOut = 1;
     public final double leftMid = 0.5d;
 
-    public final double rightIn = 0;
-    public final double rightOut = 1;
-    public final double rightMid = 0.5d;
-
     public final double leftUp = 0.43d;
-    @Deprecated
-    public final double leftOffset = 0.5d;
     public final double leftDown = 0.92d;
-
-    @Deprecated
-    public final double rightUp = 0.36d;
-    @Deprecated
-    public final double rightOffset = 0.29d;
-
-    @Deprecated
-    public void getConfig(HardwareMap config) {
-
-        left = config.dcMotor.get("left");
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // Encoder machine 🅱️roke
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        right = config.dcMotor.get("right");
-        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        lintake = config.dcMotor.get("lintake");
-        lintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        lintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lintake.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        rintake = config.dcMotor.get("rintake");
-        rintake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        rintake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rintake.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        arm = config.dcMotor.get("arm");
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        box = config.dcMotor.get("box");
-        box.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        box.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        box.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        colorSensor = config.colorSensor.get("left color");
-
-        rightServo = config.servo.get("right servo");
-        servo = config.servo.get("left servo");
-
-        gyro = config.get(BNO055IMU.class, "gyro");
-
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        gyro = config.get(BNO055IMU.class, "gyro");
-        gyro.initialize(parameters);
-
-    }
 
     public void getAutoConfig(HardwareMap config) {
         left = config.dcMotor.get("left");

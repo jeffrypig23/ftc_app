@@ -14,23 +14,19 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 // Teleop for 6128
-@TeleOp(name = "6128 TeleOp", group = "Official")
+@TeleOp(name = "TeleOp", group = "Official")
 //@Disabled
-
 public class Teleop extends LinearOpMode {
-
-    SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
-    ElapsedTime armTime = new ElapsedTime();
-
-    @Override
     public void runOpMode() {
+
         telemetry.addData("Status", "Initializing...");
         telemetry.update();
 
-        bot.getConfig(hardwareMap);
+        SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
+
+        bot.getTeleOpConfig(hardwareMap);
 
         bot.servo.setPosition(bot.leftUp);
-        bot.rightServo.setPosition(bot.rightUp);
 
         double powR;
         double powL;
@@ -40,16 +36,9 @@ public class Teleop extends LinearOpMode {
         double slow = 1.0d;
         double turnSpeed=0.7d;
 
-        bot.rintake.setDirection(DcMotorSimple.Direction.REVERSE);
-        bot.lintake.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        int armPos = -583;
-        int boxPos = 0;
-
         telemetry.addData("Status", "Done! Press play to start");
         telemetry.update();
         waitForStart();
-
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x * gamepad1.right_stick_x;
             throttle = gamepad1.left_stick_y;
@@ -82,7 +71,7 @@ public class Teleop extends LinearOpMode {
             }
             bot.right.setPower(slow * powR);
             bot.left.setPower(slow * powL);
-            
+
             if (gamepad2.left_bumper) {
                 if (gamepad2.left_trigger > 0.1f) {
                     bot.rintake.setPower(-1);
@@ -105,25 +94,14 @@ public class Teleop extends LinearOpMode {
             }
 
             bot.arm.setPower(gamepad2.left_stick_y); // Manual control
-            if (bot.arm.isBusy() || (bot.arm.getPower() != 0.0d)) {
-                armTime.reset();
-                bot.servo.setPosition(bot.leftOffset);
-                bot.rightServo.setPosition(bot.rightOffset);
-            } else {
-                if (armTime.seconds() > 1) {
-                    bot.servo.setPosition(bot.leftUp);
-                    bot.rightServo.setPosition(bot.rightUp);
-                }
-            }
 
-            bot.box.setPower(gamepad2.right_stick_y); // Manuual control
 
             telemetry.addData("Left Pow", powL)
                     .addData("RPow", powR)
                     .addData("Right motor", bot.right.getCurrentPosition())
                     .addData("Left motor", bot.left.getCurrentPosition())
-                    .addData("Arm position", armPos + " (" + bot.arm.getCurrentPosition() + ")")
-                    .addData("Box position", boxPos +  " (" + bot.box.getCurrentPosition() + ")");
+                    .addData("Angle", bot.getAngle())
+                    .addData("Arm position", bot.arm.getCurrentPosition());
             telemetry.update();
         }
     }
