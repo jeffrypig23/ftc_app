@@ -44,7 +44,7 @@ public class SixtyOneTwentyEightConfig {
 
     public VuforiaTrackable relicTemplate;
 
-    public final int armDown = -112;
+    public final int armDown = -130;
     public final int armUp = 500;
 
     public final double leftIn = 0;
@@ -164,8 +164,8 @@ public class SixtyOneTwentyEightConfig {
         this.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.left.setTargetPosition((int) (equation * position * -1));
 
-        this.right.setPower(0.45d);
-        this.left.setPower(0.45d);
+        this.right.setPower(0.5d);
+        this.left.setPower(0.5d);
     }
 
     public void resetEncoder() {

@@ -203,7 +203,7 @@ public class BlueJewelCubeStraight extends LinearOpMode {
                     bot.resetEncoder();
                     stageNumber++;
                 }
-            } else if (stageNumber == 16) {
+            } else if (stageNumber == 15) {
                 stop();
             }
 
