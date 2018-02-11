@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
  */
 
 @Autonomous(name = "Red Jewel Cube Straight Test", group = "Test")
-//@Disabled
+@Disabled
 public class RedJewelCubeStraightTest extends LinearOpMode {
     public void runOpMode() {
 
