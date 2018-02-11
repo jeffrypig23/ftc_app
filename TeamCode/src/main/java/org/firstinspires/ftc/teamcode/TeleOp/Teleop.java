@@ -26,8 +26,6 @@ public class Teleop extends LinearOpMode {
 
         bot.getTeleOpConfig(hardwareMap);
 
-        bot.servo.setPosition(bot.leftUp);
-
         double powR;
         double powL;
         double throttle;
@@ -95,6 +93,7 @@ public class Teleop extends LinearOpMode {
 
             bot.arm.setPower(gamepad2.left_stick_y); // Manual control
 
+            bot.servo.setPosition(bot.leftUp);
 
             telemetry.addData("Left Pow", powL)
                     .addData("RPow", powR)
@@ -105,5 +104,4 @@ public class Teleop extends LinearOpMode {
             telemetry.update();
         }
     }
-
 }

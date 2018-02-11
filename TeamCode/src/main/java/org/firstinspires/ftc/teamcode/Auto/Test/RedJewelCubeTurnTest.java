@@ -25,6 +25,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
 
         SixtyOneTwentyEightConfig bot = new SixtyOneTwentyEightConfig();
         ElapsedTime time = new ElapsedTime();
+        ElapsedTime runtime = new ElapsedTime();
 
         bot.getAutoConfig(hardwareMap);
         bot.getVision(hardwareMap);
@@ -46,6 +47,7 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
 
         waitForStart();
         time.reset();
+        runtime.reset();
         bot.vision.activate();
         while (opModeIsActive()) {
 
@@ -94,6 +96,9 @@ public class RedJewelCubeTurnTest extends LinearOpMode {
             } else if (stageNumber == 5) {
                 pos = bot.getVuMark();
                 if (!pos.equals(RelicRecoveryVuMark.UNKNOWN)) {
+                    stageNumber++;
+                } else if (pos.equals(RelicRecoveryVuMark.UNKNOWN) && runtime.seconds() > 10) {
+                    pos = RelicRecoveryVuMark.CENTER;
                     stageNumber++;
                 }
             } else if (stageNumber == 6) {
