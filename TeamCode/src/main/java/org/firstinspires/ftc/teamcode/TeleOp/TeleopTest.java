@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.SixtyOneTwentyEightConfig;
 
 // Teleop for 6128
 @TeleOp(name = "TeleOp Test", group = "Test")
-@Disabled
+//@Disabled
 public class TeleopTest extends LinearOpMode {
     public void runOpMode() {
 

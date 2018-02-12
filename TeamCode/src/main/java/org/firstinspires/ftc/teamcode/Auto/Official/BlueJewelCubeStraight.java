@@ -96,7 +96,7 @@ public class BlueJewelCubeStraight extends LinearOpMode {
                 pos = bot.getVuMark();
                 if (!pos.equals(RelicRecoveryVuMark.UNKNOWN)) {
                     stageNumber++;
-                } else if (pos.equals(RelicRecoveryVuMark.UNKNOWN) && runtime.seconds() > 10) {
+                } else if (pos.equals(RelicRecoveryVuMark.UNKNOWN) && runtime.seconds() > 5) {
                     pos = RelicRecoveryVuMark.CENTER;
                     stageNumber++;
                 }

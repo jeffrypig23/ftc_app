@@ -45,7 +45,7 @@ public class SixtyOneTwentyEightConfig {
     public VuforiaTrackable relicTemplate;
 
     public final int armDown = -130;
-    public final int armUp = 500;
+    public final int armUp = 375;
 
     public final double leftIn = 0;
     public final double leftOut = 1;
